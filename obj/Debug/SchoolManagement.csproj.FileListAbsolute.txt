@@ -1,0 +1,138 @@
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\SchoolManagement.exe.config
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\SchoolManagement.exe
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\SchoolManagement.pdb
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.csproj.AssemblyReference.cache
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.Properties.Resources.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.csproj.GenerateResource.cache
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.csproj.CoreCompileInputs.cache
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.exe
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.pdb
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Toolkit.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Toolkit.pdb
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.csproj.CopyComplete
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Docking.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Navigator.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Ribbon.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Workspace.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Docking.pdb
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Navigator.pdb
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Ribbon.pdb
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\ComponentFactory.Krypton.Workspace.pdb
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\Oracle.ManagedDataAccess.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Buffers.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Memory.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Numerics.Vectors.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Text.Encodings.Web.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Text.Json.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Threading.Tasks.Extensions.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.ValueTuple.dll
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Buffers.xml
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Memory.xml
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Numerics.Vectors.xml
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Text.Encodings.Web.xml
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Text.Json.xml
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.Threading.Tasks.Extensions.xml
+D:\Code\Oracle\School Management\SchoolManagement\bin\Debug\System.ValueTuple.xml
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.Login.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.TeacherMenu.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.StudentMenu.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.AdminMenu.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.AdminProfile.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.StudentProfile.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.TeacherProfile.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.StudentManager.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.csproj.ResolveComReference.cache
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.TeacherManager.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.ClassSectionManager.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.StudentsInClassSection.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.ClassManager.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.StudensInClass.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.StudentClassSectionList.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.StudentClassList.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.SubjectManager.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.DepartmentManager.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.StudentGrade.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.TeacherClassSection.resources
+D:\Code\Oracle\School Management\SchoolManagement\obj\Debug\SchoolManagement.Schedule.resources
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\SchoolManagement.exe.config
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\SchoolManagement.exe
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\SchoolManagement.pdb
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Buffers.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Memory.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Text.Encodings.Web.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Text.Json.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.ValueTuple.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Buffers.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Memory.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Text.Encodings.Web.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Text.Json.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.ValueTuple.xml
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.csproj.AssemblyReference.cache
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.csproj.ResolveComReference.cache
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.AdminMenu.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.ClassManager.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.ClassSectionManager.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.DepartmentManager.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.Login.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.AdminProfile.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.Properties.Resources.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.Schedule.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.StudentGrade.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.StudentManager.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.StudentMenu.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.StudentProfile.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.SubjectManager.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.TeacherClassSection.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.TeacherManager.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.TeacherMenu.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.TeacherProfile.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.csproj.GenerateResource.cache
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.csproj.CoreCompileInputs.cache
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolMa.86B6095E.Up2Date
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.exe
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.pdb
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\BouncyCastle.Cryptography.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Google.Protobuf.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\K4os.Compression.LZ4.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\K4os.Compression.LZ4.Streams.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\K4os.Hash.xxHash.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\MySql.Data.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\MySqlConnector.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Savage.Data.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Savage.Data.MySqlClient.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Savage.OptimizedDataReader.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.IO.Pipelines.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\ZstdSharp.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\BouncyCastle.Cryptography.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Google.Protobuf.pdb
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Google.Protobuf.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\K4os.Compression.LZ4.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\K4os.Compression.LZ4.Streams.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\K4os.Hash.xxHash.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Microsoft.Extensions.Logging.Abstractions.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\MySql.Data.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\MySqlConnector.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\System.IO.Pipelines.xml
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.csproj.SuggestedBindingRedirects.cache
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.exe.config
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\dddd\Desktop\SchoolManagement\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.StudentClassList.resources
+C:\Users\dddd\Desktop\SchoolManagement\obj\Debug\SchoolManagement.StudentsInClass.resources
