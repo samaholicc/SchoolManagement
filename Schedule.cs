@@ -1,5 +1,7 @@
-﻿using MySql.Data.MySqlClient; // Ensure you have the MySQL data access library
+﻿using ComponentFactory.Krypton.Toolkit;
+using MySql.Data.MySqlClient; // Ensure you have the MySQL data access library
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace SchoolManagement
@@ -23,6 +25,7 @@ namespace SchoolManagement
         {
             InitializeComponent();
             LoadSchedule();
+            
         }
 
         public Schedule(bool b)
@@ -30,6 +33,7 @@ namespace SchoolManagement
             isTeacher = b;
             InitializeComponent();
             LoadSchedule();
+         
         }
 
         private void LoadSchedule()
@@ -41,107 +45,56 @@ namespace SchoolManagement
                 using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                 {
                     conn.Open();
-                    string query;
 
-                    if (isTeacher)
-                    {
-                        query = "SELECT A.SUB_ID, D.SUB_NAME, D.Credits, A.Schedule " +
-                                "FROM Class A " +
-                                "JOIN Subject D ON A.SUB_ID = D.SUB_ID " +
-                                "WHERE A.Teacher_ID = @teacherID " +
-                                "ORDER BY A.Schedule ASC";
-                    }
-                    else
-                    {
-                        query = "SELECT B.SUB_ID, C.SUB_NAME, B.Schedule " +
-                                "FROM results A " +
-                                "JOIN Class B ON A.CLASS_ID = B.CLASS_ID " +
-                                "JOIN Subject C ON B.SUB_ID = C.SUB_ID " +
-                                "WHERE A.STUDENT_ID = @ID_LG " +
-                                "ORDER BY B.Schedule ASC";
-                    }
+                    // If the user is a teacher, get the schedule based on Teacher_ID
+                    // If the user is a student, get the schedule based on STUDENT_ID
+                    string query = isTeacher
+                        ? "SELECT A.SUB_ID, D.SUB_NAME, A.Schedule " +
+                          "FROM Class A " +
+                          "JOIN Subject D ON A.SUB_ID = D.SUB_ID " +
+                          "WHERE A.Teacher_ID = @teacherID " +
+                          "ORDER BY A.Schedule ASC"
+                        : "SELECT A.SUB_ID, S.SUB_NAME, A.SCHEDULE " +
+                          "FROM Class A " +
+                          "JOIN Subject S ON A.SUB_ID = S.SUB_ID " +
+                          "JOIN Student_Classes SC ON SC.CLASS_ID = A.CLASS_ID " +
+                          "WHERE SC.STUDENT_ID = @ID_LG " + // For students, we use their STUDENT_ID
+                          "ORDER BY A.SCHEDULE ASC;";
 
+                    // Adding the parameter depending on whether it's a teacher or student
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        if (isTeacher)
-                        {
-                            cmd.Parameters.AddWithValue("@teacherID", Login.ID);
-                        }
-                        else
-                        {
-                            cmd.Parameters.AddWithValue("@ID_LG", Login.ID);
-                        }
+                        cmd.Parameters.AddWithValue(isTeacher ? "@teacherID" : "@ID_LG", Login.ID);
 
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
+                            // Dictionary to store the schedule based on the day of the week
+                            Dictionary<string, KryptonRichTextBox> scheduleTextBoxes = new Dictionary<string, KryptonRichTextBox>
+                    {
+                        { "lundi", txtMonday },
+                        { "mardi", txtTuesday },
+                        { "mercredi", txtWed },
+                        { "jeudi", txtThurs },
+                        { "vendredi", txtFri },
+                        { "samedi", txtSat }
+                    };
+
+                            // Reading each row and processing the data
                             while (reader.Read())
                             {
-                                string sname;
-                                if (isTeacher)
-                                {
-                                    // Retrieve SUB_ID as int and Schedule as string  
-                                    int subId = reader.GetInt32(0);
-                                    string subName = reader.GetString(1);
-                                    sname = reader.GetString(3); // Schedule  
+                                int subId = reader.GetInt32(0); // Subject ID
+                                string subName = reader.GetString(1); // Subject Name
+                                string schedule = reader.GetString(2); // Schedule (e.g., "Lundi 08:00-10:00")
 
-                                    // Check which day the schedule corresponds to, and add it to the correct text box  
-                                    if (sname.Contains("Lundi"))
-                                    {
-                                        txtMonday.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Mardi"))
-                                    {
-                                        txtTuesday.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Mercredi"))
-                                    {
-                                        txtWed.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Jeudi"))
-                                    {
-                                        txtThurs.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Vendredi"))
-                                    {
-                                        txtFri.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Samedi"))
-                                    {
-                                        txtSat.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                }
-                                else
-                                {
-                                    // Retrieve SUB_ID as int and Schedule as string  
-                                    int subId = reader.GetInt32(0);
-                                    string subName = reader.GetString(1);
-                                    sname = reader.GetString(2); // Schedule
+                                // Splitting the schedule string into day and time
+                                string[] parts = schedule.Split(' ');
+                                string day = parts[0].Trim(); // Day of the week
+                                string time = parts.Length > 1 ? parts[1].Trim() : ""; // Time
 
-                                    // Check which day the schedule corresponds to, and add it to the correct text box  
-                                    if (sname.Contains("Lundi"))
-                                    {
-                                        txtMonday.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Mardi"))
-                                    {
-                                        txtTuesday.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Mercredi"))
-                                    {
-                                        txtWed.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Jeudi"))
-                                    {
-                                        txtThurs.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Vendredi"))
-                                    {
-                                        txtFri.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
-                                    else if (sname.Contains("Samedi"))
-                                    {
-                                        txtSat.Text += $"{subId} - {subName}\n{sname}\n\n\n";
-                                    }
+                                // If the day exists in our dictionary, append the schedule details
+                                if (scheduleTextBoxes.ContainsKey(day))
+                                {
+                                    scheduleTextBoxes[day].Text += $"{subId} - {subName}\n{time}\n\n";
                                 }
                             }
                         }
@@ -150,10 +103,21 @@ namespace SchoolManagement
             }
             catch (Exception es)
             {
-                MessageBox.Show("Error: " + es.Message + "\n" + es.StackTrace);
+                MessageBox.Show("Erreur : " + es.Message + "\n" + es.StackTrace);
             }
         }
+
         private void Schedule_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtMonday_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtThurs_TextChanged(object sender, EventArgs e)
         {
 
         }

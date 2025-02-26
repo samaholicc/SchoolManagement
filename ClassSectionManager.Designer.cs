@@ -34,28 +34,29 @@ namespace SchoolManagement
             this.kryptonPalette1 = new ComponentFactory.Krypton.Toolkit.KryptonPalette(this.components);
             this.dgvClass = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
             this.txtID = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbClassSectionID = new System.Windows.Forms.Label();
             this.cbSubject = new ComponentFactory.Krypton.Toolkit.KryptonComboBox();
             this.cbTeacher = new ComponentFactory.Krypton.Toolkit.KryptonComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lbTeacherID = new System.Windows.Forms.Label();
+            this.lbStart = new System.Windows.Forms.Label();
             this.dtpStart = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lbFinish = new System.Windows.Forms.Label();
             this.dtpFinish = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
-            this.label5 = new System.Windows.Forms.Label();
+            this.lbSchedule = new System.Windows.Forms.Label();
             this.kryptonContextMenuMonthCalendar1 = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuMonthCalendar();
-            this.txtSchedule = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             this.txtNOS = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.btnLogin = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.lbNos = new System.Windows.Forms.Label();
+            this.lbExport = new System.Windows.Forms.Label();
+            this.btnSearch = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.txtSearch = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             this.lbSave = new System.Windows.Forms.Label();
             this.lbDelete = new System.Windows.Forms.Label();
-            this.lbEdit = new System.Windows.Forms.Label();
-            this.lbStudents = new System.Windows.Forms.Label();
-            this.lbDetail = new System.Windows.Forms.Label();
+            this.lbEditClass = new System.Windows.Forms.Label();
+            this.lbAddClass = new System.Windows.Forms.Label();
+            this.lbShowStudents = new System.Windows.Forms.Label();
+            this.txtSchedule = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            this.lbSubjectID = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pbDetail = new System.Windows.Forms.PictureBox();
             this.pbSave = new System.Windows.Forms.PictureBox();
             this.pbDelete = new System.Windows.Forms.PictureBox();
@@ -63,11 +64,11 @@ namespace SchoolManagement
             this.pbStudents = new System.Windows.Forms.PictureBox();
             this.pbPrev = new System.Windows.Forms.PictureBox();
             this.pbNext = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pbReload = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClass)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSubject)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbTeacher)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDetail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).BeginInit();
@@ -75,21 +76,68 @@ namespace SchoolManagement
             ((System.ComponentModel.ISupportInitialize)(this.pbStudents)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPrev)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbReload)).BeginInit();
             this.SuspendLayout();
             // 
             // kryptonPalette1
             // 
+            this.kryptonPalette1.ButtonSpecs.FormClose.AllowInheritExtraText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.AllowInheritExtraText")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.AllowInheritImage = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.AllowInheritImage")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.AllowInheritText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.AllowInheritText")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.AllowInheritToolTipTitle = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.AllowInheritToolTipTitle")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.ColorMap = ((System.Drawing.Color)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ColorMap")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.Edge = ((ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.Edge")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.ExtraText = resources.GetString("kryptonPalette1.ButtonSpecs.FormClose.ExtraText");
             this.kryptonPalette1.ButtonSpecs.FormClose.Image = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.Image")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedNormal")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedPressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedPressed")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedTracking")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageDisabled = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageDisabled")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageNormal")));
             this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImagePressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImagePressed")));
             this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageTracking")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.Orientation = ((ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.Orientation")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.Style = ((ComponentFactory.Krypton.Toolkit.PaletteButtonStyle)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.Style")));
+            this.kryptonPalette1.ButtonSpecs.FormClose.Text = resources.GetString("kryptonPalette1.ButtonSpecs.FormClose.Text");
+            this.kryptonPalette1.ButtonSpecs.FormClose.ToolTipTitle = resources.GetString("kryptonPalette1.ButtonSpecs.FormClose.ToolTipTitle");
+            this.kryptonPalette1.ButtonSpecs.FormMax.AllowInheritExtraText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.AllowInheritExtraText")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.AllowInheritImage = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.AllowInheritImage")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.AllowInheritText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.AllowInheritText")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.AllowInheritToolTipTitle = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.AllowInheritToolTipTitle")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.ColorMap = ((System.Drawing.Color)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ColorMap")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.Edge = ((ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.Edge")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.ExtraText = resources.GetString("kryptonPalette1.ButtonSpecs.FormMax.ExtraText");
             this.kryptonPalette1.ButtonSpecs.FormMax.Image = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.Image")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedNormal")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedPressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedPressed")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedTracking")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageDisabled = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageDisabled")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageNormal")));
             this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImagePressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImagePressed")));
             this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.Orientation = ((ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.Orientation")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.Style = ((ComponentFactory.Krypton.Toolkit.PaletteButtonStyle)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.Style")));
+            this.kryptonPalette1.ButtonSpecs.FormMax.Text = resources.GetString("kryptonPalette1.ButtonSpecs.FormMax.Text");
+            this.kryptonPalette1.ButtonSpecs.FormMax.ToolTipTitle = resources.GetString("kryptonPalette1.ButtonSpecs.FormMax.ToolTipTitle");
+            this.kryptonPalette1.ButtonSpecs.FormMin.AllowInheritExtraText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.AllowInheritExtraText")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.AllowInheritImage = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.AllowInheritImage")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.AllowInheritText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.AllowInheritText")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.AllowInheritToolTipTitle = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.AllowInheritToolTipTitle")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.ColorMap = ((System.Drawing.Color)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ColorMap")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.Edge = ((ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.Edge")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.ExtraText = resources.GetString("kryptonPalette1.ButtonSpecs.FormMin.ExtraText");
             this.kryptonPalette1.ButtonSpecs.FormMin.Image = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.Image")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedNormal")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedPressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedPressed")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedTracking")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageNormal")));
             this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImagePressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImagePressed")));
             this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageTracking")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.Orientation = ((ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.Orientation")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.Style = ((ComponentFactory.Krypton.Toolkit.PaletteButtonStyle)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.Style")));
+            this.kryptonPalette1.ButtonSpecs.FormMin.Text = resources.GetString("kryptonPalette1.ButtonSpecs.FormMin.Text");
+            this.kryptonPalette1.ButtonSpecs.FormMin.ToolTipTitle = resources.GetString("kryptonPalette1.ButtonSpecs.FormMin.ToolTipTitle");
             this.kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
@@ -141,19 +189,19 @@ namespace SchoolManagement
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.ButtonEdgeInset = 10;
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, -1, -1, -1);
+            this.kryptonPalette1.PalettePaint += new System.EventHandler<ComponentFactory.Krypton.Toolkit.PaletteLayoutEventArgs>(this.kryptonPalette1_PalettePaint);
             // 
             // dgvClass
             // 
+            resources.ApplyResources(this.dgvClass, "dgvClass");
             this.dgvClass.AllowUserToAddRows = false;
             this.dgvClass.AllowUserToDeleteRows = false;
             this.dgvClass.AllowUserToOrderColumns = true;
             this.dgvClass.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvClass.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllHeaders;
             this.dgvClass.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvClass.Location = new System.Drawing.Point(1, 374);
             this.dgvClass.Name = "dgvClass";
             this.dgvClass.ReadOnly = true;
-            this.dgvClass.Size = new System.Drawing.Size(979, 273);
             this.dgvClass.StateCommon.Background.Color1 = System.Drawing.Color.White;
             this.dgvClass.StateCommon.Background.Color2 = System.Drawing.Color.White;
             this.dgvClass.StateCommon.Background.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
@@ -186,15 +234,12 @@ namespace SchoolManagement
             this.dgvClass.StateCommon.HeaderRow.Border.Width = 1;
             this.dgvClass.StateSelected.DataCell.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(165)))), ((int)(((byte)(166)))));
             this.dgvClass.StateSelected.DataCell.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(165)))), ((int)(((byte)(166)))));
-            this.dgvClass.TabIndex = 75;
             this.dgvClass.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvClass_CellMouseClick);
             // 
             // txtID
             // 
-            this.txtID.Enabled = false;
-            this.txtID.Location = new System.Drawing.Point(153, 12);
+            resources.ApplyResources(this.txtID, "txtID");
             this.txtID.Name = "txtID";
-            this.txtID.Size = new System.Drawing.Size(315, 33);
             this.txtID.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.txtID.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
             this.txtID.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
@@ -207,36 +252,18 @@ namespace SchoolManagement
             this.txtID.StateCommon.Content.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
             this.txtID.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtID.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.txtID.TabIndex = 108;
             // 
-            // label10
+            // lbClassSectionID
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(10, 20);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(128, 20);
-            this.label10.TabIndex = 107;
-            this.label10.Text = "Class Section ID:";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(10, 59);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(87, 20);
-            this.label1.TabIndex = 109;
-            this.label1.Text = "Subject ID:";
+            resources.ApplyResources(this.lbClassSectionID, "lbClassSectionID");
+            this.lbClassSectionID.Name = "lbClassSectionID";
             // 
             // cbSubject
             // 
+            resources.ApplyResources(this.cbSubject, "cbSubject");
             this.cbSubject.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cbSubject.DropDownWidth = 285;
-            this.cbSubject.Enabled = false;
-            this.cbSubject.Location = new System.Drawing.Point(153, 51);
             this.cbSubject.Name = "cbSubject";
-            this.cbSubject.Size = new System.Drawing.Size(315, 36);
             this.cbSubject.StateCommon.ComboBox.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.cbSubject.StateCommon.ComboBox.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
             this.cbSubject.StateCommon.ComboBox.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
@@ -257,16 +284,13 @@ namespace SchoolManagement
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
             this.cbSubject.StateCommon.Item.Border.Width = 1;
             this.cbSubject.StateCommon.Item.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbSubject.TabIndex = 111;
             // 
             // cbTeacher
             // 
+            resources.ApplyResources(this.cbTeacher, "cbTeacher");
             this.cbTeacher.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cbTeacher.DropDownWidth = 285;
-            this.cbTeacher.Enabled = false;
-            this.cbTeacher.Location = new System.Drawing.Point(153, 93);
             this.cbTeacher.Name = "cbTeacher";
-            this.cbTeacher.Size = new System.Drawing.Size(315, 36);
             this.cbTeacher.StateCommon.ComboBox.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.cbTeacher.StateCommon.ComboBox.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
             this.cbTeacher.StateCommon.ComboBox.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
@@ -287,35 +311,22 @@ namespace SchoolManagement
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
             this.cbTeacher.StateCommon.Item.Border.Width = 1;
             this.cbTeacher.StateCommon.Item.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbTeacher.TabIndex = 113;
             // 
-            // label2
+            // lbTeacherID
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(10, 101);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(92, 20);
-            this.label2.TabIndex = 112;
-            this.label2.Text = "Teacher ID:";
+            resources.ApplyResources(this.lbTeacherID, "lbTeacherID");
+            this.lbTeacherID.Name = "lbTeacherID";
             // 
-            // label3
+            // lbStart
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 143);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(45, 20);
-            this.label3.TabIndex = 115;
-            this.label3.Text = "Start:";
+            resources.ApplyResources(this.lbStart, "lbStart");
+            this.lbStart.Name = "lbStart";
             // 
             // dtpStart
             // 
+            resources.ApplyResources(this.dtpStart, "dtpStart");
             this.dtpStart.CalendarTodayDate = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
-            this.dtpStart.Enabled = false;
-            this.dtpStart.Location = new System.Drawing.Point(153, 135);
             this.dtpStart.Name = "dtpStart";
-            this.dtpStart.Size = new System.Drawing.Size(315, 37);
             this.dtpStart.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.dtpStart.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
             this.dtpStart.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
@@ -326,25 +337,17 @@ namespace SchoolManagement
             this.dtpStart.StateCommon.Border.Width = 1;
             this.dtpStart.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpStart.StateDisabled.Content.Color1 = System.Drawing.Color.Black;
-            this.dtpStart.TabIndex = 114;
             // 
-            // label4
+            // lbFinish
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 186);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(50, 20);
-            this.label4.TabIndex = 117;
-            this.label4.Text = "Finish:";
+            resources.ApplyResources(this.lbFinish, "lbFinish");
+            this.lbFinish.Name = "lbFinish";
             // 
             // dtpFinish
             // 
+            resources.ApplyResources(this.dtpFinish, "dtpFinish");
             this.dtpFinish.CalendarTodayDate = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
-            this.dtpFinish.Enabled = false;
-            this.dtpFinish.Location = new System.Drawing.Point(153, 178);
             this.dtpFinish.Name = "dtpFinish";
-            this.dtpFinish.Size = new System.Drawing.Size(315, 37);
             this.dtpFinish.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.dtpFinish.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
             this.dtpFinish.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
@@ -355,50 +358,23 @@ namespace SchoolManagement
             this.dtpFinish.StateCommon.Border.Width = 1;
             this.dtpFinish.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpFinish.StateDisabled.Content.Color1 = System.Drawing.Color.Black;
-            this.dtpFinish.TabIndex = 116;
             // 
-            // label5
+            // lbSchedule
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(10, 231);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(81, 20);
-            this.label5.TabIndex = 118;
-            this.label5.Text = "Schedule:";
+            resources.ApplyResources(this.lbSchedule, "lbSchedule");
+            this.lbSchedule.Name = "lbSchedule";
             // 
             // kryptonContextMenuMonthCalendar1
             // 
+            resources.ApplyResources(this.kryptonContextMenuMonthCalendar1, "kryptonContextMenuMonthCalendar1");
             this.kryptonContextMenuMonthCalendar1.SelectionEnd = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
             this.kryptonContextMenuMonthCalendar1.SelectionStart = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
             this.kryptonContextMenuMonthCalendar1.TodayDate = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
             // 
-            // txtSchedule
-            // 
-            this.txtSchedule.Enabled = false;
-            this.txtSchedule.Location = new System.Drawing.Point(153, 226);
-            this.txtSchedule.Name = "txtSchedule";
-            this.txtSchedule.Size = new System.Drawing.Size(315, 33);
-            this.txtSchedule.StateCommon.Back.Color1 = System.Drawing.Color.White;
-            this.txtSchedule.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
-            this.txtSchedule.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
-            this.txtSchedule.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.txtSchedule.StateCommon.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.txtSchedule.StateCommon.Border.Rounding = 20;
-            this.txtSchedule.StateCommon.Border.Width = 1;
-            this.txtSchedule.StateCommon.Content.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
-            this.txtSchedule.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSchedule.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.txtSchedule.TabIndex = 120;
-            // 
             // txtNOS
             // 
-            this.txtNOS.Enabled = false;
-            this.txtNOS.Location = new System.Drawing.Point(153, 265);
+            resources.ApplyResources(this.txtNOS, "txtNOS");
             this.txtNOS.Name = "txtNOS";
-            this.txtNOS.Size = new System.Drawing.Size(315, 33);
             this.txtNOS.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.txtNOS.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
             this.txtNOS.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
@@ -411,94 +387,82 @@ namespace SchoolManagement
             this.txtNOS.StateCommon.Content.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
             this.txtNOS.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtNOS.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.txtNOS.TabIndex = 122;
             // 
-            // label6
+            // lbNos
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(10, 273);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(41, 20);
-            this.label6.TabIndex = 121;
-            this.label6.Text = "NoS:";
+            resources.ApplyResources(this.lbNos, "lbNos");
+            this.lbNos.Name = "lbNos";
             // 
-            // label7
+            // lbExport
             // 
-            this.label7.AutoSize = true;
-            this.label7.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label7.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(888, 343);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(54, 20);
-            this.label7.TabIndex = 127;
-            this.label7.Text = "Export";
-            this.label7.Click += new System.EventHandler(this.label7_Click);
+            resources.ApplyResources(this.lbExport, "lbExport");
+            this.lbExport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbExport.Name = "lbExport";
+            this.lbExport.Click += new System.EventHandler(this.label7_Click);
             // 
-            // btnLogin
+            // btnSearch
             // 
-            this.btnLogin.Location = new System.Drawing.Point(330, 335);
-            this.btnLogin.Name = "btnLogin";
-            this.btnLogin.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
-            this.btnLogin.OverrideDefault.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
-            this.btnLogin.OverrideDefault.Back.ColorAngle = 62F;
-            this.btnLogin.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
-            this.btnLogin.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
-            this.btnLogin.OverrideDefault.Border.ColorAngle = 62F;
-            this.btnLogin.OverrideDefault.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            resources.ApplyResources(this.btnSearch, "btnSearch");
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
+            this.btnSearch.OverrideDefault.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
+            this.btnSearch.OverrideDefault.Back.ColorAngle = 62F;
+            this.btnSearch.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
+            this.btnSearch.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
+            this.btnSearch.OverrideDefault.Border.ColorAngle = 62F;
+            this.btnSearch.OverrideDefault.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnLogin.OverrideDefault.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnLogin.OverrideDefault.Border.Rounding = 20;
-            this.btnLogin.OverrideDefault.Border.Width = 1;
-            this.btnLogin.Size = new System.Drawing.Size(96, 33);
-            this.btnLogin.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
-            this.btnLogin.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
-            this.btnLogin.StateCommon.Back.ColorAngle = 62F;
-            this.btnLogin.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
-            this.btnLogin.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
-            this.btnLogin.StateCommon.Border.ColorAngle = 62F;
-            this.btnLogin.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            this.btnSearch.OverrideDefault.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btnSearch.OverrideDefault.Border.Rounding = 20;
+            this.btnSearch.OverrideDefault.Border.Width = 1;
+            this.btnSearch.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
+            this.btnSearch.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
+            this.btnSearch.StateCommon.Back.ColorAngle = 62F;
+            this.btnSearch.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
+            this.btnSearch.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
+            this.btnSearch.StateCommon.Border.ColorAngle = 62F;
+            this.btnSearch.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnLogin.StateCommon.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnLogin.StateCommon.Border.Rounding = 20;
-            this.btnLogin.StateCommon.Border.Width = 1;
-            this.btnLogin.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.Black;
-            this.btnLogin.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.Black;
-            this.btnLogin.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogin.StatePressed.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
-            this.btnLogin.StatePressed.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
-            this.btnLogin.StatePressed.Back.ColorAngle = 62F;
-            this.btnLogin.StatePressed.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
-            this.btnLogin.StatePressed.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
-            this.btnLogin.StatePressed.Border.ColorAngle = 62F;
-            this.btnLogin.StatePressed.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            this.btnSearch.StateCommon.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btnSearch.StateCommon.Border.Rounding = 20;
+            this.btnSearch.StateCommon.Border.Width = 1;
+            this.btnSearch.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.Black;
+            this.btnSearch.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.Black;
+            this.btnSearch.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSearch.StatePressed.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
+            this.btnSearch.StatePressed.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
+            this.btnSearch.StatePressed.Back.ColorAngle = 62F;
+            this.btnSearch.StatePressed.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
+            this.btnSearch.StatePressed.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
+            this.btnSearch.StatePressed.Border.ColorAngle = 62F;
+            this.btnSearch.StatePressed.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnLogin.StatePressed.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnLogin.StatePressed.Border.Rounding = 20;
-            this.btnLogin.StatePressed.Border.Width = 1;
-            this.btnLogin.StateTracking.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
-            this.btnLogin.StateTracking.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
-            this.btnLogin.StateTracking.Back.ColorAngle = 62F;
-            this.btnLogin.StateTracking.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
-            this.btnLogin.StateTracking.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
-            this.btnLogin.StateTracking.Border.ColorAngle = 62F;
-            this.btnLogin.StateTracking.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            this.btnSearch.StatePressed.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btnSearch.StatePressed.Border.Rounding = 20;
+            this.btnSearch.StatePressed.Border.Width = 1;
+            this.btnSearch.StateTracking.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
+            this.btnSearch.StateTracking.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
+            this.btnSearch.StateTracking.Back.ColorAngle = 62F;
+            this.btnSearch.StateTracking.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(197)))), ((int)(((byte)(252)))));
+            this.btnSearch.StateTracking.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(195)))), ((int)(((byte)(252)))));
+            this.btnSearch.StateTracking.Border.ColorAngle = 62F;
+            this.btnSearch.StateTracking.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnLogin.StateTracking.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnLogin.StateTracking.Border.Rounding = 20;
-            this.btnLogin.StateTracking.Border.Width = 1;
-            this.btnLogin.TabIndex = 124;
-            this.btnLogin.Values.Text = "Search";
+            this.btnSearch.StateTracking.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btnSearch.StateTracking.Border.Rounding = 20;
+            this.btnSearch.StateTracking.Border.Width = 1;
+            this.btnSearch.Values.ExtraText = resources.GetString("btnSearch.Values.ExtraText");
+            this.btnSearch.Values.ImageTransparentColor = ((System.Drawing.Color)(resources.GetObject("btnSearch.Values.ImageTransparentColor")));
+            this.btnSearch.Values.Text = resources.GetString("btnSearch.Values.Text");
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(2, 335);
+            resources.ApplyResources(this.txtSearch, "txtSearch");
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(307, 33);
             this.txtSearch.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.txtSearch.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
             this.txtSearch.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
@@ -511,220 +475,178 @@ namespace SchoolManagement
             this.txtSearch.StateCommon.Content.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
             this.txtSearch.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSearch.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.txtSearch.TabIndex = 123;
             // 
             // lbSave
             // 
-            this.lbSave.AutoSize = true;
+            resources.ApplyResources(this.lbSave, "lbSave");
             this.lbSave.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lbSave.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSave.Location = new System.Drawing.Point(728, 296);
             this.lbSave.Name = "lbSave";
-            this.lbSave.Size = new System.Drawing.Size(46, 20);
-            this.lbSave.TabIndex = 137;
-            this.lbSave.Text = "SAVE";
-            this.lbSave.Visible = false;
             // 
             // lbDelete
             // 
-            this.lbDelete.AutoSize = true;
+            resources.ApplyResources(this.lbDelete, "lbDelete");
             this.lbDelete.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lbDelete.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbDelete.Location = new System.Drawing.Point(499, 296);
             this.lbDelete.Name = "lbDelete";
-            this.lbDelete.Size = new System.Drawing.Size(169, 20);
-            this.lbDelete.TabIndex = 135;
-            this.lbDelete.Text = "DELETE CLASS SECTION";
             this.lbDelete.Click += new System.EventHandler(this.lbDelete_Click);
             // 
-            // lbEdit
+            // lbEditClass
             // 
-            this.lbEdit.AutoSize = true;
-            this.lbEdit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lbEdit.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbEdit.Location = new System.Drawing.Point(677, 132);
-            this.lbEdit.Name = "lbEdit";
-            this.lbEdit.Size = new System.Drawing.Size(151, 20);
-            this.lbEdit.TabIndex = 133;
-            this.lbEdit.Text = "EDIT CLASS SECTION";
-            this.lbEdit.Click += new System.EventHandler(this.pbEdit_Click);
+            resources.ApplyResources(this.lbEditClass, "lbEditClass");
+            this.lbEditClass.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbEditClass.Name = "lbEditClass";
+            this.lbEditClass.Click += new System.EventHandler(this.pbEdit_Click);
             // 
-            // lbStudents
+            // lbAddClass
             // 
-            this.lbStudents.AutoSize = true;
-            this.lbStudents.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lbStudents.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbStudents.Location = new System.Drawing.Point(499, 133);
-            this.lbStudents.Name = "lbStudents";
-            this.lbStudents.Size = new System.Drawing.Size(156, 20);
-            this.lbStudents.TabIndex = 131;
-            this.lbStudents.Text = "NEW CLASS SECTION";
-            this.lbStudents.Click += new System.EventHandler(this.pbStudents_Click);
+            resources.ApplyResources(this.lbAddClass, "lbAddClass");
+            this.lbAddClass.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbAddClass.Name = "lbAddClass";
+            this.lbAddClass.Click += new System.EventHandler(this.pbStudents_Click);
             // 
-            // lbDetail
+            // lbShowStudents
             // 
-            this.lbDetail.AutoSize = true;
-            this.lbDetail.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lbDetail.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbDetail.Location = new System.Drawing.Point(881, 133);
-            this.lbDetail.Name = "lbDetail";
-            this.lbDetail.Size = new System.Drawing.Size(78, 20);
-            this.lbDetail.TabIndex = 139;
-            this.lbDetail.Text = "STUDENTS ";
+            resources.ApplyResources(this.lbShowStudents, "lbShowStudents");
+            this.lbShowStudents.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbShowStudents.Name = "lbShowStudents";
+            // 
+            // txtSchedule
+            // 
+            resources.ApplyResources(this.txtSchedule, "txtSchedule");
+            this.txtSchedule.CalendarTodayDate = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
+            this.txtSchedule.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.txtSchedule.Name = "txtSchedule";
+            this.txtSchedule.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.txtSchedule.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
+            this.txtSchedule.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
+            this.txtSchedule.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.txtSchedule.StateCommon.Border.Rounding = 20;
+            this.txtSchedule.StateCommon.Border.Width = 1;
+            this.txtSchedule.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSchedule.StateDisabled.Content.Color1 = System.Drawing.Color.Black;
+            // 
+            // lbSubjectID
+            // 
+            resources.ApplyResources(this.lbSubjectID, "lbSubjectID");
+            this.lbSubjectID.Name = "lbSubjectID";
+            // 
+            // pictureBox1
+            // 
+            resources.ApplyResources(this.pictureBox1, "pictureBox1");
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.label7_Click);
             // 
             // pbDetail
             // 
+            resources.ApplyResources(this.pbDetail, "pbDetail");
             this.pbDetail.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbDetail.Image = ((System.Drawing.Image)(resources.GetObject("pbDetail.Image")));
-            this.pbDetail.Location = new System.Drawing.Point(866, 5);
             this.pbDetail.Name = "pbDetail";
-            this.pbDetail.Size = new System.Drawing.Size(114, 125);
-            this.pbDetail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbDetail.TabIndex = 138;
             this.pbDetail.TabStop = false;
+            this.pbDetail.Click += new System.EventHandler(this.pbDetail_Click);
             // 
             // pbSave
             // 
+            resources.ApplyResources(this.pbSave, "pbSave");
             this.pbSave.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbSave.Image = ((System.Drawing.Image)(resources.GetObject("pbSave.Image")));
-            this.pbSave.Location = new System.Drawing.Point(696, 168);
             this.pbSave.Name = "pbSave";
-            this.pbSave.Size = new System.Drawing.Size(114, 125);
-            this.pbSave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbSave.TabIndex = 136;
             this.pbSave.TabStop = false;
-            this.pbSave.Visible = false;
             this.pbSave.Click += new System.EventHandler(this.pbSave_Click);
             // 
             // pbDelete
             // 
+            resources.ApplyResources(this.pbDelete, "pbDelete");
             this.pbDelete.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbDelete.Image = ((System.Drawing.Image)(resources.GetObject("pbDelete.Image")));
-            this.pbDelete.Location = new System.Drawing.Point(519, 168);
             this.pbDelete.Name = "pbDelete";
-            this.pbDelete.Size = new System.Drawing.Size(114, 125);
-            this.pbDelete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbDelete.TabIndex = 134;
             this.pbDelete.TabStop = false;
             this.pbDelete.Click += new System.EventHandler(this.lbDelete_Click);
             // 
             // pbEdit
             // 
+            resources.ApplyResources(this.pbEdit, "pbEdit");
             this.pbEdit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbEdit.Image = ((System.Drawing.Image)(resources.GetObject("pbEdit.Image")));
-            this.pbEdit.Location = new System.Drawing.Point(696, 4);
             this.pbEdit.Name = "pbEdit";
-            this.pbEdit.Size = new System.Drawing.Size(114, 125);
-            this.pbEdit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbEdit.TabIndex = 132;
             this.pbEdit.TabStop = false;
             this.pbEdit.Click += new System.EventHandler(this.pbEdit_Click);
             // 
             // pbStudents
             // 
+            resources.ApplyResources(this.pbStudents, "pbStudents");
             this.pbStudents.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbStudents.Image = ((System.Drawing.Image)(resources.GetObject("pbStudents.Image")));
-            this.pbStudents.Location = new System.Drawing.Point(519, 5);
             this.pbStudents.Name = "pbStudents";
-            this.pbStudents.Size = new System.Drawing.Size(114, 125);
-            this.pbStudents.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbStudents.TabIndex = 130;
             this.pbStudents.TabStop = false;
             this.pbStudents.Click += new System.EventHandler(this.pbStudents_Click);
             // 
             // pbPrev
             // 
+            resources.ApplyResources(this.pbPrev, "pbPrev");
             this.pbPrev.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbPrev.Image = ((System.Drawing.Image)(resources.GetObject("pbPrev.Image")));
-            this.pbPrev.Location = new System.Drawing.Point(892, 653);
             this.pbPrev.Name = "pbPrev";
-            this.pbPrev.Size = new System.Drawing.Size(39, 33);
-            this.pbPrev.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbPrev.TabIndex = 129;
             this.pbPrev.TabStop = false;
             this.pbPrev.Click += new System.EventHandler(this.pbPrev_Click);
             // 
             // pbNext
             // 
+            resources.ApplyResources(this.pbNext, "pbNext");
             this.pbNext.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbNext.Image = ((System.Drawing.Image)(resources.GetObject("pbNext.Image")));
-            this.pbNext.Location = new System.Drawing.Point(941, 653);
             this.pbNext.Name = "pbNext";
-            this.pbNext.Size = new System.Drawing.Size(39, 33);
-            this.pbNext.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbNext.TabIndex = 128;
             this.pbNext.TabStop = false;
             this.pbNext.Click += new System.EventHandler(this.pbNext_Click);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(941, 335);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(39, 33);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 126;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.label7_Click);
-            // 
             // pbReload
             // 
-            this.pbReload.Image = ((System.Drawing.Image)(resources.GetObject("pbReload.Image")));
-            this.pbReload.Location = new System.Drawing.Point(432, 335);
+            resources.ApplyResources(this.pbReload, "pbReload");
             this.pbReload.Name = "pbReload";
-            this.pbReload.Size = new System.Drawing.Size(39, 33);
-            this.pbReload.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbReload.TabIndex = 125;
             this.pbReload.TabStop = false;
             this.pbReload.Click += new System.EventHandler(this.pbReload_Click);
             // 
             // ClassSectionManager
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(982, 693);
-            this.Controls.Add(this.lbDetail);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.txtSchedule);
+            this.Controls.Add(this.lbShowStudents);
             this.Controls.Add(this.pbDetail);
             this.Controls.Add(this.lbSave);
             this.Controls.Add(this.pbSave);
             this.Controls.Add(this.lbDelete);
             this.Controls.Add(this.pbDelete);
-            this.Controls.Add(this.lbEdit);
+            this.Controls.Add(this.lbEditClass);
             this.Controls.Add(this.pbEdit);
-            this.Controls.Add(this.lbStudents);
+            this.Controls.Add(this.lbAddClass);
             this.Controls.Add(this.pbStudents);
             this.Controls.Add(this.pbPrev);
             this.Controls.Add(this.pbNext);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.pbReload);
-            this.Controls.Add(this.btnLogin);
+            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.txtNOS);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.txtSchedule);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.lbNos);
+            this.Controls.Add(this.lbSchedule);
+            this.Controls.Add(this.lbFinish);
             this.Controls.Add(this.dtpFinish);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lbStart);
             this.Controls.Add(this.dtpStart);
             this.Controls.Add(this.cbTeacher);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lbTeacherID);
             this.Controls.Add(this.cbSubject);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lbSubjectID);
             this.Controls.Add(this.txtID);
-            this.Controls.Add(this.label10);
+            this.Controls.Add(this.lbClassSectionID);
             this.Controls.Add(this.dgvClass);
+            this.Controls.Add(this.lbExport);
             this.Name = "ClassSectionManager";
             this.Palette = this.kryptonPalette1;
             this.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "CLASS SECTION MANAGER";
             this.Load += new System.EventHandler(this.ClassSectionManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvClass)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSubject)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbTeacher)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDetail)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).EndInit();
@@ -732,7 +654,6 @@ namespace SchoolManagement
             ((System.ComponentModel.ISupportInitialize)(this.pbStudents)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPrev)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbReload)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -744,36 +665,36 @@ namespace SchoolManagement
         private ComponentFactory.Krypton.Toolkit.KryptonPalette kryptonPalette1;
         private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgvClass;
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox txtID;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbClassSectionID;
         private ComponentFactory.Krypton.Toolkit.KryptonComboBox cbSubject;
         private ComponentFactory.Krypton.Toolkit.KryptonComboBox cbTeacher;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbTeacherID;
+        private System.Windows.Forms.Label lbStart;
         private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker dtpStart;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbFinish;
         private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker dtpFinish;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lbSchedule;
         private ComponentFactory.Krypton.Toolkit.KryptonContextMenuMonthCalendar kryptonContextMenuMonthCalendar1;
-        private ComponentFactory.Krypton.Toolkit.KryptonTextBox txtSchedule;
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox txtNOS;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lbNos;
         private System.Windows.Forms.PictureBox pbPrev;
         private System.Windows.Forms.PictureBox pbNext;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lbExport;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pbReload;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton btnLogin;
+        private ComponentFactory.Krypton.Toolkit.KryptonButton btnSearch;
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox txtSearch;
         private System.Windows.Forms.Label lbSave;
         private System.Windows.Forms.PictureBox pbSave;
         private System.Windows.Forms.Label lbDelete;
         private System.Windows.Forms.PictureBox pbDelete;
-        private System.Windows.Forms.Label lbEdit;
+        private System.Windows.Forms.Label lbEditClass;
         private System.Windows.Forms.PictureBox pbEdit;
-        private System.Windows.Forms.Label lbStudents;
+        private System.Windows.Forms.Label lbAddClass;
         private System.Windows.Forms.PictureBox pbStudents;
-        private System.Windows.Forms.Label lbDetail;
+        private System.Windows.Forms.Label lbShowStudents;
         private System.Windows.Forms.PictureBox pbDetail;
+        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker txtSchedule;
+        private System.Windows.Forms.Label lbSubjectID;
     }
 }

@@ -24,6 +24,8 @@ namespace SchoolManagement
         {
             InitializeComponent();
             LoadTextBox();
+          
+
         }
 
         private void LoadTextBox()
@@ -44,79 +46,88 @@ namespace SchoolManagement
                 {
                     conn.Open();
                     string query = @"
-            SELECT 
-                t.TEACHER_ID, 
-                t.FULL_NAME, 
-                t.ADRESS,   
-                t.GENDER, 
-                t.DATE_OF_BIRTH, 
-                a.USER, 
-                a.PASSWORD 
-            FROM SYSTEM.TEACHER t 
-            JOIN SYSTEM.ACCOUNT a ON a.USER = t.FULL_NAME  
-            WHERE t.FULL_NAME = @name"; // Recherche par FULL_NAME
+SELECT 
+    t.TEACHER_ID, 
+    t.FULL_NAME, 
+    t.ADRESS,   
+    t.GENDER, 
+    t.DATE_OF_BIRTH, 
+    t.DEP_ID,
+    a.ID, 
+    a.PASSWORD 
+FROM SYSTEM.TEACHER t 
+JOIN SYSTEM.ACCOUNT a ON a.ID = t.TEACHER_ID  -- Jointure basée sur TEACHER_ID, 
+WHERE t.TEACHER_ID = @id"; // Recherche par TEACHER_ID
 
                     MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@name", Login.ID); // Passer le FULL_NAME
+                    cmd.Parameters.AddWithValue("@id", Login.ID); // Passer le TEACHER_ID
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
                         if (dr.Read())
                         {
-                            txtID.Text = dr.GetInt32(0).ToString();
+                            txtClass.Text = dr.GetString(5);
+                            txtID.Text = dr.GetString(6);
                             txtHoTen.Text = dr.GetString(1);
                             txtAddress.Text = dr.GetString(2);
                             txtBirth.Text = dr.GetDateTime(4).ToString("yyyy-MM-dd");
                             txtGender.Text = dr.GetString(3);
-                            txtPassword.Text = dr.GetString(6);
+                            txtPassword.Text = dr.GetString(7);
                         }
                         else
                         {
-                            MessageBox.Show("No data found for the given Teacher name.");
+                            MessageBox.Show("No data found for the given Teacher ID.");
                         }
                     }
                 }
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show($"MySQL error ({ex.Number}): {ex.Message}\n{ex.StackTrace}");
-            }
-            catch (Exception es)
-            {
-                MessageBox.Show(es.Message);
+                MessageBox.Show("MySQL error (" + ex.Number + "): " + ex.Message + "\n" + ex.StackTrace);
             }
         }
 
+
+
         private void kryptonButton1_Click(object sender, EventArgs e)
         {
-            this.Close(); // Fermer le formulaire  
+            this.Close(); 
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
-                string username = txtHoTen.Text;
+                InsertData dataInserter = new InsertData();
+
                 string passInsert = txtPassword.Text;
 
-                // Assurez-vous que InsertData est bien configuré pour mettre à jour le mot de passe  
-                InsertData dataInserter = new InsertData();
-                string result = dataInserter.UpdatePassword(username, passInsert); // Ajustez l'appel selon vos besoins
+                string userID = txtID.Text;
+                string hashedPassword = Encrypt.HashString(passInsert);
+
+                
+                string result = dataInserter.UpdatePassword(userID, hashedPassword);
 
                 if (result != null)
                 {
                     MessageBox.Show("Account modified successfully.");
-                    this.Close(); // Fermez le formulaire après que la modification a été effectuée  
-                }
-                else
-                {
-                    MessageBox.Show("Failed to modify account.");
+                    this.Close();
                 }
             }
             catch (Exception es)
             {
                 MessageBox.Show(es.Message); // Afficher tout message d'erreur  
             }
+        }
+
+        private void TeacherProfile_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

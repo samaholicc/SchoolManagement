@@ -6,11 +6,11 @@ using MySql.Data.MySqlClient;
 
 namespace SchoolManagement
 {
-    public partial class AdminMenu : KryptonForm
+    public partial class MenuAdmin : KryptonForm
     {
         private const string MySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
 
-        public AdminMenu()
+        public MenuAdmin()
         {
             InitializeComponent();
         }
@@ -18,13 +18,18 @@ namespace SchoolManagement
         private void AdminMenu_Load(object sender, EventArgs e)
         {
             LoadTotals();
+          
+
+
+
+
         }
 
         private void pbLogout_Click(object sender, EventArgs e)
         {
             LogOut();
         }
-
+     
         private void LogOut()
         {
             // Navigate to the login screen
@@ -67,10 +72,12 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error fetching data: {ex.Message}");
+                // Use string concatenation instead of interpolation for C# 4.0 compatibility
+                MessageBox.Show("Error fetching data: " + ex.Message);
                 return 0; // Return 0 in case of an error
             }
         }
+
 
         private void pbProfile_Click(object sender, EventArgs e)
         {
@@ -90,15 +97,11 @@ namespace SchoolManagement
             teacher.Show();
         }
 
-        private void pbSection_Click(object sender, EventArgs e)
-        {
-            ClassSectionManager classSectionManager = new ClassSectionManager();
-            classSectionManager.Show();
-        }
+        
 
         private void pbClasses_Click(object sender, EventArgs e)
         {
-            ClassManager classManager = new ClassManager();
+            ClassSectionManager classManager = new ClassSectionManager();
             classManager.Show();
         }
 
@@ -112,6 +115,16 @@ namespace SchoolManagement
         {
             DepartmentManager departmentManager = new DepartmentManager();
             departmentManager.Show();
+        }
+
+        private void menu4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbClasses_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

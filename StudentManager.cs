@@ -1,8 +1,16 @@
-﻿using System;
+﻿using ComponentFactory.Krypton.Toolkit;
+using MySql.Data.MySqlClient; 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition.Primitives;
 using System.Data;
+using System.Data.SqlClient;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
-using MySql.Data.MySqlClient; // Using MySQL data access
+using Excel = Microsoft.Office.Interop.Excel;
+
 
 namespace SchoolManagement
 {
@@ -18,8 +26,7 @@ namespace SchoolManagement
                 return cp;
             }
         }
-
-        private int action; // 0 - add, 1 - edit  
+        private int action;
         private bool isSelected = false;
         private int currFrom = 1;
         private int pageSize = 10;
@@ -28,7 +35,8 @@ namespace SchoolManagement
         {
             InitializeComponent();
             LoadStudents();
-            LoadComboBoxClass();
+            LoadListBox1Class();
+
 
         }
 
@@ -37,57 +45,76 @@ namespace SchoolManagement
             try
             {
                 string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
+
+                // Create a connection using the connection string
                 using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                 {
                     conn.Open();
-                    // Modifiez la requête pour combiner CLASS_ID et CLASS_NAME  
-                    string query = @"
-            SELECT 
-                a.STUDENT_ID, 
-                CONCAT(a.CLASS_ID, ' - ', c.CLASS_NAME) AS `Class`, 
-                a.FULL_NAME AS `Name`, 
-                a.DATE_OF_BIRTH AS `Birth`, 
-                a.GENDER AS `Gender`, 
-                a.ADRESS AS `Address`
-            FROM SYSTEM.STUDENTSTABLE a 
-            JOIN SYSTEM.CLASS c ON a.CLASS_ID = c.CLASS_ID;";
 
+                    // Create a command object
+                    string query = @"
+                SELECT 
+                    s.STUDENT_ID, 
+                    s.FULL_NAME AS Name, 
+                    s.DATE_OF_BIRTH AS Birth, 
+                    s.GENDER AS Gender, 
+                    s.ADRESS AS Adress,
+                    GROUP_CONCAT(sc.CLASS_ID ORDER BY sc.CLASS_ID) AS CLASS_ID
+                FROM SYSTEM.STUDENTSTABLE s
+                JOIN SYSTEM.STUDENT_CLASSES sc ON s.STUDENT_ID = sc.STUDENT_ID
+                GROUP BY s.STUDENT_ID, s.FULL_NAME, s.DATE_OF_BIRTH, s.GENDER, s.ADRESS
+                ORDER BY s.STUDENT_ID";
+
+
+                    // Create the MySqlCommand object
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
+                        // Execute the query and load the result into a DataTable
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
                             DataTable dataTable = new DataTable();
                             dataTable.Load(reader);
 
-                            // Mettre à jour le DataGridView avec le DataTable 
-                            dgvTeachers.DataSource = dataTable;
-
-                            // Supprimez explicitement CLASS_ID si vous le souhaitez  
-                            // dgvStudents.Columns.Remove("CLASS_ID"); // Optionnel si CLASS_ID n'est plus dans la requête
-
-                            // Si vous avez besoin de renommer d'autres colonnes, vous pouvez le faire ici  
+                            // Bind the DataTable to the DataGridView
+                            dgvStudents.DataSource = dataTable;
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
+                // Show error message if there's an exception
                 MessageBox.Show(ex.Message);
             }
         }
+
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
             try
             {
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
+                string mySqlDb = "Server =localhost;Database=system;User ID=root;Password=samia;";
                 using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                 {
                     conn.Open();
-                    string query = "SELECT STUDENT_ID, CLASS_ID AS `Class`, FULL_NAME AS `Name`, DATE_OF_BIRTH AS `BIRTH`, " +
-                                   "GENDER AS `GENDER`, ADRESS AS `Address` " +
-                                   "FROM SYSTEM.STUDENTSTABLE WHERE FULL_NAME LIKE @search OR STUDENT_ID LIKE @search " +
-                                   "OR CLASS_ID LIKE @search OR GENDER LIKE @search OR ADRESS LIKE @search";
+                    String query = "SELECT " +
+              "S.STUDENT_ID, " +
+              "S.FULL_NAME AS `Name`, " +
+              "S.DATE_OF_BIRTH AS `BIRTH`, " +
+              "S.GENDER AS `GENDER`, " +
+              "S.ADRESS AS `Adress`, " +
+              "GROUP_CONCAT(C.CLASS_ID ORDER BY C.CLASS_ID ASC) AS `Class_ID` " +
+              "FROM SYSTEM.STUDENTSTABLE S " +
+              "JOIN SYSTEM.STUDENT_CLASSES SC ON S.STUDENT_ID = SC.STUDENT_ID " +
+              "JOIN SYSTEM.CLASS C ON SC.CLASS_ID = C.CLASS_ID " +
+              "WHERE S.FULL_NAME LIKE @search " +
+              "OR S.STUDENT_ID LIKE @search " +
+              "OR C.CLASS_ID LIKE @search " +
+              "OR S.GENDER LIKE @search " +
+              "OR S.ADRESS LIKE @search " +
+              "GROUP BY S.STUDENT_ID, S.FULL_NAME, S.DATE_OF_BIRTH, S.GENDER, S.ADRESS";
+
+
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -97,7 +124,7 @@ namespace SchoolManagement
                         {
                             DataTable dataTable = new DataTable();
                             dataTable.Load(reader);
-                            dgvTeachers.DataSource = dataTable;
+                            dgvStudents.DataSource = dataTable;
                         }
                     }
                 }
@@ -115,36 +142,30 @@ namespace SchoolManagement
                 isSelected = true;
                 showAction();
 
-                DataGridViewRow row = dgvTeachers.Rows[e.RowIndex];
+                DataGridViewRow row = dgvStudents.Rows[e.RowIndex];
 
-                // Assuming the structure is as follows:
-                // 0: STUDENT_ID, 1: CLASS_ID, 2: FULL_NAME, 3: DATE_OF_BIRTH, 4: GENDER, 5: ADRESS  
-                txtID.Text = row.Cells[0].Value.ToString(); // STUDENT_ID  
-                txtName.Text = row.Cells[2].Value.ToString(); // FULL_NAME
+                // STUDENT_ID
+                txtID.Text = row.Cells[0].Value.ToString();
 
-                // Correctly set the date of birth  
-                if (DateTime.TryParse(row.Cells[3].Value.ToString(), out DateTime dateOfBirth))
+                // FULL_NAME
+                txtName.Text = row.Cells[1].Value.ToString();
+
+
+                DateTime dateOfBirth;
+                if (!DateTime.TryParse(row.Cells[2].Value.ToString(), out dateOfBirth))
                 {
-                    dtpBirth.Value = dateOfBirth;
+                    MessageBox.Show($"Invalid date format: {row.Cells[2].Value.ToString()}");
                 }
 
-                // Set the address field correctly  
-                txtAddress.Text = row.Cells[5].Value?.ToString() ?? string.Empty; // ADRESS
+                // ADRESS (null-conditional operator used)
+                txtAddress.Text = row.Cells[4].Value?.ToString() ?? string.Empty;
 
-                // Set the ComboBox to the selected CLASS_ID  
-                string classId = row.Cells[1].Value.ToString(); // CLASS_ID  
-                if (cbClass.Items.Contains(classId))
-                {
-                    cbClass.SelectedItem = classId; // Set the selected class in ComboBox  
-                }
-                else
-                {
-                    // Optionally, you can handle the case where the CLASS_ID is not found in the ComboBox  
-                    cbClass.Text = classId; // Set the text if the item is not found  
-                }
+                // CLASS_ID  
+                string classId = row.Cells[5].Value.ToString();
+                txtClass.Text = classId;
 
                 // Set gender based on cell value  
-                if (row.Cells[4].Value.ToString() == "Homme")
+                if (row.Cells[3].Value.ToString() == "Homme")
                 {
                     rbMale.Checked = true;
                 }
@@ -155,21 +176,24 @@ namespace SchoolManagement
             }
         }
 
+
+
         private void pbStudents_Click(object sender, EventArgs e)
         {
             action = 0;
 
             pbStudents.Visible = false;
-            lbStudents.Visible = false;
+            lbAddStudents.Visible = false;
             pbEdit.Visible = false;
-            lbEdit.Visible = false;
+            lbEditStudent.Visible = false;
             pbDelete.Visible = false;
-            lbDelete.Visible = false;
+            lbDeleteStudent.Visible = false;
             pbSave.Visible = true;
             lbSave.Visible = true;
+            txtID.Text = "";
 
-            txtID.Visible = false;
-            label10.Visible = false;
+            txtID.Visible = true;
+            lbStudentID.Visible = true;
 
             txtName.Text = "";
             txtName.Enabled = true;
@@ -180,8 +204,7 @@ namespace SchoolManagement
             txtPassword.Text = "";
             txtPassword.Enabled = true;
 
-            cbClass.Text = "";
-            cbClass.Enabled = true;
+            txtClass.Enabled = true;
 
             dtpBirth.Enabled = true;
 
@@ -199,13 +222,14 @@ namespace SchoolManagement
                 return;
             }
             action = 1;
-
+            txtID.Visible = true;
+            lbStudentID.Visible = true;
             pbStudents.Visible = false;
-            lbStudents.Visible = false;
+            lbAddStudents.Visible = false;
             pbEdit.Visible = false;
-            lbEdit.Visible = false;
+            lbEditStudent.Visible = false;
             pbDelete.Visible = false;
-            lbDelete.Visible = false;
+            lbDeleteStudent.Visible = false;
             pbSave.Visible = true;
             lbSave.Visible = true;
 
@@ -213,7 +237,7 @@ namespace SchoolManagement
             txtName.Enabled = true;
             txtAddress.Enabled = true;
             txtPassword.Enabled = true;
-            cbClass.Enabled = true;
+            txtClass.Enabled = true;
             dtpBirth.Enabled = true;
             rbMale.Enabled = true;
             rbFemale.Enabled = true;
@@ -221,12 +245,13 @@ namespace SchoolManagement
 
         private void showAction()
         {
+
             pbStudents.Visible = true;
-            lbStudents.Visible = true;
+            lbAddStudents.Visible = true;
             pbEdit.Visible = true;
-            lbEdit.Visible = true;
+            lbEditStudent.Visible = true;
             pbDelete.Visible = true;
-            lbDelete.Visible = true;
+            lbDeleteStudent.Visible = true;
             pbSave.Visible = false;
             lbSave.Visible = false;
         }
@@ -234,77 +259,216 @@ namespace SchoolManagement
         private void pbSave_Click(object sender, EventArgs e)
         {
             string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                 {
                     conn.Open();
-                    MySqlCommand cmd;
+                    MySqlCommand cmd = new MySqlCommand(); // Initialization of cmd
+                    cmd.Connection = conn; // Associate the connection
 
-                    if (action == 0) // Add new student  
+                    if (action == 0) // Add a new student
                     {
-                        // Check if a class is selected  
-                        // Check if a class is selected  
-                        if (cbClass.SelectedItem == null)
+                        if (string.IsNullOrEmpty(txtClass.Text))
                         {
                             MessageBox.Show("Please select a class.");
-                            return; // Exit the method if no class is selected  
+                            return;
                         }
-                        int classId = Convert.ToInt32(cbClass.SelectedItem.ToString().Split('-')[0]);
 
+                        string classId = txtClass.Text.Split('-')[0].Trim(); // Retrieve CLASS_ID as a string
 
-                        string query = "INSERT INTO SYSTEM.STUDENTSTABLE (CLASS_ID, FULL_NAME, DATE_OF_BIRTH, GENDER, ADRESS, PASSWORD) " +
-                                       "VALUES (@classId, @prenomnom, @dateofbirth, @gender, @adress, @password); SELECT LAST_INSERT_ID();";
-
-                        cmd = new MySqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@classId", classId); // Get CLASS_ID from selected item  
-                        cmd.Parameters.AddWithValue("@prenomnom", txtName.Text);
-                        cmd.Parameters.AddWithValue("@dateofbirth", dtpBirth.Value);
-                        cmd.Parameters.AddWithValue("@gender", rbMale.Checked ? "Homme" : "Femme");
-                        cmd.Parameters.AddWithValue("@adress", txtAddress.Text);
-                        cmd.Parameters.AddWithValue("@password", Encrypt.HashString(txtPassword.Text)); // Hash the password
-
-                        // Execute the insert command and retrieve the new student ID  
-                        int newStudentId = Convert.ToInt32(cmd.ExecuteScalar());
-
-                        // Create an account for the new student  
-                        InsertData insertData = new InsertData();
-                        string result = insertData.AddAccount(txtName.Text, txtPassword.Text, newStudentId, "Student", classId);
-
-                        MessageBox.Show(result != null ? "Add success, and account created." : "Account creation failed.");
-                    }
-                    else // Edit existing student  
-                    {    
-                        // Check if a class is selected  
-                        if (cbClass.SelectedItem == null)
+                        // Check if a student with the same name already exists
+                        string checkStudentQuery = "SELECT COUNT(*) FROM SYSTEM.STUDENTSTABLE WHERE FULL_NAME = @prenomnom";
+                        using (MySqlCommand checkCmd = new MySqlCommand(checkStudentQuery, conn))
                         {
-                            MessageBox.Show("Please select a class.");
-                            return; // Exit the method if no class is selected  
-                        }
-                        int classId = Convert.ToInt32(cbClass.SelectedItem.ToString().Split('-')[0]);
-                        string query = "UPDATE SYSTEM.STUDENTSTABLE SET CLASS_ID = @classId, FULL_NAME = @prenomnom, " +
-                                       "DATE_OF_BIRTH = @dateofbirth, GENDER = @gender, ADRESS = @adress, PASSWORD = @password WHERE STUDENT_ID = @id";
+                            checkCmd.Parameters.AddWithValue("@prenomnom", txtName.Text);
+                            int studentExists = Convert.ToInt32(checkCmd.ExecuteScalar());
 
-                        cmd = new MySqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@classId", classId) ; // Get CLASS_ID from selected item  
-                        cmd.Parameters.AddWithValue("@prenomnom", txtName.Text);
+                            if (studentExists > 0)
+                            {
+                                // Optionally append a unique identifier to the name (e.g., append "_1" or "_timestamp")
+                                string uniqueName = txtName.Text + "_" + DateTime.Now.Ticks; // Append unique timestamp to the name
+                                MessageBox.Show("A student with this name already exists. The new student will be registered as: " + uniqueName);
+
+                                // Now use the unique name for insertion instead of the original name
+                                txtName.Text = uniqueName;
+                            }
+                        }
+
+                        // Insert a new student into the STUDENTSTABLE
+                        string query = "INSERT INTO SYSTEM.STUDENTSTABLE (FULL_NAME, DATE_OF_BIRTH, GENDER, ADRESS) " +
+                                       "VALUES (@prenomnom, @dateofbirth, @gender, @address);";
+                        cmd.CommandText = query;
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.AddWithValue("@prenomnom", txtName.Text); // Use the unique name here
                         cmd.Parameters.AddWithValue("@dateofbirth", dtpBirth.Value);
                         cmd.Parameters.AddWithValue("@gender", rbMale.Checked ? "Homme" : "Femme");
-                        cmd.Parameters.AddWithValue("@adress", txtAddress.Text);
-                        cmd.Parameters.AddWithValue("@password", Encrypt.HashString(txtPassword.Text)); // Hash the password  
-                        cmd.Parameters.AddWithValue("@id", txtID.Text); // Ensure the Student ID is included
+                        cmd.Parameters.AddWithValue("@address", txtAddress.Text);
 
+                        // Execute the command to insert the student
                         cmd.ExecuteNonQuery();
 
-                        InsertData insertData = new InsertData();
-                        string result = insertData.UpdatePassword(txtName.Text, txtPassword.Text);
-                        MessageBox.Show("Edit success");
+                        // Retrieve the newly generated STUDENT_ID from the database
+                        string newStudentIdQuery = "SELECT STUDENT_ID FROM SYSTEM.STUDENTSTABLE WHERE FULL_NAME = @prenomnom ORDER BY STUDENT_ID DESC LIMIT 1";
+                        using (MySqlCommand getIdCmd = new MySqlCommand(newStudentIdQuery, conn))
+                        {
+                            getIdCmd.Parameters.AddWithValue("@prenomnom", txtName.Text);
+                            string newStudentId = getIdCmd.ExecuteScalar()?.ToString();
+                            Console.WriteLine($"New Student ID: {newStudentId}"); // Debug Output
+
+                            if (!string.IsNullOrEmpty(newStudentId))
+                            {
+                                // Now insert the student's class into the STUDENT_CLASSES table
+                                string insertClassQuery = "INSERT INTO SYSTEM.STUDENT_CLASSES (STUDENT_ID, CLASS_ID) VALUES (@studentId, @classId)";
+                                using (MySqlCommand classCmd = new MySqlCommand(insertClassQuery, conn))
+                                {
+                                    classCmd.Parameters.AddWithValue("@studentId", newStudentId);
+                                    classCmd.Parameters.AddWithValue("@classId", classId);
+
+                                    try
+                                    {
+                                        // Execute the insert for the student's class
+                                        classCmd.ExecuteNonQuery();
+                                        MessageBox.Show("Student class added successfully.");
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        // Show error message if insertion fails
+                                        MessageBox.Show("Error inserting student class: " + ex.Message);
+                                    }
+                                }
+
+                                // Create an account for the newly added student
+                                InsertData insertData = new InsertData();
+                                string result = insertData.AddAccount(txtName.Text, txtPassword.Text, newStudentId, "Student");
+                                insertData.UpdateUserIdBasedOnRole(txtName.Text, "Student");
+
+                                // Notify the user about account creation
+                                MessageBox.Show(result != null ? "Add success, and account created." : "Account creation failed.");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to retrieve the student ID after insertion.");
+                            }
+                        }
+
+                        // Refresh the student list after adding the student
+                        LoadStudents();
+                        showAction();
                     }
 
-                    // Clear inputs after save  
-                    ClearInputs();
-                    LoadStudents(); // Reload the student list to reflect changes  
+
+
+
+                    else // Edit existing student
+                    {
+                        try
+                        {
+                            if (string.IsNullOrEmpty(txtClass.Text))
+                            {
+                                MessageBox.Show("Please select at least one class.");
+                                return;
+                            }
+
+                            string[] classIds = txtClass.Text.Split(','); // Split the selected class IDs
+                            string studentId = txtID.Text;
+                            string newPassword = txtPassword.Text.Trim(); // Assuming txtPassword is where the new password is entered
+
+                            // Fetch the current password from the database before updating
+                            string currentPassword = GetCurrentPassword(studentId, conn); // Pass connection to the method
+
+                            // Update the student information
+                            string updateQuery = @"UPDATE SYSTEM.STUDENTSTABLE 
+                       SET FULL_NAME = @prenomnom, 
+                           DATE_OF_BIRTH = @dateofbirth, 
+                           GENDER = @gender, 
+                           ADRESS = @address  
+                       WHERE STUDENT_ID = @id";
+
+                            using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn))
+                            {
+                                updateCmd.Parameters.Clear();
+                                updateCmd.Parameters.AddWithValue("@prenomnom", txtName.Text);
+                                updateCmd.Parameters.AddWithValue("@dateofbirth", dtpBirth.Value);
+                                updateCmd.Parameters.AddWithValue("@gender", rbMale.Checked ? "Homme" : "Femme");
+                                updateCmd.Parameters.AddWithValue("@address", txtAddress.Text);
+                                updateCmd.Parameters.AddWithValue("@id", studentId);
+
+                                updateCmd.ExecuteNonQuery();
+                            }
+
+                            // Check if password was changed
+                            if (!string.IsNullOrEmpty(newPassword) && newPassword != currentPassword && IsPasswordValid(newPassword))
+                            {
+                                // Hash the new password before saving it
+                                string hashedPassword = Encrypt.HashString(newPassword);  // Hash the password
+
+                                // Only update password if it was changed
+                                InsertData insertData = new InsertData();
+                                string updateResult = insertData.UpdatePassword(studentId, hashedPassword); // Pass the hashed password
+
+                                if (updateResult != "Success")
+                                {
+                                    MessageBox.Show("Failed to update password. Please check the details.");
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Password updated successfully.");
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("No password change detected.");
+                            }
+
+
+                            // Delete existing class associations for the student before adding new ones
+                            string deleteClassQuery = "DELETE FROM SYSTEM.STUDENT_CLASSES WHERE STUDENT_ID = @id";
+                            using (MySqlCommand deleteCmd = new MySqlCommand(deleteClassQuery, conn))
+                            {
+                                deleteCmd.Parameters.AddWithValue("@id", studentId);
+                                deleteCmd.ExecuteNonQuery();
+                            }
+
+                            // Insert new class associations
+                            foreach (var classId in classIds)
+                            {
+                                string cleanClassId = classId.Trim();
+                                string insertClassQuery = "INSERT INTO SYSTEM.STUDENT_CLASSES (STUDENT_ID, CLASS_ID) VALUES (@id, @classId)";
+                                using (MySqlCommand classCmd = new MySqlCommand(insertClassQuery, conn))
+                                {
+                                    classCmd.Parameters.AddWithValue("@id", studentId);
+                                    classCmd.Parameters.AddWithValue("@classId", cleanClassId);
+                                    classCmd.ExecuteNonQuery();
+                                }
+                            }
+                            string updateAccountQuery = @"UPDATE SYSTEM.ACCOUNT 
+                                  SET FULL_NAME = @prenomnom 
+                                  WHERE ID = @id";
+
+                            using (MySqlCommand updateAccountCmd = new MySqlCommand(updateAccountQuery, conn))
+                            {
+                                updateAccountCmd.Parameters.Clear();
+                                updateAccountCmd.Parameters.AddWithValue("@prenomnom", txtName.Text);  // Full name from the input
+                                updateAccountCmd.Parameters.AddWithValue("@id", studentId);
+
+                                updateAccountCmd.ExecuteNonQuery();  // Execute the update query for ACCOUNT table
+                            }
+
+
+
+
+                            // Clear inputs after save
+                            ClearInputs();
+                            LoadStudents();
+                            showAction();
+                            kryptonListBox1.Visible = false;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: " + ex.Message);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -313,6 +477,25 @@ namespace SchoolManagement
             }
         }
 
+        public string GetCurrentPassword(string studentId, MySqlConnection conn)
+        {
+            string password = string.Empty;
+            string query = "SELECT PASSWORD FROM SYSTEM.ACCOUNT WHERE ID = @id";
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@id", studentId);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        password = reader["PASSWORD"].ToString();
+                    }
+                }
+            }
+            return password;
+        }
+
+
         private void ClearInputs()
         {
             // Clear input fields  
@@ -320,7 +503,6 @@ namespace SchoolManagement
             txtName.Text = "";
             txtAddress.Text = "";
             txtPassword.Text = "";
-            cbClass.SelectedIndex = -1; // Clears selection  
             dtpBirth.Value = DateTime.Now; // Reset to current date  
             rbMale.Checked = false; // Uncheck male radio button  
             rbFemale.Checked = false; // Uncheck female radio button  
@@ -345,9 +527,25 @@ namespace SchoolManagement
                     using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                     {
                         conn.Open();
-                        string query = "DELETE FROM SYSTEM.STUDENTSTABLE WHERE STUDENT_ID=@id";
 
-                        using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                        // Delete from STUDENTS_CLASSES table
+                        string deleteClassQuery = "DELETE FROM SYSTEM.STUDENT_CLASSES WHERE STUDENT_ID = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteClassQuery, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@id", txtID.Text);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Delete from STUDENTSTABLE table
+                        string deleteQuery = "DELETE FROM SYSTEM.STUDENTSTABLE WHERE STUDENT_ID=@id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteQuery, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@id", txtID.Text);
+                            cmd.ExecuteNonQuery();
+                        }
+                        // Suppression du compte associé à l'étudiant dans la table SYSTEM.ACCOUNTTABLE  
+                        string deleteAccountQuery = "DELETE FROM SYSTEM.ACCOUNT WHERE ID=@id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteAccountQuery, conn))
                         {
                             cmd.Parameters.AddWithValue("@id", txtID.Text);
                             cmd.ExecuteNonQuery();
@@ -377,12 +575,14 @@ namespace SchoolManagement
             txtName.Text = "";
             txtAddress.Text = "";
             txtPassword.Text = "";
-            cbClass.Text = "";
+            txtClass.Text = "";
             dtpBirth.Value = DateTime.Now;
             rbMale.Checked = false;
             rbFemale.Checked = false;
         }
 
+
+        // Logic for handling the "Next" and "Previous" buttons
         private void pbNext_Click(object sender, EventArgs e)
         {
             currFrom++;
@@ -398,11 +598,13 @@ namespace SchoolManagement
             }
         }
 
-        private void StudentManager_Load(object sender, EventArgs e)
+        private void UpdatePaginationButtons()
         {
-            // Any additional load logic can be added here  
+            pbPrev.Enabled = currFrom > 1;
+            pbNext.Enabled = currFrom * pageSize < GetTotalRecordCount();
         }
-        private void LoadComboBoxClass()
+
+        private int GetTotalRecordCount()
         {
             try
             {
@@ -410,18 +612,41 @@ namespace SchoolManagement
                 using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SELECT CLASS_ID, CLASS_NAME FROM SYSTEM.CLASS", conn); // Assuming CLASS_ID and CLASS_NAME are correct
+                    string query = "SELECT COUNT(DISTINCT STUDENT_ID) FROM SYSTEM.STUDENTSTABLE";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        return Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return 0; // Return 0 in case of an error
+            }
+
+        }
+
+        private void LoadListBox1Class()
+        {
+            try
+            {
+                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
+                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT CLASS_ID FROM SYSTEM.CLASS", conn);
 
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            string classId = reader.GetInt32(0).ToString();
-                            string className = reader.GetString(1);
-                            cbClass.Items.Add($"{classId} - {className}");
+                            string classId = reader.GetString(0);
+                            kryptonListBox1.Items.Add(classId);
                         }
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -431,9 +656,134 @@ namespace SchoolManagement
 
 
 
-        private void label8_Click(object sender, EventArgs e)
+        private void picturebox1_Click(object sender, EventArgs e)
         {
+            ExportToExcel();
+        }
+
+        private void ExportToExcel()
+        {
+            try
+            {
+                // Create a new Excel application instance
+                Excel.Application excelApp = new Excel.Application();
+                excelApp.Visible = true;
+                Excel.Workbook workbook = excelApp.Workbooks.Add();
+                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
+
+                // Add column headers to the Excel file
+                for (int col = 0; col < dgvStudents.Columns.Count; col++)
+                {
+                    worksheet.Cells[1, col + 1] = dgvStudents.Columns[col].HeaderText;
+                }
+
+                // Fetch all data for the export, not just the current page
+                List<DataRow> allRows = new List<DataRow>();
+
+                // Loop through all pages and collect all data
+                int totalRecords = GetTotalRecordCount(); // Get total record count from DB
+                int totalPages = (totalRecords + pageSize - 1) / pageSize; // Calculate number of pages
+
+                for (int page = 1; page <= totalPages; page++)
+                {
+                    currFrom = page; // Update current page number
+                    LoadStudents();  // This loads students for the current page
+
+                    // Collect rows from the DataGridView
+                    foreach (DataGridViewRow row in dgvStudents.Rows)
+                    {
+                        if (row.IsNewRow) continue; // Skip the new row placeholder
+
+                        DataRow dataRow = ((DataTable)dgvStudents.DataSource).NewRow();
+
+                        // Copy row values to DataRow
+                        for (int col = 0; col < dgvStudents.Columns.Count; col++)
+                        {
+                            dataRow[col] = row.Cells[col].Value.ToString();
+                        }
+
+                        allRows.Add(dataRow); // Add the row to the list
+                    }
+                }
+
+                // Populate Excel worksheet with all rows collected
+                int rowIndex = 2; // Start from row 2 (because row 1 is the header)
+                foreach (var row in allRows)
+                {
+                    for (int col = 0; col < dgvStudents.Columns.Count; col++)
+                    {
+                        worksheet.Cells[rowIndex, col + 1] = row[col].ToString();
+                    }
+                    rowIndex++;
+                }
+
+                MessageBox.Show("Exported to Excel successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error exporting to Excel: " + ex.Message);
+            }
+            LoadStudents();
+        }
+
+
+
+        private void txtClass_Click(object sender, EventArgs e)
+        {
+            kryptonListBox1.Visible = true;
+            kryptonListBox1.ClearSelected();
+
+        }
+
+        private void kryptonListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<string> selectedClasses = new List<string>();
+            foreach (var item in kryptonListBox1.SelectedItems)
+            {
+                selectedClasses.Add(item.ToString());
+            }
+            txtClass.Text = string.Join(", ", selectedClasses);
+        }
+
+        private void txtClass_Leave(object sender, EventArgs e)
+        {
+            kryptonListBox1.Visible = false;
+        }
+
+        private void StudentManager_Click(object sender, EventArgs e)
+        {
+            if (!txtClass.Focused && !kryptonListBox1.Focused)
+            {
+                kryptonListBox1.Visible = false;
+            }
+        }
+
+        private void StudentManager_Load(object sender, EventArgs e)
+        {
+            kryptonListBox1.Visible = false;
+
+        }
+        private bool IsPasswordValid(string password)
+        {
+            if (password.Length < 8)
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères !");
+                return false;
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*(),.?""{}|<>]"))
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins un caractère spécial !");
+                return false;
+            }
+
+            return true;
+
 
         }
     }
 }
+    
+
+
+

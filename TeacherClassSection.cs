@@ -1,15 +1,16 @@
-﻿using System;
+﻿using ComponentFactory.Krypton.Toolkit;
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
-using MySql.Data.MySqlClient; // Use MySql.Data for MySQL database connection
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace SchoolManagement
 {
     public partial class TeacherClassSection : KryptonForm
     {
         private const int CS_DropShadow = 0x00020000;
-
         protected override CreateParams CreateParams
         {
             get
@@ -25,14 +26,16 @@ namespace SchoolManagement
         private int currFrom = 1;
         private int pageSize = 10;
 
-        public static string ClassSectionID;
-        public static string SubjectID;
-        public static int limited;
+        public static string ClassID { get; set; }
 
-        public TeacherClassSection()
+        public static int SubjectID;          // INT
+        public static int StudentLimit;
+
+        public TeacherClassSection()  // Constructor to pass ClassSectionID
         {
             InitializeComponent();
             LoadClasses();
+           
         }
 
         private void LoadClasses()
@@ -44,13 +47,19 @@ namespace SchoolManagement
                 using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                 {
                     conn.Open();
-                    string query = "SELECT * FROM ( SELECT a.MALOPHP AS `CLASS SECTION ID`, a.MAMH AS `SUBJECT ID`, a.MAGV AS `TEACHER ID`, a.BATDAU AS `START`, a.KETTHUC AS `FINISH`, a.LICHHOC AS `SCHEDULE`, a.SISO AS `N.O.S`, ROW_NUMBER() OVER(ORDER BY MALOPHP ASC) AS r__ FROM LOPHP a WHERE MAGV = @magv ORDER BY MALOPHP ASC ) AS temp WHERE r__ BETWEEN @start AND @end";
+                    string query = @"SELECT class_id AS `Class ID`, sub_id AS `Subject ID`, teacher_id AS `Teacher ID`, 
+                                    start_date AS `Start Date`, finish_date AS `End Date`, schedule AS `Schedule`, 
+                                    nb_s AS `Student Limit`
+                                    FROM class 
+                                    WHERE teacher_id = @teacher_id 
+                                    ORDER BY class_id ASC 
+                                    LIMIT @limit OFFSET @offset";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@magv", Login.ID);
-                        cmd.Parameters.AddWithValue("@start", (currFrom - 1) * pageSize + 1);
-                        cmd.Parameters.AddWithValue("@end", currFrom * pageSize);
+                        cmd.Parameters.AddWithValue("@teacher_id", Login.ID);
+                        cmd.Parameters.AddWithValue("@limit", pageSize);
+                        cmd.Parameters.AddWithValue("@offset", (currFrom - 1) * pageSize);
 
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -67,7 +76,7 @@ namespace SchoolManagement
             }
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
             try
             {
@@ -76,14 +85,32 @@ namespace SchoolManagement
                 using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                 {
                     conn.Open();
-                    string query = "SELECT * FROM ( SELECT a.MALOPHP AS `CLASS SECTION ID`, a.MAMH AS `SUBJECT ID`, a.MAGV AS `TEACHER ID`, a.BATDAU AS `START`, a.KETTHUC AS `FINISH`, a.LICHHOC AS `SCHEDULE`, a.SISO AS `N.O.S`, ROW_NUMBER() OVER(ORDER BY MALOPHP ASC) AS r__ FROM LOPHP a WHERE MAGV = @magv AND (MALOPHP LIKE @search OR MAMH LIKE @search OR BATDAU LIKE @search OR KETTHUC LIKE @search OR LICHHOC LIKE @search OR SISO LIKE @search) ORDER BY MALOPHP ASC) AS temp WHERE r__ BETWEEN @start AND @end";
+                                            string query = @"
+                            SELECT Class_id AS `Class ID`, 
+                                   sub_id AS `Subject ID`, 
+                                   teacher_id AS `Teacher ID`, 
+                                   start_date AS `Start Date`, 
+                                   finish_date AS `End Date`, 
+                                   schedule AS `Schedule`,
+                                   nb_s AS `Class limit`
+                            FROM class 
+                            WHERE teacher_id = @teacher_id 
+                            AND (Class_id LIKE @search 
+                                 OR sub_id LIKE @search 
+                                 OR start_date LIKE @search 
+                                 OR finish_date LIKE @search 
+                                 OR schedule LIKE @search 
+                                 OR nb_s LIKE @search) 
+                            ORDER BY class_id ASC 
+                            LIMIT @limit OFFSET @offset";
+
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@magv", Login.ID);
+                        cmd.Parameters.AddWithValue("@teacher_id", Login.ID);
                         cmd.Parameters.AddWithValue("@search", "%" + txtSearch.Text + "%");
-                        cmd.Parameters.AddWithValue("@start", (currFrom - 1) * pageSize + 1);
-                        cmd.Parameters.AddWithValue("@end", currFrom * pageSize);
+                        cmd.Parameters.AddWithValue("@limit", pageSize);
+                        cmd.Parameters.AddWithValue("@offset", (currFrom - 1) * pageSize);
 
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -107,10 +134,6 @@ namespace SchoolManagement
             LoadClasses();
         }
 
-       
-
-    
-
         private void dgvClass_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -119,21 +142,151 @@ namespace SchoolManagement
 
                 DataGridViewRow row = dgvClass.Rows[e.RowIndex];
 
-                ClassSectionID = row.Cells[0].Value.ToString();
-                SubjectID = row.Cells[1].Value.ToString();
-                limited = Int32.Parse(row.Cells[6].Value.ToString());
+                ClassID = row.Cells[0].Value.ToString();  // VARCHAR
+                SubjectID = Convert.ToInt32(row.Cells[1].Value);  // INT
+                StudentLimit = Convert.ToInt32(row.Cells[6].Value);
             }
-        }
-
-        private void dgvClass_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // This method can be used if needed for handling cell content clicks
         }
 
         private void TeacherClassSection_Load(object sender, EventArgs e)
         {
+            // Add any initialization if needed
+        }
+
+        private void picturebox1_Click(object sender, EventArgs e)
+        {
+            ExportToExcel();
+        }
+
+        private int GetTotalRecordCount()
+        {
+            try
+            {
+                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
+                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                {
+                    conn.Open();
+                    string query = "SELECT COUNT(class_ID) FROM SYSTEM.STUDENT_classes";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        return Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return 0; // Return 0 in case of an error
+            }
+        }
+
+        private void ExportToExcel()
+        {
+            try
+            {
+                // Create a new Excel application instance
+                Excel.Application excelApp = new Excel.Application();
+                excelApp.Visible = true;
+                Excel.Workbook workbook = excelApp.Workbooks.Add();
+                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
+
+                // Add column headers to the Excel file
+                for (int col = 0; col < dgvClass.Columns.Count; col++)
+                {
+                    worksheet.Cells[1, col + 1] = dgvClass.Columns[col].HeaderText;
+                }
+
+                // Fetch all data for the export, not just the current page
+                List<DataRow> allRows = new List<DataRow>();
+
+                // Loop through all pages and collect all data
+                int totalRecords = GetTotalRecordCount(); // Get total record count from DB
+                int totalPages = (totalRecords + pageSize - 1) / pageSize; // Calculate number of pages
+
+                for (int page = 1; page <= totalPages; page++)
+                {
+                    currFrom = page; // Update current page number
+                    LoadClasses();  // This loads students for the current page
+
+                    // Collect rows from the DataGridView
+                    foreach (DataGridViewRow row in dgvClass.Rows)
+                    {
+                        if (row.IsNewRow) continue; // Skip the new row placeholder
+
+                        DataRow dataRow = ((DataTable)dgvClass.DataSource).NewRow();
+
+                        // Copy row values to DataRow
+                        for (int col = 0; col < dgvClass.Columns.Count; col++)
+                        {
+                            dataRow[col] = row.Cells[col].Value.ToString();
+                        }
+
+                        allRows.Add(dataRow); // Add the row to the list
+                    }
+                }
+
+                // Populate Excel worksheet with all rows collected
+                int rowIndex = 2; // Start from row 2 (because row 1 is the header)
+                foreach (var row in allRows)
+                {
+                    for (int col = 0; col < dgvClass.Columns.Count; col++)
+                    {
+                        worksheet.Cells[rowIndex, col + 1] = row[col].ToString();
+                    }
+                    rowIndex++;
+                }
+
+                MessageBox.Show("Exported to Excel successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error exporting to Excel: " + ex.Message);
+            }
+            LoadClasses();
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            if (!isSelected)
+            {
+                MessageBox.Show("Please choose class to view!");
+                return;
+            }
+            StudentsInClass studentsInClass = new StudentsInClass(ClassID);
+            studentsInClass.ShowDialog();
+        }
+
+        private void dgvClass_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+
+        private void pbNext_Click(object sender, EventArgs e)
+        {
+            currFrom++;
+            LoadClasses();
+        }
+
+        private void pbPrev_Click(object sender, EventArgs e)
+        {
+            if (currFrom > 1)
+            {
+                currFrom--;
+                LoadClasses();
+            }
+        }
+
+        private void pictureBox1_Click_1(object sender, EventArgs e)
+        {
+            ExportToExcel();
+        }
+
+        private void lbExport_Click(object sender, EventArgs e)
+        {
 
         }
     }
-}
+                       
 
+    }

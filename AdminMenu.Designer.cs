@@ -1,7 +1,7 @@
 ﻿
 namespace SchoolManagement
 {
-    partial class AdminMenu
+    partial class MenuAdmin
     {
         /// <summary>
         /// Required designer variable.
@@ -30,20 +30,20 @@ namespace SchoolManagement
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminMenu));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MenuAdmin));
             this.kryptonPalette1 = new ComponentFactory.Krypton.Toolkit.KryptonPalette(this.components);
             this.lbStudents = new System.Windows.Forms.Label();
             this.lbTeachers = new System.Windows.Forms.Label();
             this.lbSubjects = new System.Windows.Forms.Label();
             this.lbProfile = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbDep = new System.Windows.Forms.Label();
             this.lbHello = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.kryptonButton1 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            this.kryptonButton2 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            this.kryptonButton3 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            this.kryptonButton4 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.lbClasses = new System.Windows.Forms.Label();
+            this.lbLogout = new System.Windows.Forms.Label();
+            this.menu1 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.menu2 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.menu3 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.menu4 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.lbToTalStudent = new System.Windows.Forms.Label();
             this.lbTotalTeacher = new System.Windows.Forms.Label();
             this.lbTotalClass = new System.Windows.Forms.Label();
@@ -79,15 +79,6 @@ namespace SchoolManagement
             // 
             // kryptonPalette1
             // 
-            this.kryptonPalette1.ButtonSpecs.FormClose.Image = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.Image")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImagePressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImagePressed")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageTracking")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.Image = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.Image")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImagePressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImagePressed")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.Image = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.Image")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImagePressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImagePressed")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageTracking")));
             this.kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
@@ -142,401 +133,279 @@ namespace SchoolManagement
             // 
             // lbStudents
             // 
-            this.lbStudents.AutoSize = true;
+            resources.ApplyResources(this.lbStudents, "lbStudents");
             this.lbStudents.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lbStudents.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbStudents.Location = new System.Drawing.Point(286, 412);
             this.lbStudents.Name = "lbStudents";
-            this.lbStudents.Size = new System.Drawing.Size(156, 20);
-            this.lbStudents.TabIndex = 4;
-            this.lbStudents.Text = "STUDENTS MANAGER";
             this.lbStudents.Click += new System.EventHandler(this.pbStudents_Click);
             // 
             // lbTeachers
             // 
-            this.lbTeachers.AutoSize = true;
+            resources.ApplyResources(this.lbTeachers, "lbTeachers");
             this.lbTeachers.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lbTeachers.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTeachers.Location = new System.Drawing.Point(528, 412);
             this.lbTeachers.Name = "lbTeachers";
-            this.lbTeachers.Size = new System.Drawing.Size(161, 20);
-            this.lbTeachers.TabIndex = 6;
-            this.lbTeachers.Text = "TEACHERS MANAGER";
             // 
             // lbSubjects
             // 
-            this.lbSubjects.AutoSize = true;
+            resources.ApplyResources(this.lbSubjects, "lbSubjects");
             this.lbSubjects.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lbSubjects.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSubjects.Location = new System.Drawing.Point(166, 598);
             this.lbSubjects.Name = "lbSubjects";
-            this.lbSubjects.Size = new System.Drawing.Size(157, 20);
-            this.lbSubjects.TabIndex = 10;
-            this.lbSubjects.Text = "SUBJECTS MANAGER";
             this.lbSubjects.Click += new System.EventHandler(this.pbSubjects_Click);
             // 
             // lbProfile
             // 
-            this.lbProfile.AutoSize = true;
+            resources.ApplyResources(this.lbProfile, "lbProfile");
             this.lbProfile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lbProfile.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbProfile.Location = new System.Drawing.Point(76, 412);
             this.lbProfile.Name = "lbProfile";
-            this.lbProfile.Size = new System.Drawing.Size(93, 20);
-            this.lbProfile.TabIndex = 12;
-            this.lbProfile.Text = "MY PROFILE";
             this.lbProfile.Click += new System.EventHandler(this.pbProfile_Click);
             // 
-            // label1
+            // lbDep
             // 
-            this.label1.AutoSize = true;
-            this.label1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(401, 598);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(183, 20);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "DEPARTMENT MANAGER";
-            this.label1.Click += new System.EventHandler(this.pbDepartment_Click);
+            resources.ApplyResources(this.lbDep, "lbDep");
+            this.lbDep.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbDep.Name = "lbDep";
+            this.lbDep.Click += new System.EventHandler(this.pbDepartment_Click);
             // 
             // lbHello
             // 
-            this.lbHello.AutoSize = true;
-            this.lbHello.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbHello.Location = new System.Drawing.Point(12, 9);
+            resources.ApplyResources(this.lbHello, "lbHello");
             this.lbHello.Name = "lbHello";
-            this.lbHello.Size = new System.Drawing.Size(99, 20);
-            this.lbHello.TabIndex = 16;
-            this.lbHello.Text = "Hello, Admin";
             // 
-            // label2
+            // lbClasses
             // 
-            this.label2.AutoSize = true;
-            this.label2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label2.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(765, 412);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(135, 20);
-            this.label2.TabIndex = 18;
-            this.label2.Text = "CLASS MANAGER";
-            this.label2.Click += new System.EventHandler(this.pbSection_Click);
+            resources.ApplyResources(this.lbClasses, "lbClasses");
+            this.lbClasses.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbClasses.Name = "lbClasses";
+            this.lbClasses.Click += new System.EventHandler(this.lbClasses_Click);
             // 
-            // label3
+            // lbLogout
             // 
-            this.label3.AutoSize = true;
-            this.label3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label3.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(703, 598);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 20);
-            this.label3.TabIndex = 20;
-            this.label3.Text = "LOGOUT";
-            this.label3.Click += new System.EventHandler(this.pbLogout_Click);
+            resources.ApplyResources(this.lbLogout, "lbLogout");
+            this.lbLogout.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbLogout.Name = "lbLogout";
+            this.lbLogout.Click += new System.EventHandler(this.pbLogout_Click);
             // 
-            // kryptonButton1
+            // menu1
             // 
-            this.kryptonButton1.Enabled = false;
-            this.kryptonButton1.Location = new System.Drawing.Point(42, 54);
-            this.kryptonButton1.Name = "kryptonButton1";
-            this.kryptonButton1.Size = new System.Drawing.Size(186, 147);
-            this.kryptonButton1.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(209)))), ((int)(((byte)(161)))));
-            this.kryptonButton1.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(209)))), ((int)(((byte)(161)))));
-            this.kryptonButton1.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(188)))), ((int)(((byte)(156)))));
-            this.kryptonButton1.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(188)))), ((int)(((byte)(156)))));
-            this.kryptonButton1.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            resources.ApplyResources(this.menu1, "menu1");
+            this.menu1.Name = "menu1";
+            this.menu1.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(209)))), ((int)(((byte)(161)))));
+            this.menu1.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(209)))), ((int)(((byte)(161)))));
+            this.menu1.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(188)))), ((int)(((byte)(156)))));
+            this.menu1.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(188)))), ((int)(((byte)(156)))));
+            this.menu1.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.kryptonButton1.StateCommon.Border.Rounding = 15;
-            this.kryptonButton1.StateCommon.Content.Padding = new System.Windows.Forms.Padding(0, 0, 0, 40);
-            this.kryptonButton1.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.kryptonButton1.StateDisabled.Content.ShortText.Color1 = System.Drawing.Color.Black;
-            this.kryptonButton1.StateDisabled.Content.ShortText.Color2 = System.Drawing.Color.Black;
-            this.kryptonButton1.TabIndex = 21;
-            this.kryptonButton1.Values.Text = "TOTAL STUDENT";
+            this.menu1.StateCommon.Border.Rounding = 15;
+            this.menu1.StateCommon.Content.Padding = new System.Windows.Forms.Padding(0, 0, 0, 40);
+            this.menu1.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu1.StateDisabled.Content.ShortText.Color1 = System.Drawing.Color.Black;
+            this.menu1.StateDisabled.Content.ShortText.Color2 = System.Drawing.Color.Black;
+            this.menu1.Values.ExtraText = resources.GetString("menu1.Values.ExtraText");
+            this.menu1.Values.ImageTransparentColor = ((System.Drawing.Color)(resources.GetObject("menu1.Values.ImageTransparentColor")));
+            this.menu1.Values.Text = resources.GetString("menu1.Values.Text");
             // 
-            // kryptonButton2
+            // menu2
             // 
-            this.kryptonButton2.Enabled = false;
-            this.kryptonButton2.Location = new System.Drawing.Point(279, 54);
-            this.kryptonButton2.Name = "kryptonButton2";
-            this.kryptonButton2.Size = new System.Drawing.Size(186, 147);
-            this.kryptonButton2.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
-            this.kryptonButton2.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
-            this.kryptonButton2.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
-            this.kryptonButton2.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
-            this.kryptonButton2.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            resources.ApplyResources(this.menu2, "menu2");
+            this.menu2.Name = "menu2";
+            this.menu2.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
+            this.menu2.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
+            this.menu2.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
+            this.menu2.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
+            this.menu2.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.kryptonButton2.StateCommon.Border.Rounding = 15;
-            this.kryptonButton2.StateCommon.Content.Padding = new System.Windows.Forms.Padding(0, 0, 0, 40);
-            this.kryptonButton2.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.kryptonButton2.StateDisabled.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
-            this.kryptonButton2.StateDisabled.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
-            this.kryptonButton2.StateDisabled.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
-            this.kryptonButton2.StateDisabled.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
-            this.kryptonButton2.StateDisabled.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            this.menu2.StateCommon.Border.Rounding = 15;
+            this.menu2.StateCommon.Content.Padding = new System.Windows.Forms.Padding(0, 0, 0, 40);
+            this.menu2.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu2.StateDisabled.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
+            this.menu2.StateDisabled.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
+            this.menu2.StateDisabled.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
+            this.menu2.StateDisabled.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
+            this.menu2.StateDisabled.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.kryptonButton2.StateDisabled.Content.ShortText.Color1 = System.Drawing.Color.Black;
-            this.kryptonButton2.StateDisabled.Content.ShortText.Color2 = System.Drawing.Color.Black;
-            this.kryptonButton2.TabIndex = 22;
-            this.kryptonButton2.Values.Text = "TOTAL TEACHER";
+            this.menu2.StateDisabled.Content.ShortText.Color1 = System.Drawing.Color.Black;
+            this.menu2.StateDisabled.Content.ShortText.Color2 = System.Drawing.Color.Black;
+            this.menu2.Values.ExtraText = resources.GetString("menu2.Values.ExtraText");
+            this.menu2.Values.ImageTransparentColor = ((System.Drawing.Color)(resources.GetObject("menu2.Values.ImageTransparentColor")));
+            this.menu2.Values.Text = resources.GetString("menu2.Values.Text");
             // 
-            // kryptonButton3
+            // menu3
             // 
-            this.kryptonButton3.Enabled = false;
-            this.kryptonButton3.Location = new System.Drawing.Point(522, 54);
-            this.kryptonButton3.Name = "kryptonButton3";
-            this.kryptonButton3.Size = new System.Drawing.Size(186, 147);
-            this.kryptonButton3.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(190)))), ((int)(((byte)(118)))));
-            this.kryptonButton3.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(190)))), ((int)(((byte)(118)))));
-            this.kryptonButton3.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(190)))), ((int)(((byte)(118)))));
-            this.kryptonButton3.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(190)))), ((int)(((byte)(118)))));
-            this.kryptonButton3.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            resources.ApplyResources(this.menu3, "menu3");
+            this.menu3.Name = "menu3";
+            this.menu3.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(190)))), ((int)(((byte)(118)))));
+            this.menu3.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(190)))), ((int)(((byte)(118)))));
+            this.menu3.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(190)))), ((int)(((byte)(118)))));
+            this.menu3.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(190)))), ((int)(((byte)(118)))));
+            this.menu3.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.kryptonButton3.StateCommon.Border.Rounding = 15;
-            this.kryptonButton3.StateCommon.Content.Padding = new System.Windows.Forms.Padding(0, 0, 0, 40);
-            this.kryptonButton3.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.kryptonButton3.StateDisabled.Content.ShortText.Color1 = System.Drawing.Color.Black;
-            this.kryptonButton3.StateDisabled.Content.ShortText.Color2 = System.Drawing.Color.Black;
-            this.kryptonButton3.TabIndex = 23;
-            this.kryptonButton3.Values.Text = "TOTAL CLASS";
+            this.menu3.StateCommon.Border.Rounding = 15;
+            this.menu3.StateCommon.Content.Padding = new System.Windows.Forms.Padding(0, 0, 0, 40);
+            this.menu3.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu3.StateDisabled.Content.ShortText.Color1 = System.Drawing.Color.Black;
+            this.menu3.StateDisabled.Content.ShortText.Color2 = System.Drawing.Color.Black;
+            this.menu3.Values.ExtraText = resources.GetString("menu3.Values.ExtraText");
+            this.menu3.Values.ImageTransparentColor = ((System.Drawing.Color)(resources.GetObject("menu3.Values.ImageTransparentColor")));
+            this.menu3.Values.Text = resources.GetString("menu3.Values.Text");
             // 
-            // kryptonButton4
+            // menu4
             // 
-            this.kryptonButton4.Enabled = false;
-            this.kryptonButton4.Location = new System.Drawing.Point(764, 54);
-            this.kryptonButton4.Name = "kryptonButton4";
-            this.kryptonButton4.Size = new System.Drawing.Size(186, 147);
-            this.kryptonButton4.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(121)))));
-            this.kryptonButton4.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(121)))));
-            this.kryptonButton4.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(121)))));
-            this.kryptonButton4.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(121)))));
-            this.kryptonButton4.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            resources.ApplyResources(this.menu4, "menu4");
+            this.menu4.Name = "menu4";
+            this.menu4.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(121)))));
+            this.menu4.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(121)))));
+            this.menu4.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(121)))));
+            this.menu4.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(121)))));
+            this.menu4.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.kryptonButton4.StateCommon.Border.Rounding = 15;
-            this.kryptonButton4.StateCommon.Content.Padding = new System.Windows.Forms.Padding(0, 0, 0, 40);
-            this.kryptonButton4.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.kryptonButton4.StateDisabled.Content.ShortText.Color1 = System.Drawing.Color.Black;
-            this.kryptonButton4.StateDisabled.Content.ShortText.Color2 = System.Drawing.Color.Black;
-            this.kryptonButton4.TabIndex = 24;
-            this.kryptonButton4.Values.Text = "TOTAL SUBJECT";
+            this.menu4.StateCommon.Border.Rounding = 15;
+            this.menu4.StateCommon.Content.Padding = new System.Windows.Forms.Padding(0, 0, 0, 40);
+            this.menu4.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu4.StateDisabled.Content.ShortText.Color1 = System.Drawing.Color.Black;
+            this.menu4.StateDisabled.Content.ShortText.Color2 = System.Drawing.Color.Black;
+            this.menu4.Values.ExtraText = resources.GetString("menu4.Values.ExtraText");
+            this.menu4.Values.ImageTransparentColor = ((System.Drawing.Color)(resources.GetObject("menu4.Values.ImageTransparentColor")));
+            this.menu4.Values.Text = resources.GetString("menu4.Values.Text");
+            this.menu4.Click += new System.EventHandler(this.menu4_Click);
             // 
             // lbToTalStudent
             // 
-            this.lbToTalStudent.AutoSize = true;
+            resources.ApplyResources(this.lbToTalStudent, "lbToTalStudent");
             this.lbToTalStudent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(209)))), ((int)(((byte)(161)))));
             this.lbToTalStudent.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.lbToTalStudent.Font = new System.Drawing.Font("Century Gothic", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbToTalStudent.ForeColor = System.Drawing.Color.White;
-            this.lbToTalStudent.Location = new System.Drawing.Point(112, 141);
             this.lbToTalStudent.Name = "lbToTalStudent";
-            this.lbToTalStudent.Size = new System.Drawing.Size(38, 41);
-            this.lbToTalStudent.TabIndex = 25;
-            this.lbToTalStudent.Text = "0";
             // 
             // lbTotalTeacher
             // 
-            this.lbTotalTeacher.AutoSize = true;
+            resources.ApplyResources(this.lbTotalTeacher, "lbTotalTeacher");
             this.lbTotalTeacher.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(219)))), ((int)(((byte)(251)))));
             this.lbTotalTeacher.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.lbTotalTeacher.Font = new System.Drawing.Font("Century Gothic", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTotalTeacher.ForeColor = System.Drawing.Color.White;
-            this.lbTotalTeacher.Location = new System.Drawing.Point(354, 141);
             this.lbTotalTeacher.Name = "lbTotalTeacher";
-            this.lbTotalTeacher.Size = new System.Drawing.Size(38, 41);
-            this.lbTotalTeacher.TabIndex = 26;
-            this.lbTotalTeacher.Text = "0";
             // 
             // lbTotalClass
             // 
-            this.lbTotalClass.AutoSize = true;
+            resources.ApplyResources(this.lbTotalClass, "lbTotalClass");
             this.lbTotalClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(190)))), ((int)(((byte)(118)))));
             this.lbTotalClass.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.lbTotalClass.Font = new System.Drawing.Font("Century Gothic", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTotalClass.ForeColor = System.Drawing.Color.White;
-            this.lbTotalClass.Location = new System.Drawing.Point(605, 141);
             this.lbTotalClass.Name = "lbTotalClass";
-            this.lbTotalClass.Size = new System.Drawing.Size(38, 41);
-            this.lbTotalClass.TabIndex = 27;
-            this.lbTotalClass.Text = "0";
             // 
             // lbTotalSubject
             // 
-            this.lbTotalSubject.AutoSize = true;
+            resources.ApplyResources(this.lbTotalSubject, "lbTotalSubject");
             this.lbTotalSubject.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(121)))));
             this.lbTotalSubject.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.lbTotalSubject.Font = new System.Drawing.Font("Century Gothic", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTotalSubject.ForeColor = System.Drawing.Color.White;
-            this.lbTotalSubject.Location = new System.Drawing.Point(840, 141);
             this.lbTotalSubject.Name = "lbTotalSubject";
-            this.lbTotalSubject.Size = new System.Drawing.Size(38, 41);
-            this.lbTotalSubject.TabIndex = 28;
-            this.lbTotalSubject.Text = "0";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(210, 248);
+            resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(573, 20);
-            this.label4.TabIndex = 29;
-            this.label4.Text = "--------------------------------------------------ACTIONS------------------------" +
-    "--------------------------";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pictureBox6
             // 
-            this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
-            this.pictureBox6.Location = new System.Drawing.Point(-61, 403);
+            resources.ApplyResources(this.pictureBox6, "pictureBox6");
             this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(92, 108);
-            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox6.TabIndex = 35;
             this.pictureBox6.TabStop = false;
             // 
             // pictureBox4
             // 
-            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(375, 621);
+            resources.ApplyResources(this.pictureBox4, "pictureBox4");
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(67, 87);
-            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox4.TabIndex = 33;
             this.pictureBox4.TabStop = false;
             // 
             // pbLogout
             // 
+            resources.ApplyResources(this.pbLogout, "pbLogout");
             this.pbLogout.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbLogout.Image = ((System.Drawing.Image)(resources.GetObject("pbLogout.Image")));
-            this.pbLogout.Location = new System.Drawing.Point(680, 470);
             this.pbLogout.Name = "pbLogout";
-            this.pbLogout.Size = new System.Drawing.Size(118, 125);
-            this.pbLogout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbLogout.TabIndex = 19;
             this.pbLogout.TabStop = false;
             this.pbLogout.Click += new System.EventHandler(this.pbLogout_Click);
             // 
             // pbDepartment
             // 
+            resources.ApplyResources(this.pbDepartment, "pbDepartment");
             this.pbDepartment.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbDepartment.Image = ((System.Drawing.Image)(resources.GetObject("pbDepartment.Image")));
-            this.pbDepartment.Location = new System.Drawing.Point(420, 470);
             this.pbDepartment.Name = "pbDepartment";
-            this.pbDepartment.Size = new System.Drawing.Size(120, 125);
-            this.pbDepartment.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbDepartment.TabIndex = 13;
             this.pbDepartment.TabStop = false;
             this.pbDepartment.Click += new System.EventHandler(this.pbDepartment_Click);
             // 
             // pbProfile
             // 
+            resources.ApplyResources(this.pbProfile, "pbProfile");
             this.pbProfile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbProfile.Image = ((System.Drawing.Image)(resources.GetObject("pbProfile.Image")));
-            this.pbProfile.Location = new System.Drawing.Point(69, 284);
             this.pbProfile.Name = "pbProfile";
-            this.pbProfile.Size = new System.Drawing.Size(123, 125);
-            this.pbProfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbProfile.TabIndex = 11;
             this.pbProfile.TabStop = false;
             this.pbProfile.Click += new System.EventHandler(this.pbProfile_Click);
             // 
             // pbSubjects
             // 
+            resources.ApplyResources(this.pbSubjects, "pbSubjects");
             this.pbSubjects.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbSubjects.Image = ((System.Drawing.Image)(resources.GetObject("pbSubjects.Image")));
-            this.pbSubjects.Location = new System.Drawing.Point(182, 470);
             this.pbSubjects.Name = "pbSubjects";
-            this.pbSubjects.Size = new System.Drawing.Size(114, 125);
-            this.pbSubjects.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbSubjects.TabIndex = 9;
             this.pbSubjects.TabStop = false;
             this.pbSubjects.Click += new System.EventHandler(this.pbSubjects_Click);
             // 
             // pbClasses
             // 
+            resources.ApplyResources(this.pbClasses, "pbClasses");
             this.pbClasses.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbClasses.Image = ((System.Drawing.Image)(resources.GetObject("pbClasses.Image")));
-            this.pbClasses.Location = new System.Drawing.Point(764, 284);
             this.pbClasses.Name = "pbClasses";
-            this.pbClasses.Size = new System.Drawing.Size(136, 125);
-            this.pbClasses.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbClasses.TabIndex = 7;
             this.pbClasses.TabStop = false;
             this.pbClasses.Click += new System.EventHandler(this.pbClasses_Click);
             // 
             // pbTeachers
             // 
+            resources.ApplyResources(this.pbTeachers, "pbTeachers");
             this.pbTeachers.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbTeachers.Image = ((System.Drawing.Image)(resources.GetObject("pbTeachers.Image")));
-            this.pbTeachers.Location = new System.Drawing.Point(548, 284);
             this.pbTeachers.Name = "pbTeachers";
-            this.pbTeachers.Size = new System.Drawing.Size(120, 125);
-            this.pbTeachers.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbTeachers.TabIndex = 5;
             this.pbTeachers.TabStop = false;
             this.pbTeachers.Click += new System.EventHandler(this.pbTeachers_Click);
             // 
             // pbStudents
             // 
+            resources.ApplyResources(this.pbStudents, "pbStudents");
             this.pbStudents.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbStudents.Image = ((System.Drawing.Image)(resources.GetObject("pbStudents.Image")));
-            this.pbStudents.Location = new System.Drawing.Point(304, 284);
             this.pbStudents.Name = "pbStudents";
-            this.pbStudents.Size = new System.Drawing.Size(114, 125);
-            this.pbStudents.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbStudents.TabIndex = 0;
             this.pbStudents.TabStop = false;
             this.pbStudents.Click += new System.EventHandler(this.pbStudents_Click);
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(939, 125);
+            resources.ApplyResources(this.pictureBox1, "pictureBox1");
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(175, 168);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 30;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(375, -82);
+            resources.ApplyResources(this.pictureBox2, "pictureBox2");
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(197, 239);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 31;
             this.pictureBox2.TabStop = false;
             // 
             // pictureBox3
             // 
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(-47, 125);
+            resources.ApplyResources(this.pictureBox3, "pictureBox3");
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(158, 127);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox3.TabIndex = 32;
             this.pictureBox3.TabStop = false;
             // 
             // pictureBox5
             // 
-            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-            this.pictureBox5.Location = new System.Drawing.Point(939, 504);
+            resources.ApplyResources(this.pictureBox5, "pictureBox5");
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(137, 104);
-            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox5.TabIndex = 34;
             this.pictureBox5.TabStop = false;
             // 
-            // AdminMenu
+            // MenuAdmin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(994, 662);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.Controls.Add(this.pictureBox6);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.label4);
@@ -544,15 +413,15 @@ namespace SchoolManagement
             this.Controls.Add(this.lbTotalClass);
             this.Controls.Add(this.lbTotalTeacher);
             this.Controls.Add(this.lbToTalStudent);
-            this.Controls.Add(this.kryptonButton4);
-            this.Controls.Add(this.kryptonButton3);
-            this.Controls.Add(this.kryptonButton2);
-            this.Controls.Add(this.kryptonButton1);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.menu4);
+            this.Controls.Add(this.menu3);
+            this.Controls.Add(this.menu2);
+            this.Controls.Add(this.menu1);
+            this.Controls.Add(this.lbLogout);
             this.Controls.Add(this.pbLogout);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lbClasses);
             this.Controls.Add(this.lbHello);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lbDep);
             this.Controls.Add(this.pbDepartment);
             this.Controls.Add(this.lbProfile);
             this.Controls.Add(this.pbProfile);
@@ -567,11 +436,9 @@ namespace SchoolManagement
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.pictureBox5);
-            this.Name = "AdminMenu";
+            this.Name = "MenuAdmin";
             this.Palette = this.kryptonPalette1;
             this.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ADMIN MENU";
             this.Load += new System.EventHandler(this.AdminMenu_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
@@ -603,16 +470,16 @@ namespace SchoolManagement
         private System.Windows.Forms.PictureBox pbSubjects;
         private System.Windows.Forms.Label lbProfile;
         private System.Windows.Forms.PictureBox pbProfile;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbDep;
         private System.Windows.Forms.PictureBox pbDepartment;
         private System.Windows.Forms.Label lbHello;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbClasses;
+        private System.Windows.Forms.Label lbLogout;
         private System.Windows.Forms.PictureBox pbLogout;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton kryptonButton1;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton kryptonButton2;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton kryptonButton3;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton kryptonButton4;
+        private ComponentFactory.Krypton.Toolkit.KryptonButton menu1;
+        private ComponentFactory.Krypton.Toolkit.KryptonButton menu2;
+        private ComponentFactory.Krypton.Toolkit.KryptonButton menu3;
+        private ComponentFactory.Krypton.Toolkit.KryptonButton menu4;
         private System.Windows.Forms.Label lbToTalStudent;
         private System.Windows.Forms.Label lbTotalTeacher;
         private System.Windows.Forms.Label lbTotalClass;

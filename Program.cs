@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,9 +18,22 @@ namespace SchoolManagement
         [STAThread]
         static void Main()
         {
+
+            var language = ConfigurationManager.AppSettings["language"];
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(language);
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(language);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Login());
         }
+
+
+       
+
+
+
+
+
     }
 }

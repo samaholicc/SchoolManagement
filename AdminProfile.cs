@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
 using MySql.Data.MySqlClient; // Using MySQL data access
 using System.Security.Cryptography;
-using static SchoolManagement.Login;
 
 namespace SchoolManagement
 {
@@ -40,7 +39,7 @@ namespace SchoolManagement
                 using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                 {
                     conn.Open();
-                    string query = "SELECT * FROM ACCOUNT WHERE user=@id";
+                    string query = "SELECT * FROM ACCOUNT WHERE ID=@id";
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", Login.ID); // Using parameterized query to prevent SQL injection
@@ -49,8 +48,8 @@ namespace SchoolManagement
                         {
                             if (dr.Read()) // Ensure that there is a row to read
                             {
-                                txtHoTen.Text = dr.GetString(1); // Assuming column 1 is Full Name
-                                txtID.Text = dr.GetInt32(0).ToString();  // Assuming column 0 is ID_LG
+                                txtName.Text = dr.GetString(1); // Assuming column 1 is Full Name
+                                txtID.Text = dr.GetString(0);  // Assuming column 0 is ID
                                 txtPassword.Text = dr.GetString(2); // Assuming column 2 is Password
                             }
                             else
@@ -67,27 +66,57 @@ namespace SchoolManagement
             }
         }
 
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
-                InsertData dataInserter = new InsertData();
-
-                string userID = txtHoTen.Text;
                 string passInsert = txtPassword.Text;
+                string insertID = txtID.Text;
 
-                int insertID;
-                if (!int.TryParse(txtID.Text, out insertID))
+                if (string.IsNullOrWhiteSpace(insertID))
                 {
                     MessageBox.Show("Please enter a valid ID.");
                     return;
                 }
 
+                string newPassword = txtPassword.Text; // Assuming there's a txtNewPassword TextBox
+                string currentPassword = string.Empty;
 
+                // Open MySQL connection to get current password from the database
+                using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
+                {
+                    conn.Open();
+                    currentPassword = GetCurrentPassword(insertID, conn);
+                }
 
+                // Validate new password before saving
+                if (!string.IsNullOrEmpty(newPassword) && newPassword != currentPassword && IsPasswordValid(newPassword))
+                {
+                    // Hash the new password before saving it
+                    string hashedPassword = Encrypt.HashString(newPassword);  // Hash the password
 
-                string result = dataInserter.UpdatePassword(userID, passInsert);
+                    // Only update password if it was changed
+                    InsertData insertData = new InsertData();
+                    string updateResult = insertData.UpdatePassword(insertID, hashedPassword); // Pass the hashed password
+
+                    if (updateResult != "Success")
+                    {
+                        MessageBox.Show("Failed to update password. Please check the details.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Password updated successfully.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Password is either invalid, unchanged, or it does not meet the criteria.");
+                    return;  // Don't proceed if the password is invalid or unchanged
+                }
+
+                // If no password change, don't attempt to update the database with the same password
+                InsertData dataInserter = new InsertData();
+                string result = dataInserter.UpdatePassword(insertID, Encrypt.HashString(passInsert));  // Always hash the password
 
                 if (result != null)
                 {
@@ -108,6 +137,41 @@ namespace SchoolManagement
 
         private void AdminProfile_Load(object sender, EventArgs e)
         {
+        }
+
+        private bool IsPasswordValid(string password)
+        {
+            if (password.Length < 8)
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères !");
+                return false;
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*(),.?""{}|<>]"))
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins un caractère spécial !");
+                return false;
+            }
+
+            return true;
+        }
+
+        public string GetCurrentPassword(string insertID, MySqlConnection conn)
+        {
+            string password = string.Empty;
+            string query = "SELECT PASSWORD FROM ACCOUNT WHERE ID = @id";
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@id", insertID);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        password = reader["PASSWORD"].ToString();
+                    }
+                }
+            }
+            return password;
         }
     }
 }
