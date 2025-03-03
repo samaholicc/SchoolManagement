@@ -245,3 +245,4 @@ C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.Login
 C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\en\SchoolManagement.resources.dll
 C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.StudentsInClassSection.en.resources
 C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.ClassSectionManager.en.resources
+C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.MenuAdmin.en.resources

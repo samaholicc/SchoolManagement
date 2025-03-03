@@ -82,12 +82,12 @@ namespace SchoolManagement
 
                         if (rowsAffected > 0)
                         {
-                            MessageBox.Show("Password updated successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            
                             return "Success";
                         }
                         else
                         {
-                            MessageBox.Show("No records were updated. Please check the ID or password.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                           
                             return "Failed: No rows affected";
                         }
                     }

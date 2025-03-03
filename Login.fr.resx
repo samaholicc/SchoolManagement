@@ -1420,4 +1420,10 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//2Q==
 </value>
   </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>239, 64</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>CONNEXION AU SYSTEME D'ECOLE</value>
+  </data>
 </root>

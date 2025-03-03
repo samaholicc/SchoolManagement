@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
+using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
-using MySql.Data.MySqlClient; // Using MySQL data access
-using System.Security.Cryptography;
+using MySql.Data.MySqlClient;
 
 namespace SchoolManagement
 {
@@ -30,8 +30,6 @@ namespace SchoolManagement
 
         private void LoadTextBox()
         {
-            MessageBox.Show("Attempting to load user with ID: " + Login.ID);
-
             try
             {
                 string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
@@ -54,7 +52,7 @@ namespace SchoolManagement
                             }
                             else
                             {
-                                MessageBox.Show("No user found.");
+                                ShowMessage("NoUserFound");
                             }
                         }
                     }
@@ -62,7 +60,7 @@ namespace SchoolManagement
             }
             catch (Exception es)
             {
-                MessageBox.Show(es.Message);
+                ShowMessage(es.Message);
             }
         }
 
@@ -75,7 +73,7 @@ namespace SchoolManagement
 
                 if (string.IsNullOrWhiteSpace(insertID))
                 {
-                    MessageBox.Show("Please enter a valid ID.");
+                    ShowMessage("InvalidID");
                     return;
                 }
 
@@ -101,17 +99,17 @@ namespace SchoolManagement
 
                     if (updateResult != "Success")
                     {
-                        MessageBox.Show("Failed to update password. Please check the details.");
+                        ShowMessage("FailedToUpdatePassword");
                     }
                     else
                     {
-                        MessageBox.Show("Password updated successfully.");
+                        ShowMessage("PasswordUpdated");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Password is either invalid, unchanged, or it does not meet the criteria.");
-                    return;  // Don't proceed if the password is invalid or unchanged
+                    ShowMessage("InvalidPassword");
+                    return;  
                 }
 
                 // If no password change, don't attempt to update the database with the same password
@@ -120,13 +118,13 @@ namespace SchoolManagement
 
                 if (result != null)
                 {
-                    MessageBox.Show("Account modified successfully.");
+                    
                     this.Close();
                 }
             }
             catch (Exception es)
             {
-                MessageBox.Show(es.Message);
+                ShowMessage(es.Message);
             }
         }
 
@@ -143,13 +141,13 @@ namespace SchoolManagement
         {
             if (password.Length < 8)
             {
-                MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères !");
+                ShowMessage("PasswordTooShort");
                 return false;
             }
 
             if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*(),.?""{}|<>]"))
             {
-                MessageBox.Show("Le mot de passe doit contenir au moins un caractère spécial !");
+                ShowMessage("PasswordNoSpecialChar");
                 return false;
             }
 
@@ -172,6 +170,77 @@ namespace SchoolManagement
                 }
             }
             return password;
+        }
+
+        private void ShowMessage(string key)
+        {
+            string message = string.Empty;
+
+            // Check the current UI culture (language) and display the appropriate message
+            if (CultureInfo.CurrentUICulture.Name == "fr-FR")  // French
+            {
+                switch (key)
+                {
+                    case "PasswordTooShort":
+                        message = "Le mot de passe doit contenir au moins 8 caractères !";
+                        break;
+                    case "PasswordNoSpecialChar":
+                        message = "Le mot de passe doit contenir au moins un caractère spécial !";
+                        break;
+                    case "InvalidID":
+                        message = "Veuillez entrer un ID valide.";
+                        break;
+                    case "FailedToUpdatePassword":
+                        message = "Échec de la mise à jour du mot de passe. Vérifiez les détails.";
+                        break;
+                    case "PasswordUpdated":
+                        message = "Mot de passe mis à jour avec succès.";
+                        break;
+                    case "InvalidPassword":
+                        message = "Le mot de passe est invalide ou inchangé.";
+                        break;
+                    case "NoUserFound":
+                        message = "Aucun utilisateur trouvé.";
+                        break;
+       
+                    default:
+                        message = key; // Default to key if no match
+                        break;
+                }
+            }
+            else  // Default to English
+            {
+                switch (key)
+                {
+                    case "PasswordTooShort":
+                        message = "Password must be at least 8 characters!";
+                        break;
+                    case "PasswordNoSpecialChar":
+                        message = "Password must contain at least one special character!";
+                        break;
+                    case "InvalidID":
+                        message = "Please enter a valid ID.";
+                        break;
+                    case "FailedToUpdatePassword":
+                        message = "Failed to update password. Please check the details.";
+                        break;
+                    case "PasswordUpdated":
+                        message = "Password updated successfully.";
+                        break;
+                    case "InvalidPassword":
+                        message = "Password is either unchanged or it does not meet the criteria.";
+                        break;
+                    case "NoUserFound":
+                        message = "No user found.";
+                        break;
+                   
+                    default:
+                        message = key; // Default to key if no match
+                        break;
+                }
+            }
+
+            MessageBox.Show(message);
         }
     }
 }

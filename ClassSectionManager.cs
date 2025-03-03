@@ -1,14 +1,15 @@
-﻿using System;
+﻿using ComponentFactory.Krypton.Toolkit;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
-using MySql.Data.MySqlClient;
 using Excel = Microsoft.Office.Interop.Excel;
 
 
@@ -24,6 +25,24 @@ namespace SchoolManagement
                 CreateParams cp = base.CreateParams;
                 cp.ClassStyle = CS_DropShadow;
                 return cp;
+            }
+        }
+        public enum Language
+        {
+            English,
+            French
+        }
+
+        public static Language CurrentLanguage = Language.French;
+        private void ShowMessage(string messageEnglish, string messageFrench, string caption, MessageBoxIcon icon)
+        {
+            if (CurrentLanguage == Language.English)
+            {
+                MessageBox.Show(messageEnglish, caption, MessageBoxButtons.OK, icon);
+            }
+            else if (CurrentLanguage == Language.French)
+            {
+                MessageBox.Show(messageFrench, caption, MessageBoxButtons.OK, icon);
             }
         }
 
@@ -48,8 +67,9 @@ namespace SchoolManagement
             LoadClasses();
             LoadSubjects();
             LoadTeachers();
-            
-
+            ConfigureDateTimePickers();
+            txtEndTime.Enabled = false;
+            txtStartTime.Enabled = false;
         }
 
         private void LoadTeachers()
@@ -148,56 +168,175 @@ namespace SchoolManagement
             }
             catch (Exception es)
             {
-                MessageBox.Show(es.Message);
+                ShowMessage("An error occurred: " + es.Message, "Une erreur est survenue : " + es.Message, "Error", MessageBoxIcon.Error);
             }
         }
 
         private void dgvClass_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex >= 0)
-            {
-                isSelected = true;
-                DataGridViewRow row = dgvClass.Rows[e.RowIndex];
+            
+        {
+            isSelected = true;
+            DataGridViewRow row = dgvClass.Rows[e.RowIndex];
 
-                // Handle ID retrieval with conversion
-                txtID.Text = row.Cells[0].Value.ToString();
-                cbSubject.Text = row.Cells[1].Value.ToString();
-                cbTeacher.Text = row.Cells[2].Value.ToString();
+            // Handle ID retrieval with conversion
+            txtID.Text = row.Cells[0].Value.ToString();
+            cbSubject.Text = row.Cells[1].Value.ToString();
+            cbTeacher.Text = row.Cells[2].Value.ToString();
 
-                // Handle date conversions (ensure the cells are not null)
-                if (row.Cells[3].Value != null)
-                    dtpStart.Value = Convert.ToDateTime(row.Cells[3].Value);
+            // Handle date conversions (ensure the cells are not null)
+            if (row.Cells[3].Value != null)
+                dtpStart.Value = Convert.ToDateTime(row.Cells[3].Value);
 
-                if (row.Cells[4].Value != null)
-                    dtpFinish.Value = Convert.ToDateTime(row.Cells[4].Value);
+            if (row.Cells[4].Value != null)
+                dtpFinish.Value = Convert.ToDateTime(row.Cells[4].Value);
 
-                txtSchedule.Text = row.Cells[5].Value.ToString();
+            // Retrieve the full schedule from the database
+            string fullSchedule = row.Cells[5].Value.ToString();
+            txtSchedule.Text = fullSchedule;
+                
+
+                // Parse the schedule string to extract date, start time, and end time
+                ParseSchedule(fullSchedule);
+                
+                // Handle the number of students
                 txtNOS.Text = row.Cells[6].Value.ToString();
 
-                // Correcting the class section and subject IDs correctly
-                ClassSectionID = txtID.Text;
-                SubjectID = cbSubject.Text;
+            // Correcting the class section and subject IDs correctly
+            ClassSectionID = txtID.Text;
+            SubjectID = cbSubject.Text;
 
-                // If 'limited' is meant to be an integer, parse it appropriately
-                int parsedValue; // Declare the variable separately
-                if (int.TryParse(txtNOS.Text, out parsedValue))
-                {
-                    limited = parsedValue;
-                }
-                else
-                {
-                    MessageBox.Show("Invalid number of students format!");
-                }
+            // If 'limited' is meant to be an integer, parse it appropriately
+            int parsedValue;
+            if (int.TryParse(txtNOS.Text, out parsedValue))
+            {
+                limited = parsedValue;
+            }
+            else
+            {
+                MessageBox.Show("Invalid number of students format!");
+            }
 
-                // Handle ComboBox selections
-                // Find the item that starts with the subject ID, using string concatenation
-                if (row.Cells[1].Value != null)
+            // Handle ComboBox selections
+            // Find the item that starts with the subject ID, using string concatenation
+            if (row.Cells[1].Value != null)
                     cbSubject.SelectedItem = cbSubject.Items.Cast<string>()
                         .FirstOrDefault(i => i.StartsWith(row.Cells[1].Value.ToString().Split(' ')[0]));
 
                 if (row.Cells[2].Value != null)
                     cbTeacher.SelectedItem = cbTeacher.Items.Cast<string>()
                         .FirstOrDefault(i => i.StartsWith(row.Cells[2].Value.ToString().Split(' ')[0]));
+            }
+        }
+
+        private void ParseSchedule(string fullSchedule)
+        {
+            try
+            {
+                // Trim the input string to remove any extra spaces
+                fullSchedule = fullSchedule.Trim();
+
+                // Split the schedule into date and time parts using " - " as separator
+                string[] scheduleParts = fullSchedule.Split(new string[] { " - " }, StringSplitOptions.None);
+
+                if (scheduleParts.Length == 2)
+                {
+                    string datePart = scheduleParts[0].Trim();
+                    string timePart = scheduleParts[1].Trim();
+
+                    // Log the extracted parts for debugging
+                    MessageBox.Show("Extracted Date Part (before trimming): " + datePart);
+                    MessageBox.Show("Extracted Time Part: " + timePart);
+
+                    // Now, let's ensure we are correctly extracting the date part and removing any time information.
+                    // If datePart contains the start time, we will remove it.
+
+                    // Use the last space index to identify where time might start in datePart
+                    int lastSpaceIndex = datePart.LastIndexOf(' ');
+
+                    // If there's a space indicating that time is included, trim it
+                    if (lastSpaceIndex != -1)
+                    {
+                        datePart = datePart.Substring(0, lastSpaceIndex); // Keep only the date part, removing time
+                    }
+
+                    // Log the extracted date part for debugging
+                    MessageBox.Show("Extracted Date Part (after trimming): " + datePart);
+
+                    DateTime parsedDate;
+
+                    // Try to parse the datePart string using the exact format
+                    if (DateTime.TryParseExact(datePart, "dddd, dd MMMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+                    {
+                        // If successful, display the formatted date in txtSchedule
+                        txtSchedule.Text = parsedDate.ToString("dddd, dd MMMM yyyy");
+                    }
+                    else
+                    {
+                        // If parsing failed, display an error message
+                        MessageBox.Show("Error: Failed to parse the date.");
+                        return;
+                    }
+
+                    // Now, to parse the time part:
+                    string[] timeParts = timePart.Split(new string[] { " - " }, StringSplitOptions.None);
+
+                    // Log the time parts for debugging
+                    MessageBox.Show("Time Parts Count: " + timeParts.Length);
+
+                    // Ensure we have exactly 2 time parts (start and end time)
+                    if (timeParts.Length == 2)
+                    {
+                        string startTime = timeParts[0].Trim();
+                        string endTime = timeParts[1].Trim();
+
+                        // Log both start and end time
+                        MessageBox.Show("Start Time: " + startTime);
+                        MessageBox.Show("End Time: " + endTime);
+
+                        DateTime startDateTime;
+                        DateTime endDateTime;
+
+                        // Try parsing the start time
+                        if (DateTime.TryParseExact(startTime, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDateTime))
+                        {
+                            // Add the time of day to today's date for the start time
+                            txtStartTime.Value = DateTime.Today.Add(startDateTime.TimeOfDay);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: Start time format is incorrect. Start Time: " + startTime);
+                            return;
+                        }
+
+                        // Try parsing the end time
+                        if (DateTime.TryParseExact(endTime, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDateTime))
+                        {
+                            // Add the time of day to today's date for the end time
+                            txtEndTime.Value = DateTime.Today.Add(endDateTime.TimeOfDay);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: End time format is incorrect. End Time: " + endTime);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        // If the time part is not exactly two parts, show error
+                        MessageBox.Show("Error: Time range format is incorrect. Time Part: " + timePart);
+                    }
+                }
+                else
+                {
+                    // If the schedule format does not match the expected parts, show an error
+                    MessageBox.Show("Error: Schedule format is incorrect. Full Schedule: " + fullSchedule);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An unexpected error occurred: " + ex.Message);
             }
         }
 
@@ -212,6 +351,8 @@ namespace SchoolManagement
             cbTeacher.Text = "";
             txtSchedule.Text = "";
             txtNOS.Text = "";
+            txtEndTime.Text = "";
+            txtStartTime.Text = "";
 
             // Reset control states
             cbSubject.Enabled = false;
@@ -220,6 +361,8 @@ namespace SchoolManagement
             dtpFinish.Enabled = false;
             txtSchedule.Enabled = false;
             txtNOS.Enabled = false;
+            txtEndTime.Enabled = false;
+            txtStartTime.Enabled = false;
 
             // Show relevant buttons and labels
             pbStudents.Visible = true;
@@ -273,6 +416,46 @@ namespace SchoolManagement
             dtpFinish.Enabled = isEditingMode;
             txtSchedule.Enabled = isEditingMode;
             txtNOS.Enabled = isEditingMode;
+            txtEndTime.Enabled = isEditingMode;
+            txtStartTime.Enabled = isEditingMode;
+
+           
+        }
+        // Method to configure the DateTimePickers
+        private void ConfigureDateTimePickers()
+        {
+            // Configuration for txtSchedule (Date Picker)
+            txtSchedule.CustomFormat = "dddd, dd MMMM yyyy";  // Full Day, Day, Month, Year
+            txtSchedule.Format = DateTimePickerFormat.Custom;
+            txtSchedule.MinDate = DateTime.Today;  // Prevent selecting past dates
+
+            // Configuration for txtStartTime (Start Time Picker)
+            txtStartTime.CustomFormat = "HH:mm";  // Format for start time
+            txtStartTime.Format = DateTimePickerFormat.Custom;
+            txtStartTime.ShowUpDown = true; // Show up/down arrows for time selection
+            dtpStart.MinDate = DateTime.Today;  // Prevent selecting past dates (today)
+            dtpFinish.MinDate = DateTime.Today;
+            // Configuration for txtEndTime (End Time Picker)
+            txtEndTime.CustomFormat = "HH:mm";  // Format for end time
+            txtEndTime.Format = DateTimePickerFormat.Custom;
+            txtEndTime.ShowUpDown = true; // Show up/down arrows for time selection
+            
+        }
+        private void ValidateTimes()
+        {
+            // Ensure start time is not earlier than 00:00
+            if (txtStartTime.Value < DateTime.Today)
+            {
+                MessageBox.Show("Start time cannot be earlier than 00:00.");
+                txtStartTime.Value = DateTime.Today;  // Reset to 00:00
+            }
+
+            // Ensure end time is not earlier than start time
+            if (txtEndTime.Value <= txtStartTime.Value)
+            {
+                MessageBox.Show("End time must be after start time.");
+                txtEndTime.Value = txtStartTime.Value.AddMinutes(30);  // Add 30 minutes to start time as default
+            }
         }
 
         private void pbEdit_Click(object sender, EventArgs e)
@@ -286,92 +469,95 @@ namespace SchoolManagement
             ToggleUIForEditing(true);
         }
 
-      private void pbSave_Click(object sender, EventArgs e)
+        private void pbSave_Click(object sender, EventArgs e)
         {
-    try
-    {
-        using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
-        {
-            conn.Open();
-            MySqlCommand cmd;
-
-            if (action == 0) // Add new class
+            try
             {
-                cmd = new MySqlCommand("SP_CLASS_ADD", conn); // Use stored procedure for adding
+                using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
+                {
+                    conn.Open();
+                    MySqlCommand cmd;
+
+                    if (action == 0) // Add new class
+                    {
+                        cmd = new MySqlCommand("SP_CLASS_ADD", conn); // Use stored procedure for adding
+                    }
+                    else // Update existing class
+                    {
+                        cmd = new MySqlCommand("SP_CLASS_UPDATE", conn); // Use stored procedure for updating
+                    }
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Validate inputs
+                    string subId, teacherId;
+                    int nbS;
+
+                    // Subject validation
+                    if (string.IsNullOrWhiteSpace(cbSubject.Text) || !TryExtractId(cbSubject.Text, out subId))
+                    {
+                        MessageBox.Show("Invalid Subject selection. Please select a valid subject.");
+                        return;
+                    }
+
+                    // Teacher validation
+                    if (string.IsNullOrWhiteSpace(cbTeacher.Text) || !TryExtractId(cbTeacher.Text, out teacherId))
+                    {
+                        MessageBox.Show("Invalid Teacher selection. Please select a valid teacher.");
+                        return;
+                    }
+
+                    // Number of students validation
+                    if (!Int32.TryParse(txtNOS.Text, out nbS))
+                    {
+                        MessageBox.Show("Invalid number of students. Please enter a valid number.");
+                        return;
+                    }
+
+                    // Start date validation
+                    if (dtpStart.Value == DateTime.MinValue)
+                    {
+                        MessageBox.Show("Please enter a valid start date.");
+                        return;
+                    }
+
+                    // Concatenate the schedule, start time, and end time in the desired format: "dddd HH:mm - HH:mm"
+                    string scheduleDetails = $"{txtSchedule.Value:dddd, dd MMMM yyyy} {txtStartTime.Value:HH:mm} - {txtEndTime.Value:HH:mm}";
+
+                    // Adding parameters for the stored procedure
+                    cmd.Parameters.AddWithValue("p_SUB_ID", subId);
+                    cmd.Parameters.AddWithValue("p_TEACHER_ID", teacherId);
+                    cmd.Parameters.AddWithValue("p_START_DATE", dtpStart.Value);
+                    cmd.Parameters.AddWithValue("p_FINISH_DATE", dtpFinish.Value);
+                    cmd.Parameters.AddWithValue("p_SCHEDULE", scheduleDetails); // Use the concatenated schedule
+                    cmd.Parameters.AddWithValue("p_NB_S", nbS);
+                    cmd.Parameters.AddWithValue("p_CLASS_ID", txtID.Text);
+
+                    // Execute the stored procedure
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show(action == 0 ? "Class added successfully!" : "Class updated successfully!");
+                }
             }
-            else // Update existing class
+            catch (Exception ex)
             {
-                cmd = new MySqlCommand("SP_CLASS_UPDATE", conn); // Use stored procedure for updating
+                ShowMessage("Error saving class: " + ex.Message, "Erreur lors de l'enregistrement de la classe : " + ex.Message, "Error", MessageBoxIcon.Error);
             }
 
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            // Validate inputs
-            string subId, teacherId;
-            int nbS;
-
-            // Subject validation
-            if (string.IsNullOrWhiteSpace(cbSubject.Text) || !TryExtractId(cbSubject.Text, out subId))
-            {
-                MessageBox.Show("Invalid Subject selection. Please select a valid subject.");
-                return;
-            }
-
-            // Teacher validation
-            if (string.IsNullOrWhiteSpace(cbTeacher.Text) || !TryExtractId(cbTeacher.Text, out teacherId))
-            {
-                MessageBox.Show("Invalid Teacher selection. Please select a valid teacher.");
-                return;
-            }
-
-            // Number of students validation
-            if (!Int32.TryParse(txtNOS.Text, out nbS))
-            {
-                MessageBox.Show("Invalid number of students. Please enter a valid number.");
-                return;
-            }
-
-            // Start date validation
-            if (dtpStart.Value == DateTime.MinValue)
-            {
-                MessageBox.Show("Please enter a valid start date.");
-                return;
-            }
-
-            // Adding parameters for the stored procedure
-            cmd.Parameters.AddWithValue("p_SUB_ID", subId);
-            cmd.Parameters.AddWithValue("p_TEACHER_ID", teacherId);
-            cmd.Parameters.AddWithValue("p_START_DATE", dtpStart.Value);
-            cmd.Parameters.AddWithValue("p_FINISH_DATE", dtpFinish.Value);
-            cmd.Parameters.AddWithValue("p_SCHEDULE", txtSchedule.Text);
-            cmd.Parameters.AddWithValue("p_NB_S", nbS);
-            cmd.Parameters.AddWithValue("p_CLASS_ID", txtID.Text);
-
-            // Execute the stored procedure
-            cmd.ExecuteNonQuery();
-            MessageBox.Show(action == 0 ? "Class added successfully!" : "Class updated successfully!");
+            // Refresh the UI and clear inputs
+            RefreshClassList();
         }
-    }
-    catch (Exception ex)
-    {
-        MessageBox.Show("Error saving class: " + ex.Message);
-    }
 
-    // Refresh the UI and clear inputs
-    RefreshClassList();
-}
-
-private bool TryExtractId(string text, out string id)
-{
-    id = string.Empty;
-    // Logic to extract ID from the formatted text (e.g., "ID - Name")
-    if (text.Contains("-"))
-    {
-        id = text.Split('-')[0].Trim();
-        return true;
-    }
-    return false;
-}
+              private bool TryExtractId(string text, out string id)
+                {
+                    id = string.Empty;
+                    // Logic to extract ID from the formatted text (e.g., "ID - Name")
+                    if (text.Contains("-"))
+                    {
+                        id = text.Split('-')[0].Trim();
+                        return true;
+                    }
+                    return false;
+                }
 
 private void RefreshClassList()
 {
@@ -552,13 +738,71 @@ private void ClearInputs()
         private void ClassSectionManager_Load(object sender, EventArgs e)
         {
             
-            txtSchedule.CustomFormat = "dddd HH:mm";
-            txtSchedule.Format = DateTimePickerFormat.Custom;
         }
 
-        private void kryptonPalette1_PalettePaint(object sender, PaletteLayoutEventArgs e)
+        // Fonction pour valider et gérer la valeur de la date et de l'heure avant de les affecter à un contrôle
+        private void ValidateDateTime()
+        { 
+            // Vérification de la date dans txtSchedule
+            if (txtSchedule.Value.Date < DateTime.Now.Date)
+            {
+                MessageBox.Show("La date sélectionnée est invalide. La valeur sera réinitialisée.");
+                txtSchedule.Value = DateTime.Now; // Réinitialiser à la date actuelle si la valeur est invalide
+            }
+
+            // Vérification de l'heure de début
+            if (txtStartTime.Value < DateTime.MinValue || txtStartTime.Value > DateTime.Now)
+            {
+                MessageBox.Show("L'heure de début est invalide. Elle sera réinitialisée.");
+                txtStartTime.Value = DateTime.Now; // Réinitialiser à l'heure actuelle si la valeur est invalide
+            }
+
+            // Vérification de l'heure de fin
+            if (txtEndTime.Value < DateTime.MinValue || txtEndTime.Value > DateTime.Now)
+            {
+                MessageBox.Show("L'heure de fin est invalide. Elle sera réinitialisée.");
+                txtEndTime.Value = DateTime.Now; // Réinitialiser à l'heure actuelle si la valeur est invalide
+            }
+
+            // Vérifier si l'heure de fin est après l'heure de début
+            if (txtEndTime.Value <= txtStartTime.Value)
+            {
+                MessageBox.Show("L'heure de fin ne peut pas être avant l'heure de début. Veuillez ajuster l'heure de fin.");
+
+                // Adjust the end time by adding minutes, but first ensure it's a valid DateTime
+                DateTime newEndTime = txtStartTime.Value.AddMinutes(60);
+
+                // Ensure the new end time is within valid range
+                if (newEndTime > DateTime.MinValue && newEndTime < DateTime.MaxValue)
+                {
+                    txtEndTime.Value = newEndTime;  // Apply the valid new end time
+                }
+                else
+                {
+                    // If adding 30 minutes causes an invalid DateTime, we can handle it differently.
+                    // For example, we can just set it to 30 minutes from now as a safe fallback
+                    txtEndTime.Value = DateTime.Now.AddMinutes(60); // Set to 30 minutes from now
+                }
+            }
+        }
+
+
+        // Méthode pour récupérer les horaires de début et de fin
+        private void GetScheduledTimes()
         {
+            DateTime selectedDate = txtSchedule.Value.Date; // Récupère seulement la date
+            TimeSpan startTimeSpan = txtStartTime.Value.TimeOfDay; // Heure de début
+            TimeSpan endTimeSpan = txtEndTime.Value.TimeOfDay; // Heure de fin
 
+            // Combinez la date avec les heures
+            DateTime finalStart = selectedDate.Add(startTimeSpan);
+            DateTime finalEnd = selectedDate.Add(endTimeSpan);
+
+            // Vous pouvez maintenant utiliser finalStart et finalEnd
+            Console.WriteLine($"Début: {finalStart}, Fin: {finalEnd}");
         }
+
+
+       
     }
 }
