@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -71,7 +72,7 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
             }
         }
 
@@ -122,7 +123,7 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
             }
         }
 
@@ -174,7 +175,7 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
                 return 0; // Return 0 in case of an error
             }
         }
@@ -235,11 +236,11 @@ namespace SchoolManagement
                     rowIndex++;
                 }
 
-                MessageBox.Show("Exported to Excel successfully.");
+                MessageBox.Show(GetLocalizedErrorMessage("Exports"));
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error exporting to Excel: " + ex.Message);
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
             }
             LoadClasses();
         }
@@ -248,8 +249,7 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please choose class to view!");
-                return;
+                MessageBox.Show(GetLocalizedErrorMessage("NoRecord"));
             }
             StudentsInClass studentsInClass = new StudentsInClass(ClassID);
             studentsInClass.ShowDialog();
@@ -260,6 +260,51 @@ namespace SchoolManagement
 
         }
 
+        private string GetLocalizedErrorMessage(string messageKey)
+        {
+            // Detect the current culture (language setting of the system)
+            string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+
+            // Handle messages based on language
+            if (currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase)) // French culture
+            {
+                // French messages
+                switch (messageKey)
+                {
+                    case "NoRecord":
+                        return "Aucun classe selectionner à voir.";
+                
+                  
+                    case "Error":
+                        return "Erreur : ";
+                    case "Exports":
+                        return "Export réussi.";
+
+                    default:
+                        return "Erreur inconnue";
+                }
+            }
+            else // Default to English culture
+            {
+                // English messages
+                switch (messageKey)
+                {
+                    
+                    
+                  
+                    case "NoRecord":
+                        return "No class has been selected.";
+                    case "Error":
+                        return "Error: ";
+                    case "Exports":
+                        return "Exported successfully.";
+
+
+                    default:
+                        return "Unknown error";
+                }
+            }
+        }
 
         private void pbNext_Click(object sender, EventArgs e)
         {
@@ -287,5 +332,10 @@ namespace SchoolManagement
         }
     }
                        
+
+
+
+
+
 
     }

@@ -117,42 +117,27 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="kryptonTextBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>435, 35</value>
-  </data>
   <data name="kryptonTextBox1.Text" xml:space="preserve">
     <value>STUDENT</value>
   </data>
   <data name="kryptonButton1.Values.Text" xml:space="preserve">
     <value>Quit</value>
   </data>
-  <data name="btnSave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 51</value>
-  </data>
   <data name="btnSave.Values.Text" xml:space="preserve">
     <value>Save</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="lbNewPass.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 20</value>
+    <value>87, 20</value>
   </data>
   <data name="lbNewPass.Text" xml:space="preserve">
-    <value>Password:</value>
-  </data>
-  <data name="txtPassword.Location" type="System.Drawing.Point, System.Drawing">
-    <value>142, 360</value>
+    <value>Password: </value>
   </data>
   <data name="lbGender.Size" type="System.Drawing.Size, System.Drawing">
     <value>70, 20</value>
   </data>
   <data name="lbGender.Text" xml:space="preserve">
     <value>Gender:</value>
-  </data>
-  <data name="txtGender.Location" type="System.Drawing.Point, System.Drawing">
-    <value>142, 310</value>
-  </data>
-  <data name="txtAddress.Location" type="System.Drawing.Point, System.Drawing">
-    <value>142, 260</value>
   </data>
   <data name="lbBirth.Size" type="System.Drawing.Size, System.Drawing">
     <value>44, 20</value>
@@ -166,17 +151,11 @@
   <data name="lbClass.Text" xml:space="preserve">
     <value>Class: </value>
   </data>
-  <data name="txtClass.Location" type="System.Drawing.Point, System.Drawing">
-    <value>142, 158</value>
-  </data>
   <data name="lbStudentID.Size" type="System.Drawing.Size, System.Drawing">
     <value>29, 20</value>
   </data>
   <data name="lbStudentID.Text" xml:space="preserve">
     <value>ID:</value>
-  </data>
-  <data name="txtID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>142, 106</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -350,24 +329,11 @@
         H2tZh5JdqcYiirfdqkbba+ypLa3vn3dGa/W9oodQk8WPoW33wi/wrPWo9sPSG3iVZcIvqspEUX//2Q==
 </value>
   </data>
-  <data name="txtBirth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>142, 208</value>
-  </data>
-  <data name="txtUser.Size" type="System.Drawing.Size, System.Drawing">
-    <value>435, 48</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="lbAdress.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
   <data name="lbAdress.Size" type="System.Drawing.Size, System.Drawing">
     <value>61, 20</value>
   </data>
   <data name="lbAdress.Text" xml:space="preserve">
     <value>Adress:</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>438, 566</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>My profil</value>

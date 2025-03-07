@@ -742,8 +742,8 @@
   <data name="lbAddStudents.TabIndex" type="System.Int32, mscorlib">
     <value>146</value>
   </data>
-  <data name="btnSave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 44</value>
+  <data name="&gt;&gt;label10.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;lbDeleteStudent.Name" xml:space="preserve">
     <value>lbDeleteStudent</value>
@@ -1541,9 +1541,6 @@ term</value>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ToolTipTitle" xml:space="preserve">
     <value />
   </data>
-  <data name="&gt;&gt;label10.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="lbName.TabIndex" type="System.Int32, mscorlib">
     <value>135</value>
   </data>
@@ -1966,6 +1963,9 @@ term</value>
   <data name="&gt;&gt;dgvStudents.Name" xml:space="preserve">
     <value>dgvStudents</value>
   </data>
+  <data name="count.TabIndex" type="System.Int32, mscorlib">
+    <value>130</value>
+  </data>
   <data name="lbNote1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -2323,8 +2323,8 @@ term</value>
   <data name="&gt;&gt;lbStudentID.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="count.TabIndex" type="System.Int32, mscorlib">
-    <value>130</value>
+  <data name="btnSave.Size" type="System.Drawing.Size, System.Drawing">
+    <value>170, 44</value>
   </data>
   <data name="&gt;&gt;lbNote2.ZOrder" xml:space="preserve">
     <value>9</value>
@@ -2348,7 +2348,7 @@ term</value>
     <value>True</value>
   </metadata>
   <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>en</value>
+    <value>fr</value>
   </metadata>
   <metadata name="kryptonPalette1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

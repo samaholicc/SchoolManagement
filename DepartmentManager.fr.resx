@@ -162,10 +162,10 @@
     <value>744, 395</value>
   </data>
   <data name="lbDepEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 20</value>
+    <value>205, 20</value>
   </data>
   <data name="lbDepEdit.Text" xml:space="preserve">
-    <value>MODIFIER LA DEPARTEMENT</value>
+    <value>MODIFIER LE DEPARTEMENT</value>
   </data>
   <data name="lbDepAdd.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>

@@ -20,12 +20,10 @@ SET time_zone = "+00:00";
 --
 -- Database: `system`
 --
-
 DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_next_class_id` ()   BEGIN
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_next_class_id` ()
+BEGIN
     DECLARE next_class_id INT;
 
     -- Récupérer le dernier numéro existant 
@@ -35,6 +33,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_next_class_id` ()   BEGIN
     -- Retourner l'ID généré sous le format "C001", "C002", etc.
     SELECT CONCAT('C', LPAD(next_class_id, 3, '0')) AS next_class_id;
 END$$
+
+DELIMITER ;
+
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ACCOUNT_PASSWORD` (IN `user` VARCHAR(50), IN `password` VARCHAR(50))   BEGIN
     -- Declare a variable to hold the hashed password

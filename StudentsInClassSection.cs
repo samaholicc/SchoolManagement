@@ -3,16 +3,31 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing.Printing;
+using System.Globalization;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
-
 
 namespace SchoolManagement
 {
     public partial class StudentsInClassSection : KryptonForm
     {
+        #region Constants and Variables
         private const int CS_DropShadow = 0x00020000;
+        private string connectionString = "Server=localhost;Database=system;User ID=root;Password=samia;";
+        private string classSectionID;
+        private bool isSelected = false;
+        #endregion
+
+        #region Constructor
+        public StudentsInClassSection(string classSectionID)
+        {
+            InitializeComponent();
+            this.classSectionID = classSectionID;
+            LoadStudents(); // Load students for the passed ClassSectionID
+        }
+        #endregion
+
+        #region Form Creation and Params
         protected override CreateParams CreateParams
         {
             get
@@ -22,21 +37,9 @@ namespace SchoolManagement
                 return cp;
             }
         }
-        private bool isSelected = false;  // Declare isSelected at the class level
+        #endregion
 
-        private string connectionString = "Server=localhost;Database=system;User ID=root;Password=samia;";
-        private string classSectionID;
-
-        // Modify constructor to accept ClassSectionID
-        public StudentsInClassSection(string classSectionID)
-        {
-            InitializeComponent();
-            this.classSectionID = classSectionID;  // Store the classSectionID
-
-            LoadStudents();  // Load students for the passed ClassSectionID
-            
-        }
-
+        #region Load Students
         private void LoadStudents()
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -55,7 +58,7 @@ namespace SchoolManagement
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ClassID", classSectionID);  // Use the passed ClassSectionID
+                        cmd.Parameters.AddWithValue("@ClassID", classSectionID); // Use the passed ClassSectionID
                         MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                         DataTable dataTable = new DataTable();
                         adapter.Fill(dataTable);
@@ -65,12 +68,108 @@ namespace SchoolManagement
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show(GetErrorMessage("Error") + ex.Message);
                 }
             }
         }
 
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (!isSelected) return;
 
+            double mid, final, avg;
+            if (!double.TryParse(txtMid.Text, out mid) || !double.TryParse(txtFinal.Text, out final))
+            {
+                MessageBox.Show(GetErrorMessage("InvalidInput"));
+                return;
+            }
+
+            avg = (mid + final) / 2;
+            txtAver.Text = avg.ToString("F2");
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = @"
+                INSERT INTO results (student_id, class_id, mid_term, final_term, average)
+                VALUES (@StudentID, @ClassID, @Mid, @Final, @Avg)
+                ON DUPLICATE KEY UPDATE 
+                    mid_term = @Mid, 
+                    final_term = @Final, 
+                    average = @Avg";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Mid", mid);
+                        cmd.Parameters.AddWithValue("@Final", final);
+                        cmd.Parameters.AddWithValue("@Avg", avg);
+                        cmd.Parameters.AddWithValue("@StudentID", lbMSSV.Text);
+                        cmd.Parameters.AddWithValue("@ClassID", classSectionID);
+
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show(GetErrorMessage("SaveSuccess"));
+                        LoadStudents();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(GetErrorMessage("Error") + ex.Message);
+                }
+            }
+        }
+
+        private void pbDelete_Click(object sender, EventArgs e)
+        {
+            if (!isSelected)
+            {
+                MessageBox.Show(GetErrorMessage("InvalidInput"));
+                return;
+            }
+
+            string studentId = lbMSSV.Text;
+
+            if (string.IsNullOrEmpty(studentId) || string.IsNullOrEmpty(classSectionID))
+            {
+                MessageBox.Show(GetErrorMessage("NoRecordToDelete"));
+                return;
+            }
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = "DELETE FROM student_classes WHERE student_id = @StudentID AND class_id = @ClassID";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@StudentID", studentId);
+                        cmd.Parameters.AddWithValue("@ClassID", classSectionID);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show(GetErrorMessage("DeleteSuccess"));
+                            LoadStudents(); // Reload the list of students
+                        }
+                        else
+                        {
+                            MessageBox.Show(GetErrorMessage("NoRecordToDelete"));
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(GetErrorMessage("Error") + ex.Message);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Event Handlers
         private void dgvStudents_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -85,107 +184,9 @@ namespace SchoolManagement
             }
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            if (!isSelected) return;
+        
 
-            double mid, final, avg;
-            if (!double.TryParse(txtMid.Text, out mid) || !double.TryParse(txtFinal.Text, out final))
-            {
-                MessageBox.Show("Invalid input!");
-                return;
-            }
-
-            avg = (mid + final) / 2;
-            txtAver.Text = avg.ToString("F2");
-
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    string query = @"
-                        INSERT INTO results (student_id, class_id, mid_term, final_term, average)
-                        VALUES (@StudentID, @ClassID, @Mid, @Final, @Avg)
-                        ON DUPLICATE KEY UPDATE 
-                            mid_term = @Mid, 
-                            final_term = @Final, 
-                            average = @Avg";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Mid", mid);
-                        cmd.Parameters.AddWithValue("@Final", final);
-                        cmd.Parameters.AddWithValue("@Avg", avg);
-                        cmd.Parameters.AddWithValue("@StudentID", lbMSSV.Text);
-                        cmd.Parameters.AddWithValue("@ClassID", ClassSectionManager.ClassSectionID);
-
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Save success");
-                        LoadStudents();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
-        }
-
-        private void pbDelete_Click(object sender, EventArgs e)
-        {
-            if (!isSelected)
-            {
-                MessageBox.Show("Please select a student first.");
-                return;
-            }
-
-            // Make sure lbMSSV.Text and ClassSectionManager.ClassSectionID are correct
-            string studentId = lbMSSV.Text;
-            string classId = ClassSectionManager.ClassSectionID;
-
-            if (string.IsNullOrEmpty(studentId) || string.IsNullOrEmpty(classId))
-            {
-                MessageBox.Show("Student ID or Class ID is invalid.");
-                return;
-            }
-
-            // Debugging: Check the current values of studentId and classId
-            MessageBox.Show($"Student ID: {studentId}, Class ID: {classId}");
-
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    string query = "DELETE FROM student_classes WHERE student_id = @StudentID AND class_id = @ClassID";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        // Add parameters
-                        cmd.Parameters.AddWithValue("@StudentID", studentId);
-                        cmd.Parameters.AddWithValue("@ClassID", classId);
-
-                        int rowsAffected = cmd.ExecuteNonQuery();
-
-                        // Check if any row was affected
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show("Deleted successfully.");
-                            LoadStudents(); // Reload the list of students
-                        }
-                        else
-                        {
-                            MessageBox.Show("No matching record found to delete.");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
-        }
+        
 
         private void pbStudents_Click(object sender, EventArgs e)
         {
@@ -193,25 +194,18 @@ namespace SchoolManagement
             studentList.ShowDialog();
             LoadStudents();
         }
-        private void StudentsInClassSection_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dgvStudents_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             ExportToExcel();
         }
+        #endregion
+
+        #region Export to Excel
         private void ExportToExcel()
         {
             try
             {
-                // Create a new Excel application instance
                 Excel.Application excelApp = new Excel.Application();
                 excelApp.Visible = true;
                 Excel.Workbook workbook = excelApp.Workbooks.Add();
@@ -223,33 +217,22 @@ namespace SchoolManagement
                     worksheet.Cells[1, col + 1] = dgvStudents.Columns[col].HeaderText;
                 }
 
-                // Fetch all data for the export, not just the current page
+                // Fetch and add all data to Excel
                 List<DataRow> allRows = new List<DataRow>();
-
-                // Loop through all pages and collect all data
-
-
-
-
-                LoadStudents();  // This loads students for the current page
-
-                // Collect rows from the DataGridView
                 foreach (DataGridViewRow row in dgvStudents.Rows)
                 {
-                    if (row.IsNewRow) continue; // Skip the new row placeholder
+                    if (row.IsNewRow) continue;
 
                     DataRow dataRow = ((DataTable)dgvStudents.DataSource).NewRow();
-
-                    // Copy row values to DataRow
                     for (int col = 0; col < dgvStudents.Columns.Count; col++)
                     {
                         dataRow[col] = row.Cells[col].Value.ToString();
                     }
-
-                    allRows.Add(dataRow); // Add the row to the list
+                    allRows.Add(dataRow);
                 }
-                // Populate Excel worksheet with all rows collected
-                int rowIndex = 2; // Start from row 2 (because row 1 is the header)
+
+                // Populate the Excel worksheet with the collected rows
+                int rowIndex = 2;
                 foreach (var row in allRows)
                 {
                     for (int col = 0; col < dgvStudents.Columns.Count; col++)
@@ -265,12 +248,54 @@ namespace SchoolManagement
             {
                 MessageBox.Show("Error exporting to Excel: " + ex.Message);
             }
-            LoadStudents();
         }
-    }
-}
+        #endregion
         
 
+    private string GetErrorMessage(string messageKey)
+    {
+        // Retrieve the current culture
+        var currentCulture = CultureInfo.CurrentCulture.Name;
 
+        // Return messages based on culture
+        if (currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase))
+        {
+            // French messages
+            switch (messageKey)
+            {
+                case "InvalidInput":
+                    return "Entrée invalide!";
+                case "SaveSuccess":
+                    return "Enregistrement réussi";
+                case "DeleteSuccess":
+                    return "Suppression réussie";
+                case "NoRecordToDelete":
+                    return "Aucun enregistrement trouvé à supprimer";
+                case "Error":
+                    return "Erreur : ";
+                default:
+                    return "Erreur inconnue";
+            }
+        }
+        else
+        {
+            switch (messageKey)
+            {
+                case "InvalidInput":
+                    return "Invalid input!";
+                case "SaveSuccess":
+                    return "Save success";
+                case "DeleteSuccess":
+                    return "Deleted successfully.";
+                case "NoRecordToDelete":
+                    return "No matching record found to delete.";
+                case "Error":
+                    return "Error: ";
+                default:
+                    return "Unknown error";
+            }
+        }
+    }
 
-
+}
+}

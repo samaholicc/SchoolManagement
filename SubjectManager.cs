@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient; // Use MySQL data access
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -62,7 +63,7 @@ namespace SchoolManagement
             }
             catch (Exception es)
             {
-                MessageBox.Show(es.Message);
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + es.Message);
             }
         }
 
@@ -135,7 +136,7 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please choose a subject to edit!");
+                MessageBox.Show(GetLocalizedErrorMessage("NoRecordToEdit"));
                 return;
             }
             action = 1;
@@ -234,11 +235,11 @@ namespace SchoolManagement
                     rowIndex++;
                 }
 
-                MessageBox.Show("Exported to Excel successfully.");
+                MessageBox.Show(GetLocalizedErrorMessage("Exports"));
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error exporting to Excel: " + ex.Message);
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
             }
             LoadSubjects();
         }
@@ -247,11 +248,11 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please choose a subject to delete!");
+                MessageBox.Show(GetLocalizedErrorMessage("NoRecordToDelete"));
                 return;
             }
 
-            DialogResult dialogResult = MessageBox.Show("Are you sure to delete?", "Confirm", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show(GetLocalizedErrorMessage("DeleteSuccess"), "Confirm", MessageBoxButtons.YesNo);
 
             if (dialogResult == DialogResult.Yes)
             {
@@ -267,17 +268,18 @@ namespace SchoolManagement
                         cmd.ExecuteNonQuery();
                     }
 
-                    MessageBox.Show("Delete success");
+                    MessageBox.Show(GetLocalizedErrorMessage("DeleteSuccess"));
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
                 }
             }
 
             isSelected = false;
             Refesh();
         }
+
 
         private void pbSave_Click(object sender, EventArgs e)
         {
@@ -296,11 +298,11 @@ namespace SchoolManagement
                         cmd.ExecuteNonQuery();
                     }
 
-                    MessageBox.Show("Add success");
+                    MessageBox.Show(GetLocalizedErrorMessage("SaveSuccess"));
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
                 }
             }
             else // Edit existing subject
@@ -321,11 +323,11 @@ namespace SchoolManagement
                         cmd.ExecuteNonQuery();
                     }
 
-                    MessageBox.Show("Edit success");
+                    MessageBox.Show(GetLocalizedErrorMessage("SaveSuccess"));
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
                 }
             }
 
@@ -369,11 +371,64 @@ namespace SchoolManagement
             catch (Exception ex)
             {
                 // Handle any errors
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
             }
         }
 
-        private void SubjectManager_Load(object sender, EventArgs e)
+    private string GetLocalizedErrorMessage(string messageKey)
+    {
+        // Detect the current culture (language setting of the system)
+        string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+
+        // Handle messages based on language
+        if (currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase)) // French culture
+        {
+            // French messages
+            switch (messageKey)
+            {
+                case "NoRecordToEdit":
+                    return "Aucune matière trouvé à éditer";
+                case "SaveSuccess":
+                    return "Enregistrement réussi";
+                case "DeleteSuccess":
+                    return "Suppression réussie";
+                case "NoRecordToDelete":
+                    return "Aucun enregistrement trouvé à supprimer";
+                case "Error":
+                    return "Erreur : ";
+                case "Exports":
+                    return "Export réussi.";
+
+                default:
+                    return "Erreur inconnue";
+            }
+        }
+        else // Default to English culture
+        {
+            // English messages
+            switch (messageKey)
+            {
+                case "NoRecordToEdit":
+                    return "No selected subject found to edit.";
+                case "SaveSuccess":
+                    return "Save success";
+                case "DeleteSuccess":
+                    return "Deleted successfully.";
+                case "NoRecordToDelete":
+                    return "No matching record found to delete.";
+                case "Error":
+                    return "Error: ";
+                case "Exports":
+                        return "Exported successfully.";
+
+
+                default:
+                    return "Unknown error";
+            }
+        }
+    }
+
+    private void SubjectManager_Load(object sender, EventArgs e)
         {
             // Any additional load logic can be added here
         }

@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace SchoolManagement
@@ -28,7 +29,7 @@ namespace SchoolManagement
         {
             if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
             {
-                error.Text = "Veuillez entrer votre identifiant et votre mot de passe.";
+                error.Text = GetLocalizedMessage("Please enter your username and password.", "Veuillez entrer votre identifiant et votre mot de passe.");
                 return false;
             }
             return true;
@@ -55,7 +56,7 @@ namespace SchoolManagement
                             }
                             else
                             {
-                                error.Text = "Identifiant ou mot de passe invalide.";
+                                error.Text = GetLocalizedMessage("Invalid username or password.", "Identifiant ou mot de passe invalide.");
                             }
                         }
                     }
@@ -63,11 +64,13 @@ namespace SchoolManagement
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("Erreur de base de données : " + ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(GetLocalizedMessage("Database error: " + ex.Message, "Erreur de base de données : " + ex.Message),
+                                GetLocalizedMessage("Error", "Erreur"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(GetLocalizedMessage("An error occurred: " + ex.Message, "Une erreur est survenue : " + ex.Message),
+                                GetLocalizedMessage("Error", "Erreur"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -85,7 +88,7 @@ namespace SchoolManagement
             }
             else
             {
-                error.Text = "Identifiant ou mot de passe invalide.";
+                error.Text = GetLocalizedMessage("Invalid username or password.", "Identifiant ou mot de passe invalide.");
             }
         }
 
@@ -127,10 +130,21 @@ namespace SchoolManagement
         private void BtnSwitch_Click(object sender, EventArgs e)
         {
             var currentLanguage = GetCurrentLanguage();
-            var newLanguage = currentLanguage == "en-US" ? "fr-FR" : "en-US";
+            var newLanguage = currentLanguage == "fr-FR" ? "en-US" : "fr-FR";
             var changeLanguage = new ChangeLanguage();
             changeLanguage.UpdateConfig("language", newLanguage);
             Application.Restart();
+        }
+        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
+        {
+            if (CultureInfo.CurrentCulture.Name == "fr-FR")
+            {
+                return frenchMessage;  // Return French message if culture is French
+            }
+            else
+            {
+                return englishMessage;  // Return English message by default
+            }
         }
 
         private void kryptonWrapLabel1_Click(object sender, EventArgs e)
@@ -139,6 +153,11 @@ namespace SchoolManagement
         }
 
         private void Login_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtPassword_TextChanged(object sender, EventArgs e)
         {
 
         }

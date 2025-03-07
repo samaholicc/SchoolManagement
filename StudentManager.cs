@@ -2,12 +2,8 @@
 using MySql.Data.MySqlClient; 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Primitives;
 using System.Data;
-using System.Data.SqlClient;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
+using System.Globalization;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -53,17 +49,17 @@ namespace SchoolManagement
 
                     // Create a command object
                     string query = @"
-                SELECT 
-                    s.STUDENT_ID, 
-                    s.FULL_NAME AS Name, 
-                    s.DATE_OF_BIRTH AS Birth, 
-                    s.GENDER AS Gender, 
-                    s.ADRESS AS Adress,
-                    GROUP_CONCAT(sc.CLASS_ID ORDER BY sc.CLASS_ID) AS CLASS_ID
-                FROM SYSTEM.STUDENTSTABLE s
-                JOIN SYSTEM.STUDENT_CLASSES sc ON s.STUDENT_ID = sc.STUDENT_ID
-                GROUP BY s.STUDENT_ID, s.FULL_NAME, s.DATE_OF_BIRTH, s.GENDER, s.ADRESS
-                ORDER BY s.STUDENT_ID";
+                    SELECT 
+                        s.STUDENT_ID, 
+                        s.FULL_NAME AS Name, 
+                        s.DATE_OF_BIRTH AS Birth, 
+                        s.GENDER AS Gender, 
+                        s.ADRESS AS Adress,
+                        GROUP_CONCAT(sc.CLASS_ID ORDER BY sc.CLASS_ID) AS CLASS_ID
+                    FROM SYSTEM.STUDENTSTABLE s
+                    JOIN SYSTEM.STUDENT_CLASSES sc ON s.STUDENT_ID = sc.STUDENT_ID
+                    GROUP BY s.STUDENT_ID, s.FULL_NAME, s.DATE_OF_BIRTH, s.GENDER, s.ADRESS
+                    ORDER BY s.STUDENT_ID";
 
 
                     // Create the MySqlCommand object
@@ -218,9 +214,17 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please choose a student to edit!");
+                if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                {
+                    MessageBox.Show("Veuillez choisir un étudiant à modifier !");
+                }
+                else 
+                {
+                    MessageBox.Show("Please choose a student to edit!");
+                }
                 return;
             }
+
             action = 1;
             txtID.Visible = true;
             lbStudentID.Visible = true;
@@ -271,9 +275,18 @@ namespace SchoolManagement
                     {
                         if (string.IsNullOrEmpty(txtClass.Text))
                         {
-                            MessageBox.Show("Please select a class.");
+                            // Check the current language and show the message accordingly
+                            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                            {
+                                MessageBox.Show("Veuillez sélectionner une classe.");
+                            }
+                            else // Default to English
+                            {
+                                MessageBox.Show("Please select a class.");
+                            }
                             return;
                         }
+
 
                         string classId = txtClass.Text.Split('-')[0].Trim(); // Retrieve CLASS_ID as a string
 
@@ -288,11 +301,23 @@ namespace SchoolManagement
                             {
                                 // Optionally append a unique identifier to the name (e.g., append "_1" or "_timestamp")
                                 string uniqueName = txtName.Text + "_" + DateTime.Now.Ticks; // Append unique timestamp to the name
-                                MessageBox.Show("A student with this name already exists. The new student will be registered as: " + uniqueName);
+
+                                // Check the current culture and show the message accordingly
+                                if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                                {
+                                    // French message
+                                    MessageBox.Show("Un étudiant portant ce nom existe déjà. Le nouvel étudiant sera enregistré sous le nom : " + uniqueName);
+                                }
+                                else
+                                {
+                                    // Default to English message
+                                    MessageBox.Show("A student with this name already exists. The new student will be registered as: " + uniqueName);
+                                }
 
                                 // Now use the unique name for insertion instead of the original name
                                 txtName.Text = uniqueName;
                             }
+
                         }
 
                         // Insert a new student into the STUDENTSTABLE
@@ -314,7 +339,6 @@ namespace SchoolManagement
                         {
                             getIdCmd.Parameters.AddWithValue("@prenomnom", txtName.Text);
                             string newStudentId = getIdCmd.ExecuteScalar()?.ToString();
-                            Console.WriteLine($"New Student ID: {newStudentId}"); // Debug Output
 
                             if (!string.IsNullOrEmpty(newStudentId))
                             {
@@ -329,26 +353,69 @@ namespace SchoolManagement
                                     {
                                         // Execute the insert for the student's class
                                         classCmd.ExecuteNonQuery();
-                                        MessageBox.Show("Student class added successfully.");
+
+                                        // Check the current culture and show the success message accordingly
+                                        if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                                        {
+                                            // French success message
+                                            MessageBox.Show("L'étudiant est ajoutée avec succès.");
+                                        }
+                                        else
+                                        {
+                                            // Default to English success message
+                                            MessageBox.Show("Student was added successfully.");
+                                        }
                                     }
                                     catch (Exception ex)
                                     {
-                                        // Show error message if insertion fails
-                                        MessageBox.Show("Error inserting student class: " + ex.Message);
+                                       
+                                            // Failure case
+                                            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                                            {
+                                                // French failure message
+                                                MessageBox.Show("Échec de la création du compte.");
+                                            }
+                                            else
+                                            {
+                                                // English failure message
+                                                MessageBox.Show("Account creation failed.");
+                                            }
+                                        
+
                                     }
+
                                 }
 
                                 // Create an account for the newly added student
                                 InsertData insertData = new InsertData();
                                 string result = insertData.AddAccount(txtName.Text, txtPassword.Text, newStudentId, "Student");
                                 insertData.UpdateUserIdBasedOnRole(txtName.Text, "Student");
-
-                                // Notify the user about account creation
-                                MessageBox.Show(result != null ? "Add success, and account created." : "Account creation failed.");
+                               
                             }
                             else
                             {
-                                MessageBox.Show("Failed to retrieve the student ID after insertion.");
+                                try
+                                {
+                                    // Your code for insertion or data retrieval...
+
+                                    // If something goes wrong (for example, student ID retrieval fails)
+                                    MessageBox.Show("Failed to retrieve the student ID after insertion.");
+                                }
+                                catch 
+                                {
+                                    // Checking culture and displaying the appropriate message in case of failure
+                                    if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                                    {
+                                        // French failure message
+                                        MessageBox.Show("Échec de la récupération de l'ID de l'étudiant après l'insertion.");
+                                    }
+                                    else
+                                    {
+                                        // English failure message
+                                        MessageBox.Show("Failed to retrieve the student ID after insertion.");
+                                    }
+                                }
+
                             }
                         }
 
@@ -416,10 +483,7 @@ namespace SchoolManagement
                                     MessageBox.Show("Password updated successfully.");
                                 }
                             }
-                            else
-                            {
-                                MessageBox.Show("No password change detected.");
-                            }
+                            
 
 
                             // Delete existing class associations for the student before adding new ones
@@ -512,11 +576,58 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please choose a student to delete!");
+                // Show culture-specific message
+                if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                {
+                    MessageBox.Show("Veuillez sélectionner un étudiant à supprimer !");
+                }
+                else
+                {
+                    MessageBox.Show("Please choose a student to delete!");
+                }
                 return;
             }
 
-            DialogResult dialogResult = MessageBox.Show("Are you sure to delete?", "Confirm", MessageBoxButtons.YesNo);
+
+            DialogResult dialogResult;
+            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+            {
+                // Custom message box for French
+                dialogResult = MessageBox.Show("Êtes-vous sûr de vouloir supprimer ?", "Confirmer", MessageBoxButtons.YesNo);
+            }
+            else
+            {
+                // Default English MessageBox
+                dialogResult = MessageBox.Show("Are you sure you want to delete?", "Confirm", MessageBoxButtons.YesNo);
+            }
+
+            // Handle the result based on the user's selection
+            if (dialogResult == DialogResult.Yes)
+            {
+                // Code to perform the delete action
+                if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                {
+                    MessageBox.Show("Supprimé avec succès");
+                }
+                else
+                {
+                    MessageBox.Show("Deleted successfully");
+                }
+            }
+            else
+            {
+                // Code to handle if the user clicks 'No'
+                if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                {
+                    MessageBox.Show("Opération de suppression annulée");
+                }
+                else
+                {
+                    MessageBox.Show("Delete operation canceled");
+                }
+            }
+
+
 
             if (dialogResult == DialogResult.Yes)
             {
@@ -552,7 +663,15 @@ namespace SchoolManagement
                         }
                     }
 
-                    MessageBox.Show("Deleted success");
+                    if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                    {
+                        MessageBox.Show("Suppression réussie");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Deleted successfully");
+                    }
+
                     LoadStudents();
                 }
                 catch (Exception ex)
@@ -717,14 +836,32 @@ namespace SchoolManagement
                     rowIndex++;
                 }
 
-                MessageBox.Show("Exported to Excel successfully.");
+                // Show message after export depending on the language
+                if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                {
+                    MessageBox.Show("Exporté vers Excel avec succès.");
+                }
+                else
+                {
+                    MessageBox.Show("Exported to Excel successfully.");
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error exporting to Excel: " + ex.Message);
+                // Handle any errors during the export process
+                if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                {
+                    MessageBox.Show("Erreur lors de l'exportation vers Excel: " + ex.Message);
+                }
+                else
+                {
+                    MessageBox.Show("Error exporting to Excel: " + ex.Message);
+                }
             }
-            LoadStudents();
+
+            LoadStudents(); // Reload students data after export
         }
+
 
 
 
@@ -767,20 +904,33 @@ namespace SchoolManagement
         {
             if (password.Length < 8)
             {
-                MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères !");
+                if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                {
+                    MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères !");
+                }
+                else
+                {
+                    MessageBox.Show("The password must contain at least 8 characters!");
+                }
                 return false;
             }
 
             if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*(),.?""{}|<>]"))
             {
-                MessageBox.Show("Le mot de passe doit contenir au moins un caractère spécial !");
+                if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                {
+                    MessageBox.Show("Le mot de passe doit contenir au moins un caractère spécial !");
+                }
+                else
+                {
+                    MessageBox.Show("The password must contain at least one special character!");
+                }
                 return false;
             }
 
             return true;
-
-
         }
+
     }
 }
     

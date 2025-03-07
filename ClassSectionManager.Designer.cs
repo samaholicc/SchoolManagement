@@ -56,6 +56,10 @@ namespace SchoolManagement
             this.lbShowStudents = new System.Windows.Forms.Label();
             this.txtSchedule = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
             this.lbSubjectID = new System.Windows.Forms.Label();
+            this.txtStartTime = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            this.txtEndTime = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pbDetail = new System.Windows.Forms.PictureBox();
             this.pbSave = new System.Windows.Forms.PictureBox();
@@ -65,10 +69,6 @@ namespace SchoolManagement
             this.pbPrev = new System.Windows.Forms.PictureBox();
             this.pbNext = new System.Windows.Forms.PictureBox();
             this.pbReload = new System.Windows.Forms.PictureBox();
-            this.txtStartTime = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
-            this.txtEndTime = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClass)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSubject)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbTeacher)).BeginInit();
@@ -535,6 +535,52 @@ namespace SchoolManagement
             resources.ApplyResources(this.lbSubjectID, "lbSubjectID");
             this.lbSubjectID.Name = "lbSubjectID";
             // 
+            // txtStartTime
+            // 
+            resources.ApplyResources(this.txtStartTime, "txtStartTime");
+            this.txtStartTime.CalendarTodayDate = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
+            this.txtStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.txtStartTime.Name = "txtStartTime";
+            this.txtStartTime.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.txtStartTime.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
+            this.txtStartTime.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
+            this.txtStartTime.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.txtStartTime.StateCommon.Border.Rounding = 20;
+            this.txtStartTime.StateCommon.Border.Width = 1;
+            this.txtStartTime.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtStartTime.StateDisabled.Content.Color1 = System.Drawing.Color.Black;
+            this.txtStartTime.ValueNullable = new System.DateTime(((long)(0)));
+            // 
+            // txtEndTime
+            // 
+            resources.ApplyResources(this.txtEndTime, "txtEndTime");
+            this.txtEndTime.CalendarTodayDate = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
+            this.txtEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.txtEndTime.Name = "txtEndTime";
+            this.txtEndTime.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.txtEndTime.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
+            this.txtEndTime.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
+            this.txtEndTime.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.txtEndTime.StateCommon.Border.Rounding = 20;
+            this.txtEndTime.StateCommon.Border.Width = 1;
+            this.txtEndTime.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtEndTime.StateDisabled.Content.Color1 = System.Drawing.Color.Black;
+            this.txtEndTime.ValueNullable = new System.DateTime(((long)(0)));
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
+            // 
+            // label2
+            // 
+            resources.ApplyResources(this.label2, "label2");
+            this.label2.Name = "label2";
+            // 
             // pictureBox1
             // 
             resources.ApplyResources(this.pictureBox1, "pictureBox1");
@@ -605,52 +651,6 @@ namespace SchoolManagement
             this.pbReload.Name = "pbReload";
             this.pbReload.TabStop = false;
             this.pbReload.Click += new System.EventHandler(this.pbReload_Click);
-            // 
-            // txtStartTime
-            // 
-            resources.ApplyResources(this.txtStartTime, "txtStartTime");
-            this.txtStartTime.CalendarTodayDate = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
-            this.txtStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.txtStartTime.Name = "txtStartTime";
-            this.txtStartTime.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
-            this.txtStartTime.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
-            this.txtStartTime.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
-            this.txtStartTime.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.txtStartTime.StateCommon.Border.Rounding = 20;
-            this.txtStartTime.StateCommon.Border.Width = 1;
-            this.txtStartTime.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtStartTime.StateDisabled.Content.Color1 = System.Drawing.Color.Black;
-            this.txtStartTime.ValueNullable = new System.DateTime(((long)(0)));
-            // 
-            // txtEndTime
-            // 
-            resources.ApplyResources(this.txtEndTime, "txtEndTime");
-            this.txtEndTime.CalendarTodayDate = new System.DateTime(2023, 5, 4, 0, 0, 0, 0);
-            this.txtEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.txtEndTime.Name = "txtEndTime";
-            this.txtEndTime.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
-            this.txtEndTime.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
-            this.txtEndTime.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(189)))), ((int)(((byte)(195)))), ((int)(((byte)(199)))));
-            this.txtEndTime.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.txtEndTime.StateCommon.Border.Rounding = 20;
-            this.txtEndTime.StateCommon.Border.Width = 1;
-            this.txtEndTime.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEndTime.StateDisabled.Content.Color1 = System.Drawing.Color.Black;
-            this.txtEndTime.ValueNullable = new System.DateTime(((long)(0)));
-            // 
-            // label1
-            // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.Name = "label1";
-            // 
-            // label2
-            // 
-            resources.ApplyResources(this.label2, "label2");
-            this.label2.Name = "label2";
             // 
             // ClassSectionManager
             // 

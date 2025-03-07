@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
 using MySql.Data.MySqlClient; // Necessary for MySQL
+using System.Globalization;
 
 namespace SchoolManagement
 {
@@ -24,8 +25,6 @@ namespace SchoolManagement
         {
             InitializeComponent();
             LoadTextBox();
-          
-
         }
 
         private void LoadTextBox()
@@ -37,7 +36,7 @@ namespace SchoolManagement
                 // Assurez-vous que Login.ID est correctement défini  
                 if (string.IsNullOrEmpty(Login.ID))
                 {
-                    MessageBox.Show("Login ID is not set. Please log in again.");
+                    MessageBox.Show(GetLocalizedMessage("LoginIDNotSet"));
                     this.Close();
                     return;
                 }
@@ -46,18 +45,18 @@ namespace SchoolManagement
                 {
                     conn.Open();
                     string query = @"
-SELECT 
-    t.TEACHER_ID, 
-    t.FULL_NAME, 
-    t.ADRESS,   
-    t.GENDER, 
-    t.DATE_OF_BIRTH, 
-    t.DEP_ID,
-    a.ID, 
-    a.PASSWORD 
-FROM SYSTEM.TEACHER t 
-JOIN SYSTEM.ACCOUNT a ON a.ID = t.TEACHER_ID  -- Jointure basée sur TEACHER_ID, 
-WHERE t.TEACHER_ID = @id"; // Recherche par TEACHER_ID
+                        SELECT 
+                            t.TEACHER_ID, 
+                            t.FULL_NAME, 
+                            t.ADRESS,   
+                            t.GENDER, 
+                            t.DATE_OF_BIRTH, 
+                            t.DEP_ID,
+                            a.ID, 
+                            a.PASSWORD 
+                        FROM SYSTEM.TEACHER t 
+                        JOIN SYSTEM.ACCOUNT a ON a.ID = t.TEACHER_ID  -- Jointure basée sur TEACHER_ID, 
+                        WHERE t.TEACHER_ID = @id"; // Recherche par TEACHER_ID
 
                     MySqlCommand cmd = new MySqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@id", Login.ID); // Passer le TEACHER_ID
@@ -76,7 +75,7 @@ WHERE t.TEACHER_ID = @id"; // Recherche par TEACHER_ID
                         }
                         else
                         {
-                            MessageBox.Show("No data found for the given Teacher ID.");
+                            MessageBox.Show(GetLocalizedMessage("NoDataFound"));
                         }
                     }
                 }
@@ -87,11 +86,9 @@ WHERE t.TEACHER_ID = @id"; // Recherche par TEACHER_ID
             }
         }
 
-
-
         private void kryptonButton1_Click(object sender, EventArgs e)
         {
-            this.Close(); 
+            this.Close();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -105,29 +102,51 @@ WHERE t.TEACHER_ID = @id"; // Recherche par TEACHER_ID
                 string userID = txtID.Text;
                 string hashedPassword = Encrypt.HashString(passInsert);
 
-                
                 string result = dataInserter.UpdatePassword(userID, hashedPassword);
 
                 if (result != null)
                 {
-                    MessageBox.Show("Account modified successfully.");
+                    MessageBox.Show(GetLocalizedMessage("AccountModified"));
                     this.Close();
                 }
             }
             catch (Exception es)
             {
-                MessageBox.Show(es.Message); // Afficher tout message d'erreur  
+                MessageBox.Show(es.Message); // Display any error message  
             }
         }
 
-        private void TeacherProfile_Load(object sender, EventArgs e)
+        // Method for localization of messages
+        private string GetLocalizedMessage(string messageKey)
         {
+            // Detect the current culture (language setting of the system)
+            string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
 
-        }
+            // French messages
+            var messages_fr = new System.Collections.Generic.Dictionary<string, string>
+            {
+                { "LoginIDNotSet", "Login ID n'est pas défini. Veuillez vous reconnecter." },
+                { "NoDataFound", "Aucune donnée trouvée pour cet identifiant d'enseignant." },
+                { "AccountModified", "Compte modifié avec succès." }
+            };
 
-        private void label1_Click(object sender, EventArgs e)
-        {
+            // English messages
+            var messages_en = new System.Collections.Generic.Dictionary<string, string>
+            {
+                { "LoginIDNotSet", "Login ID is not set. Please log in again." },
+                { "NoDataFound", "No data found for the given Teacher ID." },
+                { "AccountModified", "Account modified successfully." }
+            };
 
+            // Return the message based on the culture
+            if (currentCulture.StartsWith("fr"))
+            {
+                return messages_fr.ContainsKey(messageKey) ? messages_fr[messageKey] : "Message not found.";
+            }
+            else
+            {
+                return messages_en.ContainsKey(messageKey) ? messages_en[messageKey] : "Message not found.";
+            }
         }
     }
 }

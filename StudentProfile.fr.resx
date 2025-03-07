@@ -117,42 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="kryptonButton1.Values.ExtraText" xml:space="preserve">
-    <value />
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="kryptonButton1.Values.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value />
-  </data>
-  <data name="btnSave.Values.ExtraText" xml:space="preserve">
-    <value />
-  </data>
-  <data name="btnSave.Values.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value />
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritExtraText" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritImage" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritText" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritToolTipTitle" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ColorMap" type="System.Drawing.Color, System.Drawing">
-    <value />
-  </data>
-  <assembly alias="ComponentFactory.Krypton.Toolkit" name="ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.Edge" type="ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ExtraText" xml:space="preserve">
-    <value />
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
@@ -171,22 +136,6 @@
         R7HWarYJBuEF1eyvQ1bXCrl6ZoBMDnESGOM+UUhT+RpE6ip3HmLAiOPiPF4o+k2pdbe58nP7ott1so7R
         SJS0FJBRUsf8IKeMRovhQABpW1rWCzRYJhlmkneZJXFzj3JufJUnXpcV/9k=
 </value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedTracking" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImagePressed" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -230,39 +179,6 @@
         KSP7sNPGEUe+B199GMY2MZWCwS7UVM1XIZZ3lzj1JuV3amhl/9k=
 </value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.Orientation" type="ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ToolTipTitle" xml:space="preserve">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritExtraText" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritImage" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritText" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritToolTipTitle" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ColorMap" type="System.Drawing.Color, System.Drawing">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.Edge" type="ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ExtraText" xml:space="preserve">
-    <value />
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
@@ -279,21 +195,6 @@
         AcrfB9MdKWtTmz9uDhn/ADA/Zn165cNdKFS8y+LDzCwmr2lDVOuhOh2Yss5b3JcbXo0NvfZMaw8Q1NwK
         lRP08PdI7zuY4RK2Uypt02Ih+KU4DyVS7N2cew70RkYKEcrOddT48UVF4Yqnr//Z
 </value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedTracking" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImagePressed" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -335,39 +236,6 @@
         QEXZZbjtIaaQlppACUoQLBI8gO7H3AAGAusANGAOSzxlZX//2Q==
 </value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.Orientation" type="ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ToolTipTitle" xml:space="preserve">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritExtraText" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritImage" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritText" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritToolTipTitle" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ColorMap" type="System.Drawing.Color, System.Drawing">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.Edge" type="ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ExtraText" xml:space="preserve">
-    <value />
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
@@ -385,21 +253,6 @@
         Sd/Aa8kGzuaQxDOGhGrjr8DuqrDsS/WiKIX0mh6rqujp+pd97aTn/LPGt9NAv8WwXb6CvNZvGiW2XGm6
         vkio2VhWiKL/2Q==
 </value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedTracking" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImagePressed" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -436,17 +289,5 @@
         AYYfq1TYqLram6fLLDiFqFtsseHL1SDrfhcAC+tmfwhQI0WYbPx22Y3MX1OnkN/1ZGuVKGyEZaGbuPfy
         H2tZh5JdqcYiirfdqkbba+ypLa3vn3dGa/W9oodQk8WPoW33wi/wrPWo9sPSG3iVZcIvqspEUX//2Q==
 </value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.Orientation" type="ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ToolTipTitle" xml:space="preserve">
-    <value />
   </data>
 </root>

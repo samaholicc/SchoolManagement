@@ -50,10 +50,7 @@ namespace SchoolManagement
                                 txtID.Text = dr.GetString(0);  // Assuming column 0 is ID
                                 txtPassword.Text = dr.GetString(2); // Assuming column 2 is Password
                             }
-                            else
-                            {
-                                ShowMessage("NoUserFound");
-                            }
+                           
                         }
                     }
                 }
@@ -70,12 +67,6 @@ namespace SchoolManagement
             {
                 string passInsert = txtPassword.Text;
                 string insertID = txtID.Text;
-
-                if (string.IsNullOrWhiteSpace(insertID))
-                {
-                    ShowMessage("InvalidID");
-                    return;
-                }
 
                 string newPassword = txtPassword.Text; // Assuming there's a txtNewPassword TextBox
                 string currentPassword = string.Empty;
@@ -204,11 +195,11 @@ namespace SchoolManagement
                         break;
        
                     default:
-                        message = key; // Default to key if no match
+                        message = key; 
                         break;
                 }
             }
-            else  // Default to English
+            else  
             {
                 switch (key)
                 {

@@ -1,8 +1,9 @@
-﻿using System;
-using System.Data;
-using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
+﻿using ComponentFactory.Krypton.Toolkit;
 using MySql.Data.MySqlClient;
+using System;
+using System.Data;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace SchoolManagement
 {
@@ -26,7 +27,6 @@ namespace SchoolManagement
             this.ClassID = ClassID;
             LoadStudents();
         }
-
         private void LoadStudents()
         {
             try
@@ -51,9 +51,10 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred: " + ex.Message);
+                MessageBox.Show(GetLocalizedMessage("An error occurred: " + ex.Message, "Une erreur est survenue : " + ex.Message));
             }
         }
+
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
@@ -62,7 +63,7 @@ namespace SchoolManagement
 
             if (string.IsNullOrEmpty(studentID))
             {
-                MessageBox.Show("Veuillez sélectionner un étudiant.");
+                MessageBox.Show(GetLocalizedMessage("Please select a student.", "Veuillez sélectionner un étudiant."));
                 return;
             }
 
@@ -89,7 +90,7 @@ namespace SchoolManagement
                             }
                             else
                             {
-                                MessageBox.Show("Étudiant introuvable !");
+                                MessageBox.Show(GetLocalizedMessage("Student not found!", "Étudiant introuvable !"));
                                 return;
                             }
                         }
@@ -107,16 +108,28 @@ namespace SchoolManagement
                     }
                 }
 
-                MessageBox.Show("Étudiant ajouté avec succès à la classe !");
+                MessageBox.Show(GetLocalizedMessage("Student added to the class successfully!", "Étudiant ajouté avec succès à la classe !"));
                 LoadStudents(); // Recharger la liste des étudiants
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur : " + ex.Message);
+                MessageBox.Show(GetLocalizedMessage("Error: " + ex.Message, "Erreur : " + ex.Message));
             }
         }
 
-        
+
+        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
+        {
+            if (CultureInfo.CurrentCulture.Name == "fr-FR")
+            {
+                return frenchMessage;  // Return the French message if culture is French
+            }
+            else
+            {
+                return englishMessage;  // Return the English message by default
+            }
+        }
+
 
         private void StudentClassList_Load(object sender, EventArgs e)
         {

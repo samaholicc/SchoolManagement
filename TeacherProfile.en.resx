@@ -290,10 +290,4 @@
         H2tZh5JdqcYiirfdqkbba+ypLa3vn3dGa/W9oodQk8WPoW33wi/wrPWo9sPSG3iVZcIvqspEUX//2Q==
 </value>
   </data>
-  <data name="lbAddress.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 20</value>
-  </data>
-  <data name="lbAddress.Text" xml:space="preserve">
-    <value>Address:</value>
-  </data>
 </root>

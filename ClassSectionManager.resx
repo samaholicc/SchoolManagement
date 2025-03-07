@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ToolTipTitle" xml:space="preserve">
-    <value />
-  </data>
   <data name="txtSchedule.CustomFormat" xml:space="preserve">
     <value>dddd HH:mm</value>
   </data>
@@ -822,9 +819,6 @@
         RK2+VoHriCP+P2gh0U1itVwXAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="&gt;&gt;lbStart.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;pbPrev.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
@@ -858,6 +852,9 @@
   </data>
   <data name="&gt;&gt;cbSubject.Type" xml:space="preserve">
     <value>ComponentFactory.Krypton.Toolkit.KryptonComboBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
+  </data>
+  <data name="lbFinish.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="txtSchedule.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -1466,11 +1463,14 @@
   <data name="txtID.TabIndex" type="System.Int32, mscorlib">
     <value>108</value>
   </data>
+  <data name="&gt;&gt;lbTeacherID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;kryptonPalette1.Type" xml:space="preserve">
     <value>ComponentFactory.Krypton.Toolkit.KryptonPalette, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
-  <data name="&gt;&gt;lbTeacherID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="lbAddClass.Location" type="System.Drawing.Point, System.Drawing">
     <value>579, 140</value>
@@ -1478,13 +1478,22 @@
   <data name="dgvClass.Location" type="System.Drawing.Point, System.Drawing">
     <value>1, 374</value>
   </data>
+  <data name="txtStartTime.Location" type="System.Drawing.Point, System.Drawing">
+    <value>380, 328</value>
+  </data>
   <data name="&gt;&gt;lbDelete.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="lbStart.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="lbAddClass.TabIndex" type="System.Int32, mscorlib">
+    <value>131</value>
+  </data>
   <data name="&gt;&gt;lbSchedule.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbDelete.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;lbDelete.ZOrder" xml:space="preserve">
@@ -1502,9 +1511,6 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="&gt;&gt;lbEditClass.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="pbEdit.Size" type="System.Drawing.Size, System.Drawing">
     <value>114, 125</value>
   </data>
@@ -1519,6 +1525,9 @@
   </data>
   <data name="cbSubject.TabIndex" type="System.Int32, mscorlib">
     <value>111</value>
+  </data>
+  <data name="pbReload.Location" type="System.Drawing.Point, System.Drawing">
+    <value>432, 335</value>
   </data>
   <data name="&gt;&gt;lbNos.ZOrder" xml:space="preserve">
     <value>22</value>
@@ -1550,6 +1559,9 @@
   <data name="lbTeacherID.Size" type="System.Drawing.Size, System.Drawing">
     <value>92, 20</value>
   </data>
+  <data name="&gt;&gt;txtNOS.Type" xml:space="preserve">
+    <value>ComponentFactory.Krypton.Toolkit.KryptonTextBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
+  </data>
   <data name="lbStart.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 143</value>
   </data>
@@ -1559,8 +1571,8 @@
   <data name="&gt;&gt;lbClassSectionID.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="dtpFinish.Size" type="System.Drawing.Size, System.Drawing">
-    <value>315, 37</value>
+  <data name="lbSubjectID.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 59</value>
   </data>
   <data name="lbClassSectionID.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1583,14 +1595,8 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="&gt;&gt;txtSchedule.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
   <data name="&gt;&gt;txtSearch.ZOrder" xml:space="preserve">
     <value>20</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
   </data>
   <data name="btnSearch.Location" type="System.Drawing.Point, System.Drawing">
     <value>330, 335</value>
@@ -1631,9 +1637,6 @@
   <data name="lbExport.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 17</value>
   </data>
-  <data name="lbAddClass.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 20</value>
-  </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
     <value>197, 278</value>
   </data>
@@ -1666,6 +1669,9 @@
   </data>
   <data name="lbEditClass.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="pbReload.TabIndex" type="System.Int32, mscorlib">
+    <value>125</value>
   </data>
   <data name="&gt;&gt;lbNos.Name" xml:space="preserve">
     <value>lbNos</value>
@@ -1738,6 +1744,12 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="lbNos.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 278</value>
+  </data>
+  <data name="lbExport.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Century Gothic, 9.75pt</value>
+  </data>
   <data name="cbSubject.Location" type="System.Drawing.Point, System.Drawing">
     <value>201, 51</value>
   </data>
@@ -1777,8 +1789,8 @@
   <data name="lbExport.Text" xml:space="preserve">
     <value>Export</value>
   </data>
-  <data name="lbEditClass.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 20</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>CLASS SECTION MANAGER</value>
   </data>
   <data name="dtpStart.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -1801,6 +1813,9 @@
   <data name="&gt;&gt;lbSubjectID.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.ColorMap" type="System.Drawing.Color, System.Drawing">
+    <value />
+  </data>
   <data name="&gt;&gt;txtStartDay.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
@@ -1809,6 +1824,9 @@
   </data>
   <data name="pbReload.Size" type="System.Drawing.Size, System.Drawing">
     <value>39, 33</value>
+  </data>
+  <data name="&gt;&gt;lbSubjectID.Name" xml:space="preserve">
+    <value>lbSubjectID</value>
   </data>
   <data name="lbFinish.Size" type="System.Drawing.Size, System.Drawing">
     <value>50, 20</value>
@@ -1877,6 +1895,9 @@
     <value>True</value>
   </data>
   <data name="lbEditClass.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Century Gothic, 11.25pt</value>
+  </data>
+  <data name="lbSchedule.Font" type="System.Drawing.Font, System.Drawing">
     <value>Century Gothic, 11.25pt</value>
   </data>
   <data name="pbPrev.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -2363,8 +2384,11 @@
   <data name="lbTeacherID.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="&gt;&gt;pbEdit.Name" xml:space="preserve">
-    <value>pbEdit</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="&gt;&gt;lbSubjectID.ZOrder" xml:space="preserve">
+    <value>31</value>
   </data>
   <data name="lbNos.Font" type="System.Drawing.Font, System.Drawing">
     <value>Century Gothic, 11.25pt</value>
@@ -2374,9 +2398,6 @@
   </data>
   <data name="&gt;&gt;btnSearch.Name" xml:space="preserve">
     <value>btnSearch</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritImage" type="System.Boolean, mscorlib">
-    <value>True</value>
   </data>
   <data name="&gt;&gt;pbPrev.ZOrder" xml:space="preserve">
     <value>16</value>
@@ -2436,8 +2457,8 @@
   <data name="&gt;&gt;cbSubject.Name" xml:space="preserve">
     <value>cbSubject</value>
   </data>
-  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="lbTeacherID.Text" xml:space="preserve">
+    <value>Teacher ID:</value>
   </data>
   <data name="pbDetail.Location" type="System.Drawing.Point, System.Drawing">
     <value>949, 12</value>
@@ -2445,8 +2466,8 @@
   <data name="lbSchedule.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="&gt;&gt;txtNOS.Type" xml:space="preserve">
-    <value>ComponentFactory.Krypton.Toolkit.KryptonTextBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
+  <data name="lbAddClass.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 20</value>
   </data>
   <data name="&gt;&gt;pbReload.Type" xml:space="preserve">
     <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -2457,11 +2478,11 @@
   <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
+  <data name="&gt;&gt;lbClassSectionID.ZOrder" xml:space="preserve">
+    <value>33</value>
+  </data>
   <data name="lbShowStudents.Font" type="System.Drawing.Font, System.Drawing">
     <value>Century Gothic, 11.25pt</value>
-  </data>
-  <data name="pbPrev.Size" type="System.Drawing.Size, System.Drawing">
-    <value>39, 33</value>
   </data>
   <data name="&gt;&gt;lbEditClass.ZOrder" xml:space="preserve">
     <value>12</value>
@@ -2483,9 +2504,6 @@
   </data>
   <data name="lbTeacherID.TabIndex" type="System.Int32, mscorlib">
     <value>112</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ExtraText" xml:space="preserve">
-    <value />
   </data>
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2745,6 +2763,12 @@
   </data>
   <data name="txtStartTime.Size" type="System.Drawing.Size, System.Drawing">
     <value>240, 37</value>
+  </data>
+  <data name="lbSave.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 20</value>
+  </data>
+  <data name="&gt;&gt;dtpStart.Name" xml:space="preserve">
+    <value>dtpStart</value>
   </data>
   <data name="pbStudents.Size" type="System.Drawing.Size, System.Drawing">
     <value>114, 125</value>
@@ -3532,7 +3556,7 @@
   <data name="pbStudents.TabIndex" type="System.Int32, mscorlib">
     <value>130</value>
   </data>
-  <data name="&gt;&gt;lbAddClass.Parent" xml:space="preserve">
+  <data name="&gt;&gt;btnSearch.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lbClassSectionID.Type" xml:space="preserve">
@@ -3540,9 +3564,6 @@
   </data>
   <data name="pictureBox1.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>Zoom</value>
-  </data>
-  <data name="&gt;&gt;lbShowStudents.Name" xml:space="preserve">
-    <value>lbShowStudents</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -3553,8 +3574,8 @@
   <data name="&gt;&gt;pictureBox1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ColorMap" type="System.Drawing.Color, System.Drawing">
-    <value />
+  <data name="&gt;&gt;lbAddClass.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -3580,17 +3601,14 @@
   <data name="&gt;&gt;txtEndTime.Name" xml:space="preserve">
     <value>txtEndTime</value>
   </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;lbEditClass.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;lbTeacherID.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="lbNos.Size" type="System.Drawing.Size, System.Drawing">
     <value>103, 20</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>ComponentFactory.Krypton.Toolkit.KryptonForm, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
   <data name="&gt;&gt;pbPrev.Type" xml:space="preserve">
     <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -3616,9 +3634,6 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritToolTipTitle" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritImage" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -3643,8 +3658,8 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritImage" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbTeacher.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="&gt;&gt;lbAddClass.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lbFinish.Text" xml:space="preserve">
     <value>Finish:</value>
@@ -3657,12 +3672,6 @@
   </data>
   <data name="pbNext.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>Zoom</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.Orientation" type="ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="&gt;&gt;cbTeacher.Parent" xml:space="preserve">
-    <value>$this</value>
   </data>
   <data name="pbEdit.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -4354,8 +4363,8 @@
   <data name="&gt;&gt;lbShowStudents.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;pbEdit.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormMax.ColorMap" type="System.Drawing.Color, System.Drawing">
+    <value />
   </data>
   <data name="lbDelete.Size" type="System.Drawing.Size, System.Drawing">
     <value>108, 20</value>
@@ -4363,8 +4372,8 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMax.Edge" type="ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign, ComponentFactory.Krypton.Toolkit">
     <value>Inherit</value>
   </data>
-  <data name="lbNos.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 278</value>
+  <data name="dtpFinish.Size" type="System.Drawing.Size, System.Drawing">
+    <value>315, 37</value>
   </data>
   <data name="&gt;&gt;pbStudents.Parent" xml:space="preserve">
     <value>$this</value>
@@ -4425,8 +4434,8 @@
   <data name="lbFinish.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 186</value>
   </data>
-  <data name="&gt;&gt;lbSchedule.ZOrder" xml:space="preserve">
-    <value>23</value>
+  <data name="&gt;&gt;pbDelete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dgvClass.Parent" xml:space="preserve">
     <value>$this</value>
@@ -4434,8 +4443,8 @@
   <data name="&gt;&gt;pbSave.Name" xml:space="preserve">
     <value>pbSave</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>CLASS SECTION MANAGER</value>
+  <data name="lbEditClass.Size" type="System.Drawing.Size, System.Drawing">
+    <value>86, 20</value>
   </data>
   <data name="lbSubjectID.Size" type="System.Drawing.Size, System.Drawing">
     <value>87, 20</value>
@@ -4451,9 +4460,6 @@
   </data>
   <data name="pbDetail.TabIndex" type="System.Int32, mscorlib">
     <value>138</value>
-  </data>
-  <data name="&gt;&gt;txtStartDay.Parent" xml:space="preserve">
-    <value>$this</value>
   </data>
   <data name="&gt;&gt;lbSchedule.Name" xml:space="preserve">
     <value>lbSchedule</value>
@@ -4473,8 +4479,8 @@
   <data name="&gt;&gt;pbNext.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="lbSave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 20</value>
+  <data name="&gt;&gt;txtSchedule.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="&gt;&gt;txtEndTime.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -4482,17 +4488,14 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritExtraText" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="&gt;&gt;btnSearch.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
   <data name="pbSave.Location" type="System.Drawing.Point, System.Drawing">
     <value>949, 173</value>
   </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.Edge" type="ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign, ComponentFactory.Krypton.Toolkit">
+    <value>Inherit</value>
+  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritExtraText" type="System.Boolean, mscorlib">
     <value>True</value>
-  </data>
-  <data name="txtSchedule.Location" type="System.Drawing.Point, System.Drawing">
-    <value>201, 222</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -4520,11 +4523,11 @@
   <data name="&gt;&gt;label1.Name" xml:space="preserve">
     <value>label1</value>
   </data>
-  <data name="lbSubjectID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 59</value>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="lbFinish.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="cbTeacher.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="txtEndTime.TabIndex" type="System.Int32, mscorlib">
     <value>142</value>
@@ -4532,8 +4535,8 @@
   <data name="kryptonPalette1.ButtonSpecs.FormClose.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.Edge" type="ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
+  <data name="&gt;&gt;cbTeacher.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="lbShowStudents.TabIndex" type="System.Int32, mscorlib">
     <value>139</value>
@@ -4547,8 +4550,8 @@
   <data name="&gt;&gt;lbTeacherID.ZOrder" xml:space="preserve">
     <value>29</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ColorMap" type="System.Drawing.Color, System.Drawing">
-    <value />
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="lbAddClass.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4568,17 +4571,17 @@
   <data name="pictureBox1.TabIndex" type="System.Int32, mscorlib">
     <value>126</value>
   </data>
-  <data name="&gt;&gt;pbDelete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;lbSchedule.ZOrder" xml:space="preserve">
+    <value>23</value>
   </data>
   <data name="&gt;&gt;label2.Name" xml:space="preserve">
     <value>label2</value>
   </data>
-  <data name="pbReload.Location" type="System.Drawing.Point, System.Drawing">
-    <value>432, 335</value>
+  <data name="&gt;&gt;pbEdit.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="&gt;&gt;lbAddClass.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.ExtraText" xml:space="preserve">
+    <value />
   </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
@@ -4601,35 +4604,32 @@
   <data name="pbDelete.Location" type="System.Drawing.Point, System.Drawing">
     <value>776, 173</value>
   </data>
-  <data name="lbTeacherID.Text" xml:space="preserve">
-    <value>Teacher ID:</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.Orientation" type="ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation, ComponentFactory.Krypton.Toolkit">
+    <value>Inherit</value>
   </data>
   <data name="label2.TabIndex" type="System.Int32, mscorlib">
     <value>144</value>
   </data>
-  <data name="&gt;&gt;lbClassSectionID.ZOrder" xml:space="preserve">
-    <value>33</value>
+  <data name="txtSchedule.Location" type="System.Drawing.Point, System.Drawing">
+    <value>201, 222</value>
   </data>
   <data name="lbDelete.TabIndex" type="System.Int32, mscorlib">
     <value>135</value>
   </data>
-  <data name="&gt;&gt;lbTeacherID.Name" xml:space="preserve">
-    <value>lbTeacherID</value>
-  </data>
   <data name="&gt;&gt;txtStartTime.Type" xml:space="preserve">
     <value>ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
-  <data name="&gt;&gt;dtpStart.Name" xml:space="preserve">
-    <value>dtpStart</value>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>ComponentFactory.Krypton.Toolkit.KryptonForm, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
   <data name="&gt;&gt;cbTeacher.Name" xml:space="preserve">
     <value>cbTeacher</value>
   </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+  <data name="&gt;&gt;lbStart.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lbDelete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="pbDetail.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>Zoom</value>
   </data>
   <data name="lbStart.Font" type="System.Drawing.Font, System.Drawing">
     <value>Century Gothic, 11.25pt</value>
@@ -4643,8 +4643,8 @@
   <data name="dtpFinish.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="&gt;&gt;lbSubjectID.ZOrder" xml:space="preserve">
-    <value>31</value>
+  <data name="&gt;&gt;txtStartDay.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="txtEndTime.Size" type="System.Drawing.Size, System.Drawing">
     <value>240, 37</value>
@@ -4884,17 +4884,17 @@
   <data name="lbTeacherID.Font" type="System.Drawing.Font, System.Drawing">
     <value>Century Gothic, 11.25pt</value>
   </data>
-  <data name="lbSchedule.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Century Gothic, 11.25pt</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritImage" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="lbSave.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="lbExport.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Century Gothic, 9.75pt</value>
+  <data name="&gt;&gt;lbShowStudents.Name" xml:space="preserve">
+    <value>lbShowStudents</value>
   </data>
-  <data name="pbDetail.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
+  <data name="&gt;&gt;lbTeacherID.Name" xml:space="preserve">
+    <value>lbTeacherID</value>
   </data>
   <data name="lbDelete.Text" xml:space="preserve">
     <value>DELETE CLASS </value>
@@ -4902,8 +4902,8 @@
   <data name="&gt;&gt;pbDetail.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="&gt;&gt;lbSubjectID.Name" xml:space="preserve">
-    <value>lbSubjectID</value>
+  <data name="&gt;&gt;pbEdit.Name" xml:space="preserve">
+    <value>pbEdit</value>
   </data>
   <data name="lbEditClass.TabIndex" type="System.Int32, mscorlib">
     <value>133</value>
@@ -4911,8 +4911,8 @@
   <data name="lbTeacherID.Location" type="System.Drawing.Point, System.Drawing">
     <value>10, 101</value>
   </data>
-  <data name="lbAddClass.TabIndex" type="System.Int32, mscorlib">
-    <value>131</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.ToolTipTitle" xml:space="preserve">
+    <value />
   </data>
   <data name="&gt;&gt;lbShowStudents.Parent" xml:space="preserve">
     <value>$this</value>
@@ -4920,8 +4920,8 @@
   <data name="lbSave.Location" type="System.Drawing.Point, System.Drawing">
     <value>959, 301</value>
   </data>
-  <data name="txtStartTime.Location" type="System.Drawing.Point, System.Drawing">
-    <value>380, 328</value>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lbSubjectID.Text" xml:space="preserve">
     <value>Subject ID:</value>
@@ -4932,8 +4932,8 @@
   <data name="txtEndTime.Location" type="System.Drawing.Point, System.Drawing">
     <value>382, 404</value>
   </data>
-  <data name="pbReload.TabIndex" type="System.Int32, mscorlib">
-    <value>125</value>
+  <data name="pbPrev.Size" type="System.Drawing.Size, System.Drawing">
+    <value>39, 33</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>25</value>
@@ -4942,7 +4942,7 @@
     <value>True</value>
   </metadata>
   <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>en</value>
+    <value>fr</value>
   </metadata>
   <metadata name="kryptonPalette1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

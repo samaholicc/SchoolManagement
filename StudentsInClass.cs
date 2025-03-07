@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Data;
+using System.Globalization;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -60,7 +61,7 @@ namespace SchoolManagement
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show(GetLocalizedMessage("Error: " + ex.Message, "Erreur : " + ex.Message));
                 }
             }
         }
@@ -93,7 +94,7 @@ namespace SchoolManagement
             double mid, final, avg;
             if (!double.TryParse(txtMid.Text, out mid) || !double.TryParse(txtFinal.Text, out final))
             {
-                MessageBox.Show("Invalid input!");
+                MessageBox.Show(GetLocalizedMessage("Invalid input!", "Entrée invalide!"));
                 return;
             }
 
@@ -106,12 +107,12 @@ namespace SchoolManagement
                 {
                     conn.Open();
                     string query = @"
-                        INSERT INTO results (student_id, class_id, mid_term, final_term, average)
-                        VALUES (@StudentID, @ClassID, @Mid, @Final, @Avg)
-                        ON DUPLICATE KEY UPDATE 
-                            mid_term = @Mid, 
-                            final_term = @Final, 
-                            average = @Avg";
+                INSERT INTO results (student_id, class_id, mid_term, final_term, average)
+                VALUES (@StudentID, @ClassID, @Mid, @Final, @Avg)
+                ON DUPLICATE KEY UPDATE 
+                    mid_term = @Mid, 
+                    final_term = @Final, 
+                    average = @Avg";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -122,21 +123,24 @@ namespace SchoolManagement
                         cmd.Parameters.AddWithValue("@ClassID", ClassID);
 
                         cmd.ExecuteNonQuery();
-                        MessageBox.Show("Save success");
+                        MessageBox.Show(GetLocalizedMessage("Save success", "Sauvegarde réussie"));
                         LoadStudents();
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show(GetLocalizedMessage("Error: " + ex.Message, "Erreur : " + ex.Message));
                 }
                 LoadStudents();
             }
         }
+       
+
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             ExportToExcel();
+
         }
 
         private void ExportToExcel()
@@ -197,7 +201,7 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please select a student first.");
+                MessageBox.Show(GetLocalizedMessage("Please select a student first.", "Veuillez d'abord sélectionner un étudiant."));
                 return;
             }
 
@@ -207,7 +211,7 @@ namespace SchoolManagement
 
             if (string.IsNullOrEmpty(studentId) || string.IsNullOrEmpty(classId))
             {
-                MessageBox.Show("Student ID or Class ID is invalid.");
+                MessageBox.Show(GetLocalizedMessage("Student ID or Class ID is invalid.", "L'ID de l'étudiant ou l'ID de la classe est invalide."));
                 return;
             }
 
@@ -232,20 +236,32 @@ namespace SchoolManagement
                         // Check if any row was affected
                         if (rowsAffected > 0)
                         {
-                            MessageBox.Show("Deleted successfully.");
+                            MessageBox.Show(GetLocalizedMessage("Deleted successfully.", "Supprimé avec succès."));
                             LoadStudents(); // Reload the list of students
                         }
                         else
                         {
-                            MessageBox.Show("No matching record found to delete.");
+                            MessageBox.Show(GetLocalizedMessage("No matching record found to delete.", "Aucun enregistrement trouvé à supprimer."));
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show(GetLocalizedMessage("Error: " + ex.Message, "Erreur : " + ex.Message));
                 }
                 LoadStudents();
+            }
+        }
+
+        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
+        {
+            if (CultureInfo.CurrentCulture.Name == "fr-FR")
+            {
+                return frenchMessage;  // Return the French message if culture is French
+            }
+            else
+            {
+                return englishMessage;  // Return the English message by default
             }
         }
 

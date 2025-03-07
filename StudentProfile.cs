@@ -1,8 +1,9 @@
-﻿using System;
-using System.Data;
-using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
+﻿using ComponentFactory.Krypton.Toolkit;
 using MySql.Data.MySqlClient; 
+using System;
+using System.Data;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace SchoolManagement
 {
@@ -29,7 +30,7 @@ namespace SchoolManagement
         {
             try
             {
-                MessageBox.Show("Attempting to load data...");
+                MessageBox.Show(GetLocalizedMessage("Attempting to load data...", "Tentative de charger les données..."));
                 MessageBox.Show("Login.ID: " + Login.ID);
 
                 string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
@@ -37,15 +38,14 @@ namespace SchoolManagement
                 using (MySqlConnection conn = new MySqlConnection(mySqlDb))
                 {
                     conn.Open();
-                        string query = "SELECT A.STUDENT_ID, A.FULL_NAME, " +
-                   "GROUP_CONCAT(C.CLASS_ID ORDER BY C.CLASS_ID ASC SEPARATOR ', ') AS CLASS_ID, " +
-                   "A.DATE_OF_BIRTH, A.ADRESS, A.GENDER, B.Password " +
-                   "FROM STUDENTSTABLE A " +
-                   "JOIN ACCOUNT B ON A.FULL_NAME = B.FULL_NAME " +
-                   "JOIN STUDENT_CLASSES C ON A.STUDENT_ID = C.STUDENT_ID " +
-                   "WHERE B.ID = @ID " +
-                   "GROUP BY A.STUDENT_ID, A.FULL_NAME, A.DATE_OF_BIRTH, A.ADRESS, A.GENDER, B.Password";
-
+                    string query = "SELECT A.STUDENT_ID, A.FULL_NAME, " +
+                                   "GROUP_CONCAT(C.CLASS_ID ORDER BY C.CLASS_ID ASC SEPARATOR ', ') AS CLASS_ID, " +
+                                   "A.DATE_OF_BIRTH, A.ADRESS, A.GENDER, B.Password " +
+                                   "FROM STUDENTSTABLE A " +
+                                   "JOIN ACCOUNT B ON A.FULL_NAME = B.FULL_NAME " +
+                                   "JOIN STUDENT_CLASSES C ON A.STUDENT_ID = C.STUDENT_ID " +
+                                   "WHERE B.ID = @ID " +
+                                   "GROUP BY A.STUDENT_ID, A.FULL_NAME, A.DATE_OF_BIRTH, A.ADRESS, A.GENDER, B.Password";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -55,12 +55,10 @@ namespace SchoolManagement
                         {
                             if (dr.Read())
                             {
-                                MessageBox.Show("Data retrieved successfully.");
+                                MessageBox.Show(GetLocalizedMessage("Data retrieved successfully.", "Données récupérées avec succès."));
                                 txtID.Text = dr.GetString(0);
                                 txtUser.Text = dr.GetString(1);
-
-                                txtClass.Text = dr.GetString(2); 
-
+                                txtClass.Text = dr.GetString(2);
                                 txtBirth.Text = dr.GetDateTime(3).ToString("yyyy-MM-dd");
                                 txtAddress.Text = dr.GetString(4);
                                 txtGender.Text = dr.GetString(5);
@@ -68,7 +66,7 @@ namespace SchoolManagement
                             }
                             else
                             {
-                                MessageBox.Show("No data found for the provided username.");
+                                MessageBox.Show(GetLocalizedMessage("No data found for the provided username.", "Aucune donnée trouvée pour le nom d'utilisateur fourni."));
                             }
                         }
                     }
@@ -76,7 +74,7 @@ namespace SchoolManagement
             }
             catch (Exception es)
             {
-                MessageBox.Show("Error: " + es.Message);
+                MessageBox.Show(GetLocalizedMessage("Error: " + es.Message, "Erreur : " + es.Message));
             }
         }
 
@@ -97,21 +95,32 @@ namespace SchoolManagement
 
                 if (result != null)
                 {
-                    MessageBox.Show("Account modified successfully.");
+                    MessageBox.Show(GetLocalizedMessage("Account modified successfully.", "Compte modifié avec succès."));
                     this.Close();
                 }
             }
             catch (Exception es)
             {
-                MessageBox.Show(es.Message);
+                MessageBox.Show(GetLocalizedMessage(es.Message, es.Message));  // Error message in the appropriate language
             }
-
         }
+
 
 
         private void kryptonButton1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
+        {
+            if (CultureInfo.CurrentCulture.Name == "fr-FR")
+            {
+                return frenchMessage;  // Return the French message if culture is French
+            }
+            else
+            {
+                return englishMessage;  // Return the English message by default
+            }
         }
 
         private void StudentProfile_Load(object sender, EventArgs e)

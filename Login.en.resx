@@ -308,6 +308,12 @@
   <data name="label4.Text" xml:space="preserve">
     <value>Password:</value>
   </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>269, 64</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>LOGIN TO SCHOOL SYSTEM</value>
+  </data>
   <data name="pictureBox2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         /9j/4AAQSkZJRgABAQEAAAAAAAD/7gAOQWRvYmUAZAAAAAAB/9sAQwAUEBAZEhknFxcnMiYfJjIuJiYm
@@ -1437,12 +1443,6 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//2Q==
 </value>
-  </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>269, 64</value>
-  </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>LOGIN TO SCHOOL MANAGEMENT</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Login</value>

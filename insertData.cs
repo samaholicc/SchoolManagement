@@ -31,7 +31,7 @@ namespace SchoolManagement
                         command.Parameters.AddWithValue("@role", insertROLE); // insertROLE is a string  
 
                         command.ExecuteNonQuery();
-                        MessageBox.Show("Account information saved", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
                     }
 
                     return $"{insertIDStr} {userInsert}{passInsert} {insertROLE} ";
@@ -145,7 +145,6 @@ namespace SchoolManagement
                             cmd.ExecuteNonQuery();
                         }
 
-                        MessageBox.Show("User ID updated successfully.");
                     }
                     else
                     {

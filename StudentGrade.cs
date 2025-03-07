@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient; // Using MySQL data access
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -58,9 +59,10 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(GetLocalizedMessage("Error loading students: " + ex.Message, "Erreur lors du chargement des étudiants : " + ex.Message));
             }
         }
+
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
@@ -94,15 +96,18 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(GetLocalizedMessage("Error during search: " + ex.Message, "Erreur lors de la recherche : " + ex.Message));
             }
         }
+
 
         private void pbReload_Click(object sender, EventArgs e)
         {
             LoadStudents();
             txtSearch.Text = "";
+            MessageBox.Show(GetLocalizedMessage("Students reloaded successfully.", "Étudiants rechargés avec succès."));
         }
+
 
         private void label6_Click(object sender, EventArgs e)
         {
@@ -155,17 +160,29 @@ namespace SchoolManagement
                     rowIndex++;
                 }
 
-                MessageBox.Show("Exported to Excel successfully.");
+                MessageBox.Show(GetLocalizedMessage("Exported to Excel successfully.", "Exporté avec succès vers Excel."));
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error exporting to Excel: " + ex.Message);
+                MessageBox.Show(GetLocalizedMessage("Error exporting to Excel: " + ex.Message, "Erreur d'exportation vers Excel : " + ex.Message));
+            }
+        }
+
+
+        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
+        {
+            if (CultureInfo.CurrentCulture.Name == "fr-FR")
+            {
+                return frenchMessage;  // Return the French message if culture is French
+            }
+            else
+            {
+                return englishMessage;  // Return the English message by default
             }
         }
 
 
 
-      
 
         private void dgvStudents_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

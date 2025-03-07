@@ -94,7 +94,6 @@ namespace SchoolManagement
             resources.ApplyResources(this.lbDepAdd, "lbDepAdd");
             this.lbDepAdd.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbDepAdd.Name = "lbDepAdd";
-            this.lbDepAdd.Click += new System.EventHandler(this.lbDepAdd_Click);
             // 
             // label1
             // 
@@ -203,7 +202,6 @@ namespace SchoolManagement
             this.btnSearch.Values.ExtraText = resources.GetString("btnSearch.Values.ExtraText");
             this.btnSearch.Values.ImageTransparentColor = ((System.Drawing.Color)(resources.GetObject("btnSearch.Values.ImageTransparentColor")));
             this.btnSearch.Values.Text = resources.GetString("btnSearch.Values.Text");
-            this.btnSearch.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // txtSearch
             // 
@@ -227,7 +225,6 @@ namespace SchoolManagement
             resources.ApplyResources(this.lbExport, "lbExport");
             this.lbExport.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbExport.Name = "lbExport";
-            this.lbExport.Click += new System.EventHandler(this.lbExport_Click);
             // 
             // dgvDepartments
             // 
@@ -475,7 +472,6 @@ namespace SchoolManagement
             this.Name = "DepartmentManager";
             this.Palette = this.kryptonPalette1;
             this.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
-            this.Load += new System.EventHandler(this.DepartmentManager_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvDepartments)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).EndInit();

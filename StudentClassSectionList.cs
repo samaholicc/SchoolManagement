@@ -1,8 +1,9 @@
-﻿using System;
-using System.Data;
-using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
+﻿using ComponentFactory.Krypton.Toolkit;
 using MySql.Data.MySqlClient;
+using System;
+using System.Data;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace SchoolManagement
 {
@@ -40,13 +41,13 @@ namespace SchoolManagement
                     conn.Open();
                     // Modify the query to exclude students already in the selected class (using student_classes)
                     string query = @"
-                    SELECT s.Student_ID, s.Full_Name 
-                    FROM studentstable s
-                    WHERE s.Student_ID NOT IN (
-                        SELECT sc.Student_ID
-                        FROM student_classes sc
-                        WHERE sc.Class_ID = @ClassID
-                    )";
+            SELECT s.Student_ID, s.Full_Name 
+            FROM studentstable s
+            WHERE s.Student_ID NOT IN (
+                SELECT sc.Student_ID
+                FROM student_classes sc
+                WHERE sc.Class_ID = @ClassID
+            )";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -68,15 +69,16 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur lors du chargement des étudiants : " + ex.Message);
+                MessageBox.Show(GetLocalizedMessage("Error loading students: " + ex.Message, "Erreur lors du chargement des étudiants : " + ex.Message));
             }
         }
+
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
             if (cbStudents.SelectedItem == null)
             {
-                MessageBox.Show("Veuillez sélectionner un étudiant.");
+                MessageBox.Show(GetLocalizedMessage("Please select a student.", "Veuillez sélectionner un étudiant."));
                 return;
             }
 
@@ -84,7 +86,7 @@ namespace SchoolManagement
             Student selectedStudent = cbStudents.SelectedItem as Student;
             if (selectedStudent == null)
             {
-                MessageBox.Show("Erreur lors de la sélection de l'étudiant.");
+                MessageBox.Show(GetLocalizedMessage("Error selecting student.", "Erreur lors de la sélection de l'étudiant."));
                 return;
             }
 
@@ -105,7 +107,7 @@ namespace SchoolManagement
                         if (studentCount > 0)
                         {
                             // Student is already enrolled in the class
-                            MessageBox.Show("L'étudiant est déjà inscrit dans cette classe.");
+                            MessageBox.Show(GetLocalizedMessage("The student is already enrolled in this class.", "L'étudiant est déjà inscrit dans cette classe."));
                         }
                         else
                         {
@@ -118,7 +120,7 @@ namespace SchoolManagement
                                 cmdInsert.ExecuteNonQuery();
                             }
 
-                            MessageBox.Show("Étudiant ajouté avec succès à la classe.");
+                            MessageBox.Show(GetLocalizedMessage("Student added successfully to the class.", "Étudiant ajouté avec succès à la classe."));
                         }
                     }
                 }
@@ -126,7 +128,19 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur lors de l'ajout de l'étudiant : " + ex.Message);
+                MessageBox.Show(GetLocalizedMessage("Error adding student: " + ex.Message, "Erreur lors de l'ajout de l'étudiant : " + ex.Message));
+            }
+        }
+
+        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
+        {
+            if (CultureInfo.CurrentCulture.Name == "fr-FR")
+            {
+                return frenchMessage;  // Return the French message if culture is French
+            }
+            else
+            {
+                return englishMessage;  // Return the English message by default
             }
         }
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Data;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -118,7 +119,7 @@ namespace SchoolManagement
         {
             if (!isSelected) // Vérifiez si une sélection a été faite  
             {
-                MessageBox.Show("Please choose a department to edit!");
+                MessageBox.Show(GetLocalizedMessage("Please choose a department to edit!", "Veuillez choisir un département à éditer!"));
                 return;
             }
             action = 1; // Définir l'action à éditer
@@ -163,7 +164,7 @@ namespace SchoolManagement
                         cmd.Parameters.AddWithValue("@name", txtName.Text.Trim()); // Nom du département
 
                         cmd.ExecuteNonQuery(); // Exécutez la requête  
-                        MessageBox.Show("Add success"); // Message de succès  
+                        MessageBox.Show(GetLocalizedMessage("Add success", "Ajout réussi")); // Message de succès  
                     }
                     else // Pour modifier un département existant  
                     {
@@ -174,7 +175,7 @@ namespace SchoolManagement
                         cmd.Parameters.AddWithValue("@id", txtID.Text.Trim()); // ID du département
 
                         cmd.ExecuteNonQuery(); // Exécutez la mise à jour  
-                        MessageBox.Show("Edit success");
+                        MessageBox.Show(GetLocalizedMessage("Edit success", "Édition réussie"));
                     }
 
                     RefreshData(); // Réinitialiser le formulaire et recharger les données  
@@ -185,7 +186,17 @@ namespace SchoolManagement
                 MessageBox.Show(ex.Message); // Gérer les erreurs  
             }
         }
-
+        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
+        {
+            if (CultureInfo.CurrentCulture.Name == "fr-FR")
+            {
+                return frenchMessage;  // Return the French message
+            }
+            else
+            {
+                return englishMessage;  // Return the English message
+            }
+        }
         private void RefreshData()
         {
             LoadDepartments(); // Rechargez les départements  
@@ -203,7 +214,7 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please choose a department to delete!");
+                MessageBox.Show(GetLocalizedMessage("Please choose a department to delete!", "Veuillez choisir un département à supprimer!"));
                 return;
             }
 
@@ -226,7 +237,7 @@ namespace SchoolManagement
                         }
                     }
 
-                    MessageBox.Show("Delete success");
+                    MessageBox.Show(GetLocalizedMessage("Delete success", "Suppression réussie"));
                     RefreshData(); // Actualisez l'interface après la suppression  
                 }
                 catch (MySqlException ex)
@@ -234,16 +245,16 @@ namespace SchoolManagement
                     // Check for foreign key constraint violation  
                     if (ex.Number == 1451) // Error code for foreign key constraint violation  
                     {
-                        MessageBox.Show("Cannot delete this department because it is in use.");
+                        MessageBox.Show(GetLocalizedMessage("Cannot delete this department because it is in use.", "Impossible de supprimer ce département car il est en cours d'utilisation."));
                     }
                     else
                     {
-                        MessageBox.Show("Database error: " + ex.Message); // Handle other MySQL errors  
+                        MessageBox.Show(GetLocalizedMessage("Database error: " + ex.Message, "Erreur de base de données: " + ex.Message));
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("An error occurred: " + ex.Message); // Handle generic errors  
+                    MessageBox.Show(GetLocalizedMessage("An error occurred: " + ex.Message, "Une erreur est survenue: " + ex.Message));
                 }
             }
 
@@ -316,32 +327,16 @@ namespace SchoolManagement
                     rowIndex++;
                 }
 
-                MessageBox.Show("Exported to Excel successfully.");
+                MessageBox.Show(GetLocalizedMessage("Exported to Excel successfully.", "Exportation vers Excel réussie."));
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error exporting to Excel: " + ex.Message);
+                MessageBox.Show(GetLocalizedMessage("Error exporting to Excel: " + ex.Message, "Erreur lors de l'exportation vers Excel : " + ex.Message));
             }
             LoadDepartments();
+ 
+        
+        
         }
-        private void btnLogin_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void DepartmentManager_Load_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lbExport_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lbDepAdd_Click(object sender, EventArgs e)
-        {
-
-        }
-    }
 }
+    }
