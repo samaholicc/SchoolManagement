@@ -1,22 +1,23 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
 using MySql.Data.MySqlClient;
-using Mysqlx.Crud;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Drawing.Printing;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
-
 
 namespace SchoolManagement
 {
     public partial class TeacherManager : KryptonForm
     {
-        private int action; // 0 - add, 1 - edit  
+        private int action; // 0 - add, 1 - edit
         private bool isSelected = false;
-        private string connectionString = "Server=localhost;Database=system;User ID=root;Password=samia;";
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
         private int currFrom = 1;
         private int pageSize = 10;
 
@@ -25,9 +26,6 @@ namespace SchoolManagement
             InitializeComponent();
             LoadTeachers();
             LoadComboBoxDepartment();
-           
-
-
         }
 
         #region Load Data Methods
@@ -39,24 +37,22 @@ namespace SchoolManagement
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand("SELECT DEP_ID, DEP_NAME FROM DEP", conn))
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT DEP_ID, DEP_NAME FROM SYSTEM.dep", conn))
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         cbDepartment.Items.Clear();
                         while (reader.Read())
                         {
-                            // Using string concatenation instead of string interpolation
-                            cbDepartment.Items.Add(reader.GetString(0) + " - " + reader.GetString(1));
+                            cbDepartment.Items.Add($"{reader.GetString(0)} - {reader.GetString(1)}");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading departments: " + ex.Message);
+                MessageBox.Show($"Error loading departments: {ex.Message}");
             }
         }
-
 
         private void LoadTeachers()
         {
@@ -66,37 +62,34 @@ namespace SchoolManagement
                 {
                     conn.Open();
                     string query = @"
-                SELECT 
-                    a.TEACHER_ID AS `Teacher ID`, 
-                    CONCAT(a.DEP_ID, ' - ', d.DEP_NAME) AS `Department`,  
-                    a.FULL_NAME AS `Name`,  
-                    a.DATE_OF_BIRTH AS `Birth`, 
-                    a.GENDER AS `Gender`, 
-                    a.ADRESS AS `Address`
-                FROM SYSTEM.TEACHER a  
-                JOIN SYSTEM.DEP d ON a.DEP_ID = d.DEP_ID
-                LIMIT @PageSize OFFSET @Offset";
+                        SELECT 
+                            a.TEACHER_ID AS `Teacher ID`, 
+                            CONCAT(a.DEP_ID, ' - ', d.DEP_NAME) AS `Department`,  
+                            a.FULL_NAME AS `Name`,  
+                            a.DATE_OF_BIRTH AS `Birth`, 
+                            a.GENDER AS `Gender`, 
+                            a.ADRESS AS `Address`
+                        FROM SYSTEM.teacher a  
+                        JOIN SYSTEM.dep d ON a.DEP_ID = d.DEP_ID
+                        LIMIT @PageSize OFFSET @Offset";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        // Correct parameter binding
                         cmd.Parameters.AddWithValue("@PageSize", pageSize);
                         cmd.Parameters.AddWithValue("@Offset", (currFrom - 1) * pageSize);
 
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
                             DataTable dataTable = new DataTable();
-                            dataTable.Load(reader);
-
-                            // Ensure correct DataGridView is set here (dgvTeachers or another control)
-                            dgvTeachers.DataSource = dataTable;  // Correct DataGridView to show teacher data
+                            adapter.Fill(dataTable);
+                            dgvTeachers.DataSource = dataTable;
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading teachers: " + ex.Message);
+                MessageBox.Show($"Error loading teachers: {ex.Message}");
             }
         }
 
@@ -108,7 +101,7 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please choose a teacher to edit!");
+                MessageBox.Show("Please select a teacher to edit!");
                 return;
             }
             action = 1;
@@ -120,6 +113,86 @@ namespace SchoolManagement
             SaveTeacher();
         }
 
+        private void pbDelete_Click(object sender, EventArgs e)
+        {
+            if (!isSelected)
+            {
+                MessageBox.Show("Please select a teacher to delete!");
+                return;
+            }
+
+            if (MessageBox.Show("Are you sure you want to delete?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                try
+                {
+                    using (MySqlConnection conn = new MySqlConnection(connectionString))
+                    {
+                        conn.Open();
+                        string deleteTeacherQuery = "DELETE FROM SYSTEM.teacher WHERE TEACHER_ID = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteTeacherQuery, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@id", txtID.Text);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        string deleteAccountQuery = "DELETE FROM SYSTEM.account WHERE ID = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteAccountQuery, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@id", txtID.Text);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    MessageBox.Show("Teacher deleted successfully.");
+                    LoadTeachers();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error deleting teacher: {ex.Message}");
+                }
+                finally
+                {
+                    isSelected = false;
+                    showAction();
+                }
+            }
+        }
+
+        private void pbNext_Click(object sender, EventArgs e)
+        {
+            currFrom++;
+            LoadTeachers();
+        }
+
+        private void pbPrev_Click(object sender, EventArgs e)
+        {
+            if (currFrom > 1)
+            {
+                currFrom--;
+                LoadTeachers();
+            }
+        }
+
+        private void pbTeachers_Click(object sender, EventArgs e)
+        {
+            action = 0;
+            SetAddMode();
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            SearchTeachers();
+        }
+
+        private void pbReload_Click(object sender, EventArgs e)
+        {
+            ResetForm();
+        }
+
+        private async void pictureBox1_Click(object sender, EventArgs e)
+        {
+            await ExportToCsvAsync();
+        }
+
         #endregion
 
         #region Save / Update Teacher
@@ -128,22 +201,20 @@ namespace SchoolManagement
         {
             try
             {
+                if (!ValidateInputs()) return;
+
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
 
-                    if (action == 0) // Ajout d'un nouvel enseignant
-                    {
-                        if (cbDepartment.SelectedItem == null)
-                        {
-                            MessageBox.Show("Please select a department.");
-                            return;
-                        }
+                    string depId = cbDepartment.SelectedItem?.ToString().Split('-')[0].Trim();
 
-                        string depId = cbDepartment.SelectedItem.ToString().Split('-')[0].Trim();
-                        string query = "INSERT INTO SYSTEM.TEACHER (FULL_NAME, ADRESS, GENDER, DATE_OF_BIRTH, DEP_ID) " +
-                                       "VALUES (@fullname, @adress, @gender, @dateofbirth, @depId); " +
-                                       "SELECT LAST_INSERT_ID();";
+                    if (action == 0) // Add new teacher
+                    {
+                        string query = @"
+                            INSERT INTO SYSTEM.teacher (FULL_NAME, ADRESS, GENDER, DATE_OF_BIRTH, DEP_ID) 
+                            VALUES (@fullname, @adress, @gender, @dateofbirth, @depId); 
+                            SELECT LAST_INSERT_ID();";
 
                         using (var cmd = new MySqlCommand(query, conn))
                         {
@@ -153,42 +224,24 @@ namespace SchoolManagement
                             cmd.Parameters.AddWithValue("@dateofbirth", dtpBirth.Value);
                             cmd.Parameters.AddWithValue("@depId", depId);
 
-                            // Récupération de l'ID de l'enseignant
                             object result = cmd.ExecuteScalar();
                             if (result != null)
                             {
                                 string newTeacherId = result.ToString();
-
-                                InsertData insertData = new InsertData();
-                                insertData.AddAccount(txtName.Text, txtPassword.Text, newTeacherId, "Teacher");
-                                insertData.UpdateUserIdBasedOnRole(txtName.Text, "Teacher");
-
-                                
-                            }
-                            else
-                            {
-                                MessageBox.Show("Failed to retrieve the teacher's ID after insertion.");
+                                DataManager dataManager = new DataManager();
+                                dataManager.AddAccount(newTeacherId, Encrypt.HashString(txtPassword.Text));
+                                MessageBox.Show("Teacher added successfully.");
                             }
                         }
                     }
-                    else // Mise à jour d'un enseignant
+                    else // Update existing teacher
                     {
-                        if (cbDepartment.SelectedItem == null)
-                        {
-                            MessageBox.Show("Please select a department.");
-                            return;
-                        }
-
                         string teacherId = txtID.Text;
-                        if (string.IsNullOrWhiteSpace(teacherId))
-                        {
-                            MessageBox.Show("Teacher ID is required.");
-                            return;
-                        }
-
-                        string depId = cbDepartment.SelectedItem.ToString().Split('-')[0].Trim();
-                        string query = "UPDATE SYSTEM.TEACHER SET FULL_NAME = @fullname, ADRESS = @adress, " +
-                                       "GENDER = @gender, DATE_OF_BIRTH = @dateofbirth, DEP_ID = @depId WHERE TEACHER_ID = @id";
+                        string query = @"
+                            UPDATE SYSTEM.teacher 
+                            SET FULL_NAME = @fullname, ADRESS = @adress, GENDER = @gender, 
+                                DATE_OF_BIRTH = @dateofbirth, DEP_ID = @depId 
+                            WHERE TEACHER_ID = @id";
 
                         using (var cmd = new MySqlCommand(query, conn))
                         {
@@ -197,44 +250,24 @@ namespace SchoolManagement
                             cmd.Parameters.AddWithValue("@gender", rbMale.Checked ? "Homme" : "Femme");
                             cmd.Parameters.AddWithValue("@dateofbirth", dtpBirth.Value);
                             cmd.Parameters.AddWithValue("@depId", depId);
-                            cmd.Parameters.AddWithValue("@id", teacherId);  // Utilisation de teacherId comme chaîne
-
+                            cmd.Parameters.AddWithValue("@id", teacherId);
                             cmd.ExecuteNonQuery();
                         }
-                        string newPassword = txtPassword.Text.Trim(); // Assuming txtPassword is where the new password is entered
 
-                        // Fetch the current password from the database before updating
-                        string currentPassword = GetCurrentPassword(teacherId, conn); // Pass connection to the method
-                        // Mise à jour du mot de passe uniquement si un nouveau est saisi
-                        if (!string.IsNullOrEmpty(newPassword) && newPassword != currentPassword && IsPasswordValid(newPassword))
+                        string newPassword = txtPassword.Text.Trim();
+                        if (!string.IsNullOrEmpty(newPassword) && IsPasswordValid(newPassword))
                         {
-                            // Hash the new password before saving it
-                            string hashedPassword = Encrypt.HashString(newPassword);  // Hash the password
-
-                            // Only update password if it was changed
-                            InsertData insertData = new InsertData();
-                            string updateResult = insertData.UpdatePassword(teacherId, hashedPassword); // Pass the hashed password
-
-                            if (updateResult != "Success")
-                            {
-                                MessageBox.Show("Failed to update password. Please check the details.");
-                            }
-                            else
-                            {
-                                MessageBox.Show("Password updated successfully.");
-                            }
+                            DataManager dataManager = new DataManager();
+                            string hashedPassword = Encrypt.HashString(newPassword);
+                            dataManager.UpdatePassword(teacherId, hashedPassword);
+                            MessageBox.Show("Password updated successfully.");
                         }
-                        else
-                        {
-                            MessageBox.Show("No password change detected.");
-                        }
-
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show($"Error saving teacher: {ex.Message}");
             }
             finally
             {
@@ -242,72 +275,6 @@ namespace SchoolManagement
                 showAction();
                 LoadTeachers();
             }
-        }
-
-        public string GetCurrentPassword(string teacherId, MySqlConnection conn)
-        {
-            string password = string.Empty;
-            string query = "SELECT PASSWORD FROM SYSTEM.ACCOUNT WHERE ID = @id";
-            using (MySqlCommand cmd = new MySqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@id", teacherId);
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        password = reader["PASSWORD"].ToString();
-                    }
-                }
-            }
-            return password;
-        }
-        private void pbDelete_Click(object sender, EventArgs e)
-        {
-            if (!isSelected)
-            {
-                MessageBox.Show("Please choose a teacher to delete!");
-                return;
-            }
-
-            DialogResult dialogResult = MessageBox.Show("Are you sure to delete?", "Confirm", MessageBoxButtons.YesNo);
-
-            if (dialogResult == DialogResult.Yes)
-            {
-                try
-                {
-                    string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-
-                    using (MySqlConnection conn = new MySqlConnection(mySqlDb))
-                    {
-                        conn.Open();
-
-                       
-
-                        string deleteQuery = "DELETE FROM SYSTEM.teacher WHERE teacher_ID=@id";
-                        using (MySqlCommand cmd = new MySqlCommand(deleteQuery, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@id", txtID.Text);
-                            cmd.ExecuteNonQuery();
-                        }
-                        string deleteAccountQuery = "DELETE FROM SYSTEM.ACCOUNT WHERE ID=@id";
-                        using (MySqlCommand cmd = new MySqlCommand(deleteAccountQuery, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@id", txtID.Text);
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-
-                    MessageBox.Show("Deleted success");
-                    LoadTeachers();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-
-            isSelected = false;
-            showAction();
         }
 
         #endregion
@@ -325,6 +292,7 @@ namespace SchoolManagement
             rbMale.Checked = false;
             rbFemale.Checked = false;
         }
+
         private void showAction()
         {
             pbTeachers.Visible = true;
@@ -336,6 +304,7 @@ namespace SchoolManagement
             pbSave.Visible = false;
             lbSave.Visible = false;
         }
+
         private void SetEditMode()
         {
             pbTeachers.Visible = false;
@@ -344,9 +313,8 @@ namespace SchoolManagement
             lbDeleteTeacher.Visible = false;
             pbEdit.Visible = false;
             lbEditTeacher.Visible = false;
-            pbDelete.Visible = false;
-            lbSave.Visible = true;
             pbSave.Visible = true;
+            lbSave.Visible = true;
             txtID.Enabled = false;
             txtName.Enabled = true;
             txtAddress.Enabled = true;
@@ -356,161 +324,9 @@ namespace SchoolManagement
             rbMale.Enabled = true;
             rbFemale.Enabled = true;
         }
-        private void dgvTeachers_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+
+        private void SetAddMode()
         {
-            if (e.RowIndex >= 0)
-            {
-                isSelected = true;
-                DataGridViewRow row = dgvTeachers.Rows[e.RowIndex];
-
-                // Récupération de l'ID (qui est un VARCHAR) et affichage dans txtID
-                string teacherId = row.Cells[0].Value.ToString();
-                txtID.Text = teacherId;
-
-                // Vérification de la valeur de l'ID dans txtID
-                MessageBox.Show("Selected Teacher ID: " + teacherId); // Concatenation instead of interpolation
-
-                // Chargement des autres informations
-                txtName.Text = row.Cells[2].Value.ToString();
-                txtAddress.Text = row.Cells[5].Value.ToString();
-                dtpBirth.Value = DateTime.Parse(row.Cells[3].Value.ToString());
-
-                string departmentInfo = row.Cells[1].Value.ToString();
-                cbDepartment.Text = departmentInfo;
-
-                rbMale.Checked = row.Cells[4].Value.ToString() == "Homme";
-                rbFemale.Checked = !rbMale.Checked;
-            }
-        }
-
-
-
-
-        #endregion
-        private void pbNext_Click(object sender, EventArgs e)
-        {
-            currFrom++;
-            LoadTeachers();
-        }
-
-        private void pbPrev_Click(object sender, EventArgs e)
-        {
-            if (currFrom > 1)
-            {
-                currFrom--;
-                LoadTeachers();
-            }
-        }
-
-
-        private void ExportToExcel()
-        {
-            try
-            {
-                // Create a new Excel application instance
-                Excel.Application excelApp = new Excel.Application();
-                excelApp.Visible = true;
-                Excel.Workbook workbook = excelApp.Workbooks.Add();
-                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
-
-                // Add column headers to the Excel file
-                for (int col = 0; col < dgvTeachers.Columns.Count; col++)
-                {
-                    worksheet.Cells[1, col + 1] = dgvTeachers.Columns[col].HeaderText;
-                }
-
-                // Fetch all data for the export, not just the current page
-                List<DataRow> allRows = new List<DataRow>();
-
-                // Loop through all pages and collect all data
-                int totalRecords = GetTotalRecordCount(); // Get total record count from DB
-                int totalPages = (totalRecords + pageSize - 1) / pageSize; // Calculate number of pages
-
-                for (int page = 1; page <= totalPages; page++)
-                {
-                    currFrom = page; // Update current page number
-                    LoadTeachers();  // This loads students for the current page
-
-                    // Collect rows from the DataGridView
-                    foreach (DataGridViewRow row in dgvTeachers.Rows)
-                    {
-                        if (row.IsNewRow) continue; // Skip the new row placeholder
-
-                        DataRow dataRow = ((DataTable)dgvTeachers.DataSource).NewRow();
-
-                        // Copy row values to DataRow
-                        for (int col = 0; col < dgvTeachers.Columns.Count; col++)
-                        {
-                            dataRow[col] = row.Cells[col].Value.ToString();
-                        }
-
-                        allRows.Add(dataRow); // Add the row to the list
-                    }
-                }
-
-                // Populate Excel worksheet with all rows collected
-                int rowIndex = 2; // Start from row 2 (because row 1 is the header)
-                foreach (var row in allRows)
-                {
-                    for (int col = 0; col < dgvTeachers.Columns.Count; col++)
-                    {
-                        worksheet.Cells[rowIndex, col + 1] = row[col].ToString();
-                    }
-                    rowIndex++;
-                }
-
-                MessageBox.Show("Exported to Excel successfully.");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error exporting to Excel: " + ex.Message);
-            }
-            LoadTeachers();
-        }
-        private int GetTotalRecordCount()
-        {
-            try
-            {
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
-                {
-                    conn.Open();
-                    string query = "SELECT COUNT(teacher_id) FROM SYSTEM.teacher";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        object result = cmd.ExecuteScalar();
-                        return result != null ? Convert.ToInt32(result) : 0;
-                    }
-                }
-            }
-            catch (MySqlException mysqlEx)
-            {
-                // Afficher un message d'erreur spécifique pour MySQL  
-                MessageBox.Show("MySQL Error: " + mysqlEx.Message);
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                // Afficher un message d'erreur général  
-                MessageBox.Show("Error: " + ex.Message);
-                return 0; // Return 0 in case of an error  
-            }
-        }
-        private void TeacherManager_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cbDepartment_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pbTeachers_Click(object sender, EventArgs e)
-        {
-        
-            action = 0;
-
             pbTeachers.Visible = false;
             lbAddTeacher.Visible = false;
             pbEdit.Visible = false;
@@ -519,51 +335,92 @@ namespace SchoolManagement
             lbDeleteTeacher.Visible = false;
             pbSave.Visible = true;
             lbSave.Visible = true;
-            txtID.Text = "";
-            txtID.Visible = true;
-            lbTeacherID.Visible = true;
-            cbDepartment.Text = "";
-            cbDepartment.Enabled = true;
-            txtName.Text = "";
+            ClearInputs();
+            txtID.Visible = false;
+            lbTeacherID.Visible = false;
             txtName.Enabled = true;
-
-            txtAddress.Text = "";
             txtAddress.Enabled = true;
-
-            txtPassword.Text = "";
             txtPassword.Enabled = true;
-
-            
-
+            cbDepartment.Enabled = true;
             dtpBirth.Enabled = true;
-
-            rbMale.Checked = false;
             rbMale.Enabled = true;
-            rbFemale.Checked = false;
             rbFemale.Enabled = true;
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        private void dgvTeachers_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                isSelected = true;
+                DataGridViewRow row = dgvTeachers.Rows[e.RowIndex];
+                txtID.Text = row.Cells[0].Value.ToString();
+                txtName.Text = row.Cells[2].Value.ToString();
+                txtAddress.Text = row.Cells[5].Value.ToString();
+                dtpBirth.Value = DateTime.Parse(row.Cells[3].Value.ToString());
+                cbDepartment.Text = row.Cells[1].Value.ToString();
+                rbMale.Checked = row.Cells[4].Value.ToString() == "Homme";
+                rbFemale.Checked = !rbMale.Checked;
+            }
+        }
+
+        private bool ValidateInputs()
+        {
+            if (string.IsNullOrWhiteSpace(txtName.Text))
+            {
+                MessageBox.Show("Name is required.");
+                return false;
+            }
+            if (cbDepartment.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a department.");
+                return false;
+            }
+            if (action == 0 && string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                MessageBox.Show("Password is required for new teachers.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsPasswordValid(string password)
+        {
+            if (password.Length < 8)
+            {
+                MessageBox.Show("Password must be at least 8 characters long!");
+                return false;
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*(),.?""{}|<>]"))
+            {
+                MessageBox.Show("Password must contain at least one special character!");
+                return false;
+            }
+            return true;
+        }
+
+        
+
+        private void SearchTeachers()
         {
             try
             {
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "SELECT TEACHER_ID, DEP_ID AS `Dep`, FULL_NAME AS `Name`, DATE_OF_BIRTH AS `BIRTH`, " +
-                                   "GENDER AS `GENDER`, ADRESS AS `Adress` " +
-                                   "FROM SYSTEM.teacher WHERE FULL_NAME LIKE @search OR teacher_ID LIKE @search " +
-                                   "OR dep_ID LIKE @search OR GENDER LIKE @search OR ADRESS LIKE @search";
+                    string query = @"
+                        SELECT TEACHER_ID AS `Teacher ID`, DEP_ID AS `Dep`, FULL_NAME AS `Name`, 
+                               DATE_OF_BIRTH AS `Birth`, GENDER AS `Gender`, ADRESS AS `Address`
+                        FROM SYSTEM.teacher 
+                        WHERE FULL_NAME LIKE @search OR TEACHER_ID LIKE @search 
+                              OR DEP_ID LIKE @search OR GENDER LIKE @search OR ADRESS LIKE @search";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@search", "%" + txtSearch.Text + "%");
-
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        cmd.Parameters.AddWithValue("@search", $"%{txtSearch.Text}%");
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
                             DataTable dataTable = new DataTable();
-                            dataTable.Load(reader);
+                            adapter.Fill(dataTable);
                             dgvTeachers.DataSource = dataTable;
                         }
                     }
@@ -571,55 +428,192 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error searching teachers: {ex.Message}");
             }
         }
 
-        private void pbReload_Click(object sender, EventArgs e)
+        private void ResetForm()
         {
             currFrom = 1;
             LoadTeachers();
             showAction();
             txtSearch.Text = "";
-            txtID.Text = "";
-            txtName.Text = "";
-            txtAddress.Text = "";
-            txtPassword.Text = "";
-            cbDepartment.Text = "";
-            dtpBirth.Value = DateTime.Now;
-            rbMale.Checked = false;
-            rbFemale.Checked = false;
+            ClearInputs();
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private async Task ExportToCsvAsync()
         {
-            ExportToExcel();
-        }
-        private bool IsPasswordValid(string password)
-        {
-            if (password.Length < 8)
+            try
             {
-                MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères !");
-                return false;
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                saveFileDialog.Title = "Save Teachers as CSV";
+                saveFileDialog.FileName = "Teachers_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".csv";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    DataTable dataTable = await FetchTeacherDataAsync();
+
+                    if (dataTable != null && dataTable.Rows.Count > 0)
+                    {
+                        StringBuilder csvContent = new StringBuilder();
+
+                        // Écrire les en-têtes
+                        string[] columnNames = dataTable.Columns.Cast<DataColumn>()
+                            .Select(column => $"\"{column.ColumnName}\"")
+                            .ToArray();
+                        csvContent.AppendLine(string.Join(",", columnNames));
+
+                        // Écrire les données
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            string[] fields = row.ItemArray.Select(field =>
+                                $"\"{(field != null ? field.ToString().Replace("\"", "\"\"") : "")}\"")
+                                .ToArray();
+                            csvContent.AppendLine(string.Join(",", fields));
+                        }
+
+                        // Écrire dans le fichier
+                        File.WriteAllText(saveFileDialog.FileName, csvContent.ToString(), Encoding.UTF8);
+
+                        MessageBox.Show("Exported to CSV successfully.");
+                        System.Diagnostics.Process.Start(saveFileDialog.FileName); // Ouvre le fichier
+                    }
+                    else
+                    {
+                        MessageBox.Show("No data to export.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting to CSV: {ex.Message}");
+            }
+        }
+
+        private async Task<DataTable> FetchTeacherDataAsync()
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            try
+            {
+                await conn.OpenAsync();
+                string query = @"
+                    SELECT 
+                        a.TEACHER_ID AS `Teacher ID`, 
+                        CONCAT(a.DEP_ID, ' - ', d.DEP_NAME) AS `Department`,  
+                        a.FULL_NAME AS `Name`,  
+                        a.DATE_OF_BIRTH AS `Birth`, 
+                        a.GENDER AS `Gender`, 
+                        a.ADRESS AS `Address`
+                    FROM SYSTEM.teacher a  
+                    JOIN SYSTEM.dep d ON a.DEP_ID = d.DEP_ID";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                try
+                {
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    try
+                    {
+                        DataTable dataTable = new DataTable();
+                        await Task.Run(() => adapter.Fill(dataTable));
+                        return dataTable;
+                    }
+                    finally
+                    {
+                        adapter.Dispose();
+                    }
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+            }
+            finally
+            {
+                conn.Dispose();
+            }
+        }
+
+        private int GetTotalRecordCount()
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT COUNT(TEACHER_ID) FROM SYSTEM.teacher";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        return Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error getting record count: {ex.Message}");
+                return 0;
+            }
+        }
+
+        #endregion
+
+        // Inline DataManager class to avoid conflicts
+        private class DataManager
+        {
+            private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
+
+            public void AddAccount(string teacherId, string hashedPassword)
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "INSERT INTO SYSTEM.account (ID, FULL_NAME, PASSWORD, ROLE) " +
+                                   "SELECT TEACHER_ID, FULL_NAME, @password, 'Teacher' " +
+                                   "FROM SYSTEM.teacher WHERE TEACHER_ID = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", teacherId);
+                        cmd.Parameters.AddWithValue("@password", hashedPassword);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
             }
 
-            if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*(),.?""{}|<>]"))
+            public string UpdatePassword(string userId, string hashedPassword)
             {
-                MessageBox.Show("Le mot de passe doit contenir au moins un caractère spécial !");
-                return false;
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "UPDATE SYSTEM.account SET PASSWORD = @password WHERE ID = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", userId);
+                        cmd.Parameters.AddWithValue("@password", hashedPassword);
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        return rowsAffected > 0 ? "Success" : null;
+                    }
+                }
             }
 
-            return true;
+            public bool VerifyPassword(string userId, string hashedPassword)
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT PASSWORD FROM SYSTEM.account WHERE ID = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", userId);
+                        string storedHash = (string)cmd.ExecuteScalar();
+                        return storedHash == hashedPassword;
+                    }
+                }
+            }
         }
-        private void dgvTeachers_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
-        }
-
-        private void txtPassword_TextChanged(object sender, EventArgs e)
+        private void TeacherManager_Load(object sender, EventArgs e)
         {
 
         }
     }
-    }
-
+}

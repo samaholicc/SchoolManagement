@@ -297,9 +297,6 @@
   <data name="lbLogout.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="lbLogout.Location" type="System.Drawing.Point, System.Drawing">
-    <value>278, 378</value>
-  </data>
   <data name="lbProfile.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -308,15 +305,6 @@
   </data>
   <data name="lbGrade.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
-  </data>
-  <data name="lbGrade.Location" type="System.Drawing.Point, System.Drawing">
-    <value>74, 378</value>
-  </data>
-  <data name="lbGrade.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 20</value>
-  </data>
-  <data name="lbGrade.Text" xml:space="preserve">
-    <value>GRADES</value>
   </data>
   <data name="pbGrade.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

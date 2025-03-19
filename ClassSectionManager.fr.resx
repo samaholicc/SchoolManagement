@@ -450,6 +450,61 @@
   <data name="lbSubjectID.Text" xml:space="preserve">
     <value>Identifiant matière:</value>
   </data>
+  <data name="txtStartTime.CustomFormat" xml:space="preserve">
+    <value>HH:mm </value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="txtStartTime.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="txtStartTime.Location" type="System.Drawing.Point, System.Drawing">
+    <value>263, 272</value>
+  </data>
+  <data name="txtStartTime.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 37</value>
+  </data>
+  <data name="txtEndTime.CustomFormat" xml:space="preserve">
+    <value>HH:mm</value>
+  </data>
+  <data name="txtEndTime.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="txtEndTime.Location" type="System.Drawing.Point, System.Drawing">
+    <value>432, 272</value>
+  </data>
+  <data name="txtEndTime.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 37</value>
+  </data>
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Century Gothic, 11.25pt</value>
+  </data>
+  <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>34, 20</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>De:</value>
+  </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Century Gothic, 11.25pt</value>
+  </data>
+  <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 20</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>à:</value>
+  </data>
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -3987,61 +4042,6 @@
   </data>
   <data name="pbReload.Location" type="System.Drawing.Point, System.Drawing">
     <value>432, 378</value>
-  </data>
-  <data name="txtStartTime.CustomFormat" xml:space="preserve">
-    <value>HH:mm </value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="txtStartTime.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="txtStartTime.Location" type="System.Drawing.Point, System.Drawing">
-    <value>263, 272</value>
-  </data>
-  <data name="txtStartTime.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 37</value>
-  </data>
-  <data name="txtEndTime.CustomFormat" xml:space="preserve">
-    <value>HH:mm</value>
-  </data>
-  <data name="txtEndTime.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="txtEndTime.Location" type="System.Drawing.Point, System.Drawing">
-    <value>432, 272</value>
-  </data>
-  <data name="txtEndTime.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 37</value>
-  </data>
-  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Century Gothic, 11.25pt</value>
-  </data>
-  <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 20</value>
-  </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>De:</value>
-  </data>
-  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label2.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Century Gothic, 11.25pt</value>
-  </data>
-  <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 20</value>
-  </data>
-  <data name="label2.Text" xml:space="preserve">
-    <value>à:</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>1075, 719</value>

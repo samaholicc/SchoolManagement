@@ -80,5 +80,11 @@ namespace SchoolManagement
         {
             // Any additional load logic can be added here if needed
         }
+
+        private void lbHello_Click(object sender, EventArgs e)
+        {
+
+
+        }
     }
 }

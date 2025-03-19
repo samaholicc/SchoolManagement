@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace SchoolManagement
 {
     partial class Schedule
@@ -37,70 +39,26 @@ namespace SchoolManagement
             this.dgvSchedule = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
             this.pbPrev = new System.Windows.Forms.PictureBox();
             this.pbNext = new System.Windows.Forms.PictureBox();
+            this.kryptonDateTimePicker = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            this.btnExport = new System.Windows.Forms.PictureBox();
+            this.lbExport = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSchedule)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPrev)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnExport)).BeginInit();
             this.SuspendLayout();
             // 
             // kryptonPalette1
             // 
-            this.kryptonPalette1.ButtonSpecs.FormClose.AllowInheritExtraText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.AllowInheritExtraText")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.AllowInheritImage = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.AllowInheritImage")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.AllowInheritText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.AllowInheritText")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.AllowInheritToolTipTitle = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.AllowInheritToolTipTitle")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.ColorMap = ((System.Drawing.Color)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ColorMap")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.Edge = ((ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.Edge")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.ExtraText = resources.GetString("kryptonPalette1.ButtonSpecs.FormClose.ExtraText");
             this.kryptonPalette1.ButtonSpecs.FormClose.Image = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.Image")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedNormal")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedPressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedPressed")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedTracking")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageDisabled = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageDisabled")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageNormal")));
             this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImagePressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImagePressed")));
             this.kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageTracking")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.Orientation = ((ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.Orientation")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.Style = ((ComponentFactory.Krypton.Toolkit.PaletteButtonStyle)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormClose.Style")));
-            this.kryptonPalette1.ButtonSpecs.FormClose.Text = resources.GetString("kryptonPalette1.ButtonSpecs.FormClose.Text");
-            this.kryptonPalette1.ButtonSpecs.FormClose.ToolTipTitle = resources.GetString("kryptonPalette1.ButtonSpecs.FormClose.ToolTipTitle");
-            this.kryptonPalette1.ButtonSpecs.FormMax.AllowInheritExtraText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.AllowInheritExtraText")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.AllowInheritImage = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.AllowInheritImage")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.AllowInheritText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.AllowInheritText")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.AllowInheritToolTipTitle = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.AllowInheritToolTipTitle")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.ColorMap = ((System.Drawing.Color)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ColorMap")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.Edge = ((ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.Edge")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.ExtraText = resources.GetString("kryptonPalette1.ButtonSpecs.FormMax.ExtraText");
             this.kryptonPalette1.ButtonSpecs.FormMax.Image = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.Image")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedNormal")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedPressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedPressed")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedTracking")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageDisabled = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageDisabled")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageNormal")));
             this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImagePressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImagePressed")));
             this.kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.Orientation = ((ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.Orientation")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.Style = ((ComponentFactory.Krypton.Toolkit.PaletteButtonStyle)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMax.Style")));
-            this.kryptonPalette1.ButtonSpecs.FormMax.Text = resources.GetString("kryptonPalette1.ButtonSpecs.FormMax.Text");
-            this.kryptonPalette1.ButtonSpecs.FormMax.ToolTipTitle = resources.GetString("kryptonPalette1.ButtonSpecs.FormMax.ToolTipTitle");
-            this.kryptonPalette1.ButtonSpecs.FormMin.AllowInheritExtraText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.AllowInheritExtraText")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.AllowInheritImage = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.AllowInheritImage")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.AllowInheritText = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.AllowInheritText")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.AllowInheritToolTipTitle = ((bool)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.AllowInheritToolTipTitle")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.ColorMap = ((System.Drawing.Color)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ColorMap")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.Edge = ((ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.Edge")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.ExtraText = resources.GetString("kryptonPalette1.ButtonSpecs.FormMin.ExtraText");
             this.kryptonPalette1.ButtonSpecs.FormMin.Image = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.Image")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedNormal")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedPressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedPressed")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedTracking")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageNormal = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageNormal")));
             this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImagePressed = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImagePressed")));
             this.kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageTracking = ((System.Drawing.Image)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageTracking")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.Orientation = ((ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.Orientation")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.Style = ((ComponentFactory.Krypton.Toolkit.PaletteButtonStyle)(resources.GetObject("kryptonPalette1.ButtonSpecs.FormMin.Style")));
-            this.kryptonPalette1.ButtonSpecs.FormMin.Text = resources.GetString("kryptonPalette1.ButtonSpecs.FormMin.Text");
-            this.kryptonPalette1.ButtonSpecs.FormMin.ToolTipTitle = resources.GetString("kryptonPalette1.ButtonSpecs.FormMin.ToolTipTitle");
             this.kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
@@ -155,8 +113,10 @@ namespace SchoolManagement
             // 
             // txtTuesday
             // 
-            resources.ApplyResources(this.txtTuesday, "txtTuesday");
+            this.txtTuesday.Enabled = false;
+            this.txtTuesday.Location = new System.Drawing.Point(230, 79);
             this.txtTuesday.Name = "txtTuesday";
+            this.txtTuesday.Size = new System.Drawing.Size(200, 406);
             this.txtTuesday.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.txtTuesday.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.txtTuesday.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
@@ -173,59 +133,122 @@ namespace SchoolManagement
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
             this.txtTuesday.StateDisabled.Content.Color1 = System.Drawing.Color.Black;
             this.txtTuesday.StateDisabled.Content.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTuesday.TabIndex = 29;
+            this.txtTuesday.Text = "";
             // 
             // lblWeek
             // 
-            resources.ApplyResources(this.lblWeek, "lblWeek");
+            this.lblWeek.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblWeek.Location = new System.Drawing.Point(0, 0);
+            this.lblWeek.MaximumSize = new System.Drawing.Size(0, 50);
+            this.lblWeek.MinimumSize = new System.Drawing.Size(0, 50);
             this.lblWeek.Name = "lblWeek";
             this.lblWeek.Palette = this.kryptonPalette1;
             this.lblWeek.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
-            this.lblWeek.Values.ExtraText = resources.GetString("lblWeek.Values.ExtraText");
-            this.lblWeek.Values.ImageTransparentColor = ((System.Drawing.Color)(resources.GetObject("lblWeek.Values.ImageTransparentColor")));
-            this.lblWeek.Values.Text = resources.GetString("lblWeek.Values.Text");
+            this.lblWeek.Size = new System.Drawing.Size(1315, 50);
+            this.lblWeek.TabIndex = 38;
+            this.lblWeek.Values.Text = "";
+            this.lblWeek.Paint += new System.Windows.Forms.PaintEventHandler(this.lblWeek_Paint);
             // 
             // dgvSchedule
             // 
-            resources.ApplyResources(this.dgvSchedule, "dgvSchedule");
             this.dgvSchedule.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSchedule.Location = new System.Drawing.Point(0, 56);
             this.dgvSchedule.Name = "dgvSchedule";
             this.dgvSchedule.Palette = this.kryptonPalette1;
             this.dgvSchedule.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
             this.dgvSchedule.ReadOnly = true;
             this.dgvSchedule.RowHeadersVisible = false;
+            this.dgvSchedule.Size = new System.Drawing.Size(1315, 510);
             this.dgvSchedule.StateNormal.Background.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.dgvSchedule.TabIndex = 34;
             // 
             // pbPrev
             // 
-            resources.ApplyResources(this.pbPrev, "pbPrev");
             this.pbPrev.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbPrev.Image = ((System.Drawing.Image)(resources.GetObject("pbPrev.Image")));
+            this.pbPrev.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.pbPrev.Location = new System.Drawing.Point(12, 572);
             this.pbPrev.Name = "pbPrev";
+            this.pbPrev.Size = new System.Drawing.Size(39, 33);
+            this.pbPrev.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbPrev.TabIndex = 159;
             this.pbPrev.TabStop = false;
             this.pbPrev.Click += new System.EventHandler(this.BtnPrevWeek_Click);
             // 
             // pbNext
             // 
-            resources.ApplyResources(this.pbNext, "pbNext");
             this.pbNext.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbNext.Image = ((System.Drawing.Image)(resources.GetObject("pbNext.Image")));
+            this.pbNext.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.pbNext.Location = new System.Drawing.Point(1264, 572);
             this.pbNext.Name = "pbNext";
+            this.pbNext.Size = new System.Drawing.Size(39, 33);
+            this.pbNext.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbNext.TabIndex = 160;
             this.pbNext.TabStop = false;
             this.pbNext.Click += new System.EventHandler(this.BtnNextWeek_Click);
             // 
+            // kryptonDateTimePicker
+            // 
+            this.kryptonDateTimePicker.CalendarFirstDayOfWeek = System.Windows.Forms.Day.Monday;
+            this.kryptonDateTimePicker.CalendarShowToday = false;
+            this.kryptonDateTimePicker.CalendarShowTodayCircle = false;
+            this.kryptonDateTimePicker.CustomFormat = "dd, dddd MMMM dd, YYYY";
+            this.kryptonDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.kryptonDateTimePicker.Location = new System.Drawing.Point(12, 12);
+            this.kryptonDateTimePicker.Name = "kryptonDateTimePicker";
+            this.kryptonDateTimePicker.Size = new System.Drawing.Size(197, 21);
+            this.kryptonDateTimePicker.TabIndex = 161;
+            this.kryptonDateTimePicker.ValueChanged += new System.EventHandler(this.KryptonDateTimePicker_ValueChanged);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnExport.Image = ((System.Drawing.Image)(resources.GetObject("btnExport.Image")));
+            this.btnExport.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btnExport.Location = new System.Drawing.Point(597, 572);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(39, 33);
+            this.btnExport.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.btnExport.TabIndex = 170;
+            this.btnExport.TabStop = false;
+            this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
+            // 
+            // lbExport
+            // 
+            this.lbExport.AutoSize = true;
+            this.lbExport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lbExport.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.lbExport.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lbExport.Location = new System.Drawing.Point(642, 588);
+            this.lbExport.Name = "lbExport";
+            this.lbExport.Size = new System.Drawing.Size(60, 17);
+            this.lbExport.TabIndex = 171;
+            this.lbExport.Text = "Exporter";
+            // 
             // Schedule
             // 
-            resources.ApplyResources(this, "$this");
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.ClientSize = new System.Drawing.Size(1315, 617);
+            this.Controls.Add(this.lbExport);
+            this.Controls.Add(this.btnExport);
+            this.Controls.Add(this.kryptonDateTimePicker);
             this.Controls.Add(this.pbNext);
             this.Controls.Add(this.pbPrev);
             this.Controls.Add(this.lblWeek);
             this.Controls.Add(this.dgvSchedule);
             this.Controls.Add(this.txtTuesday);
             this.Name = "Schedule";
-            this.Load += new System.EventHandler(this.Schedule_Load_1);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Schedule";
             ((System.ComponentModel.ISupportInitialize)(this.dgvSchedule)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPrev)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnExport)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -239,5 +262,8 @@ namespace SchoolManagement
         private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgvSchedule;
         private System.Windows.Forms.PictureBox pbPrev;
         private System.Windows.Forms.PictureBox pbNext;
+        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker kryptonDateTimePicker;
+        private System.Windows.Forms.PictureBox btnExport;
+        private System.Windows.Forms.Label lbExport;
     }
 }

@@ -162,6 +162,7 @@ namespace SchoolManagement
             // 
             resources.ApplyResources(this.lbHello, "lbHello");
             this.lbHello.Name = "lbHello";
+            this.lbHello.Click += new System.EventHandler(this.lbHello_Click);
             // 
             // lbLogout
             // 

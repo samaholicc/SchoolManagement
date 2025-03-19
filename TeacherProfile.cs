@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Configuration;
 using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
-using MySql.Data.MySqlClient; // Necessary for MySQL
+using MySql.Data.MySqlClient;
 using System.Globalization;
 
 namespace SchoolManagement
@@ -10,7 +11,7 @@ namespace SchoolManagement
     {
         private const int CS_DropShadow = 0x00020000;
 
-        // Customize form appearance  
+        // Customize form appearance
         protected override CreateParams CreateParams
         {
             get
@@ -24,16 +25,13 @@ namespace SchoolManagement
         public TeacherProfile()
         {
             InitializeComponent();
-            LoadTextBox();
+            LoadTeacherData();
         }
 
-        private void LoadTextBox()
+        private void LoadTeacherData()
         {
             try
             {
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-
-                // Assurez-vous que Login.ID est correctement défini  
                 if (string.IsNullOrEmpty(Login.ID))
                 {
                     MessageBox.Show(GetLocalizedMessage("LoginIDNotSet"));
@@ -41,7 +39,9 @@ namespace SchoolManagement
                     return;
                 }
 
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
+
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
                     string query = @"
@@ -52,26 +52,25 @@ namespace SchoolManagement
                             t.GENDER, 
                             t.DATE_OF_BIRTH, 
                             t.DEP_ID,
-                            a.ID, 
-                            a.PASSWORD 
-                        FROM SYSTEM.TEACHER t 
-                        JOIN SYSTEM.ACCOUNT a ON a.ID = t.TEACHER_ID  -- Jointure basée sur TEACHER_ID, 
-                        WHERE t.TEACHER_ID = @id"; // Recherche par TEACHER_ID
+                            a.ID 
+                        FROM SYSTEM.teacher t 
+                        JOIN SYSTEM.account a ON a.ID = t.TEACHER_ID 
+                        WHERE t.TEACHER_ID = @id";
 
                     MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@id", Login.ID); // Passer le TEACHER_ID
+                    cmd.Parameters.AddWithValue("@id", Login.ID);
 
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
                         if (dr.Read())
                         {
-                            txtClass.Text = dr.GetString(5);
-                            txtID.Text = dr.GetString(6);
-                            txtHoTen.Text = dr.GetString(1);
-                            txtAddress.Text = dr.GetString(2);
-                            txtBirth.Text = dr.GetDateTime(4).ToString("yyyy-MM-dd");
-                            txtGender.Text = dr.GetString(3);
-                            txtPassword.Text = dr.GetString(7);
+                            txtClass.Text = dr.GetString(5); // DEP_ID
+                            txtID.Text = dr.GetString(6);    // ACCOUNT.ID
+                            txtHoTen.Text = dr.GetString(1); // FULL_NAME
+                            txtAddress.Text = dr.GetString(2); // ADRESS
+                            txtBirth.Text = dr.GetDateTime(4).ToString("yyyy-MM-dd"); // DATE_OF_BIRTH
+                            txtGender.Text = dr.GetString(3); // GENDER
+                            txtPassword.Text = ""; // Do not display password for security
                         }
                         else
                         {
@@ -82,7 +81,9 @@ namespace SchoolManagement
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("MySQL error (" + ex.Number + "): " + ex.Message + "\n" + ex.StackTrace);
+                // Log error instead of showing stack trace to users
+                MessageBox.Show(GetLocalizedMessage("DatabaseError"));
+                // Consider logging: Logger.LogError(ex);
             }
         }
 
@@ -95,57 +96,119 @@ namespace SchoolManagement
         {
             try
             {
-                InsertData dataInserter = new InsertData();
-
-                string passInsert = txtPassword.Text;
+                if (!ValidateInputs()) return;
 
                 string userID = txtID.Text;
-                string hashedPassword = Encrypt.HashString(passInsert);
+                string newPassword = txtPassword.Text;
 
-                string result = dataInserter.UpdatePassword(userID, hashedPassword);
-
-                if (result != null)
+                if (!string.IsNullOrEmpty(newPassword))
                 {
-                    MessageBox.Show(GetLocalizedMessage("AccountModified"));
-                    this.Close();
+                    string hashedPassword = Encrypt.HashString(newPassword); 
+                    DataManager dataManager = new DataManager();
+                    string result = dataManager.UpdatePassword(userID, hashedPassword);
+
+                    if (result == "Success")
+                    {
+                        MessageBox.Show(GetLocalizedMessage("AccountModified"));
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show(GetLocalizedMessage("UpdateFailed"));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(GetLocalizedMessage("NoPasswordChange"));
                 }
             }
-            catch (Exception es)
+            catch (Exception ex)
             {
-                MessageBox.Show(es.Message); // Display any error message  
+                MessageBox.Show(GetLocalizedMessage("UpdateError"));
+                // Consider logging: Logger.LogError(ex);
             }
         }
 
-        // Method for localization of messages
+        private bool ValidateInputs()
+        {
+            if (string.IsNullOrEmpty(txtPassword.Text))
+            {
+                // Allow empty password to mean no change
+                return true;
+            }
+
+            if (txtPassword.Text.Length < 8)
+            {
+                MessageBox.Show(GetLocalizedMessage("PasswordTooShort"));
+                return false;
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtPassword.Text, @"[!@#$%^&*(),.?""{}|<>]"))
+            {
+                MessageBox.Show(GetLocalizedMessage("PasswordNoSpecialChar"));
+                return false;
+            }
+
+            return true;
+        }
+
         private string GetLocalizedMessage(string messageKey)
         {
-            // Detect the current culture (language setting of the system)
             string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
 
-            // French messages
             var messages_fr = new System.Collections.Generic.Dictionary<string, string>
             {
                 { "LoginIDNotSet", "Login ID n'est pas défini. Veuillez vous reconnecter." },
                 { "NoDataFound", "Aucune donnée trouvée pour cet identifiant d'enseignant." },
-                { "AccountModified", "Compte modifié avec succès." }
+                { "AccountModified", "Compte modifié avec succès." },
+                { "DatabaseError", "Erreur de connexion à la base de données." },
+                { "NoPasswordChange", "Aucun changement de mot de passe détecté." },
+                { "UpdateFailed", "Échec de la mise à jour du compte." },
+                { "UpdateError", "Erreur lors de la mise à jour du compte." },
+                { "PasswordTooShort", "Le mot de passe doit contenir au moins 8 caractères." },
+                { "PasswordNoSpecialChar", "Le mot de passe doit contenir au moins un caractère spécial." }
             };
 
-            // English messages
             var messages_en = new System.Collections.Generic.Dictionary<string, string>
             {
                 { "LoginIDNotSet", "Login ID is not set. Please log in again." },
                 { "NoDataFound", "No data found for the given Teacher ID." },
-                { "AccountModified", "Account modified successfully." }
+                { "AccountModified", "Account modified successfully." },
+                { "DatabaseError", "Database connection error." },
+                { "NoPasswordChange", "No password change detected." },
+                { "UpdateFailed", "Failed to update account." },
+                { "UpdateError", "Error updating account." },
+                { "PasswordTooShort", "Password must be at least 8 characters long." },
+                { "PasswordNoSpecialChar", "Password must contain at least one special character." }
             };
 
-            // Return the message based on the culture
-            if (currentCulture.StartsWith("fr"))
+            var messages = currentCulture.StartsWith("fr") ? messages_fr : messages_en;
+            string message;
+            return messages.TryGetValue(messageKey, out message) ? message : "Message not found.";
+        }
+
+        private void TeacherProfile_Load(object sender, EventArgs e)
+        {
+            // Additional initialization if needed
+        }
+    }
+
+    public class DataManager
+    {
+        private string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
+
+        public string UpdatePassword(string userId, string hashedPassword)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                return messages_fr.ContainsKey(messageKey) ? messages_fr[messageKey] : "Message not found.";
-            }
-            else
-            {
-                return messages_en.ContainsKey(messageKey) ? messages_en[messageKey] : "Message not found.";
+                conn.Open();
+                string query = "UPDATE SYSTEM.account SET PASSWORD = @password WHERE ID = @id";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@id", userId);
+                cmd.Parameters.AddWithValue("@password", hashedPassword);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+                return rowsAffected > 0 ? "Success" : null;
             }
         }
     }

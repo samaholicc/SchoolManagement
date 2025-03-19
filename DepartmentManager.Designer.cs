@@ -440,7 +440,7 @@ namespace SchoolManagement
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
             // DepartmentManager
             // 
@@ -472,6 +472,7 @@ namespace SchoolManagement
             this.Name = "DepartmentManager";
             this.Palette = this.kryptonPalette1;
             this.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
+            this.Load += new System.EventHandler(this.DepartmentManager_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvDepartments)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).EndInit();

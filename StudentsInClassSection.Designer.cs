@@ -461,6 +461,7 @@ namespace SchoolManagement
             this.Name = "StudentsInClassSection";
             this.Palette = this.kryptonPalette1;
             this.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
+            this.Load += new System.EventHandler(this.StudentsInClassSection_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvStudents)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbStudents)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

@@ -2,23 +2,36 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Configuration;
 using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
-
 
 namespace SchoolManagement
 {
     public partial class ClassSectionManager : KryptonForm
     {
         private const int CS_DropShadow = 0x00020000;
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
+        private readonly ClassService _classService;
+        private int _currentPage = 1;
+        private const int PageSize = 10;
+        private bool _isSelected = false;
+        private int _action = 0; // 0 = Add, 1 = Edit
+        public static string ClassSectionID { get; private set; } // Public static property for selected class ID
+        public static int StudentLimit { get; private set; } // Public static property for student limit
+
+        public ClassSectionManager()
+        {
+            InitializeComponent();
+            _classService = new ClassService(connectionString);
+            InitializeUI();
+            LoadInitialDataAsync();
+        }
+
         protected override CreateParams CreateParams
         {
             get
@@ -28,699 +41,480 @@ namespace SchoolManagement
                 return cp;
             }
         }
-        public enum Language
+
+        #region Initialization
+        private void InitializeUI()
         {
-            English,
-            French
-        }
-
-        public static Language CurrentLanguage = Language.French;
-
-        #region Properties
-
-        public static string ClassSectionID { get; set; }
-        public static string SubjectID;
-        public static int limited;
-
-        private int action; // 0 - add, 1 - edit
-        private bool isSelected = false;
-        private int currFrom = 1;
-        private int pageSize = 10;
-
-        #endregion
-
-        #region Constructor
-
-        public ClassSectionManager()
-        {
-            InitializeComponent();
-            LoadClasses();
-            LoadSubjects();
-            LoadTeachers();
             ConfigureDateTimePickers();
-            txtEndTime.Enabled = false;
-            txtStartTime.Enabled = false;
+            ToggleUIForEditing(false);
+            UpdatePaginationButtons();
+
+            // Ensure the CellMouseClick event is wired up
+            dgvClass.CellMouseClick += DgvClass_CellMouseClick; // Verify in designer if already set
         }
 
-        #endregion
-
-        #region Load Data Methods
-
-        private void LoadTeachers()
+        private async void LoadInitialDataAsync()
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
+                // Load data independently to ensure all are attempted even if one fails
+                await Task.WhenAll(
+                    LoadClassesAsync().ContinueWith(new Action<Task>(t => LogError(t.Exception, "Error loading classes"))),
+                    LoadSubjectsAsync().ContinueWith(new Action<Task>(t => LogError(t.Exception, "Error loading subjects"))),
+                    LoadTeachersAsync().ContinueWith(new Action<Task>(t => LogError(t.Exception, "Error loading teachers")))
+                );
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorLoadingInitialData"));
+            }
+        }
+
+        private void LogError(Exception ex, string context)
+        {
+            if (ex != null)
+            {
+                ErrorHandler.ShowError(ex, context);
+            }
+        }
+        #endregion
+
+        #region Data Loading
+        private async Task LoadTeachersAsync()
+        {
+            try
+            {
+                cbTeacher.Items.Clear();
+                var teachers = await _classService.GetTeachersAsync();
+                foreach (var teacher in teachers)
                 {
-                    conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SELECT TEACHER_ID, FULL_NAME FROM SYSTEM.TEACHER", conn);
-                    cbTeacher.Items.Clear(); // Clear existing items
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string teacherId = reader.GetString(0);
-                            string teacherName = reader.GetString(1);
-                            // Use string concatenation instead of string interpolation
-                            cbTeacher.Items.Add(teacherId + " - " + teacherName);
-                        }
-                    }
+                    cbTeacher.Items.Add(teacher.Id + " - " + teacher.FullName);
+                }
+                if (cbTeacher.Items.Count == 0)
+                {
+                    MessageBox.Show(GetLocalizedMessage("NoTeachersFound"));
                 }
             }
             catch (Exception ex)
             {
-                ShowMessage("An error occurred: " + ex.Message, "Une erreur est survenue : " + ex.Message, "Error", MessageBoxIcon.Error);
+                ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorLoadingTeachers"));
             }
         }
 
-        private void LoadSubjects()
+        private async Task LoadSubjectsAsync()
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
+                cbSubject.Items.Clear();
+                var subjects = await _classService.GetSubjectsAsync();
+                foreach (var subject in subjects)
                 {
-                    conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SELECT SUB_ID, SUB_NAME FROM SYSTEM.SUBJECT", conn);
-                    cbSubject.Items.Clear();
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            int subjectId = reader.GetInt32(0);
-                            string SubjectName = reader.GetString(1);
-                            cbSubject.Items.Add(subjectId + " - " + SubjectName);
-                        }
-                    }
+                    cbSubject.Items.Add(subject.Id + " - " + subject.Name);
+                }
+                if (cbSubject.Items.Count == 0)
+                {
+                    MessageBox.Show(GetLocalizedMessage("NoSubjectsFound"));
                 }
             }
-            catch (Exception es)
+            catch (Exception ex)
             {
-                ShowMessage("An error occurred: " + es.Message, "Une erreur est survenue : " + es.Message, "Error", MessageBoxIcon.Error);
+                ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorLoadingSubjects"));
             }
         }
 
-        private void LoadClasses()
+        private async Task LoadClassesAsync()
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
+                var classes = await _classService.GetClassesAsync(_currentPage, PageSize);
+                dgvClass.DataSource = null; // Clear existing data
+                dgvClass.DataSource = classes;
+                if (classes.Rows.Count == 0)
                 {
-                    conn.Open();
-                    MySqlCommand cmd = new MySqlCommand(@"SELECT 
-                        a.CLASS_ID AS 'CLASS SECTION ID',
-                        CONCAT(a.Sub_ID, ' - ', s.SUB_NAME) AS `Subject`,
-                        CONCAT(a.TEACHER_ID, ' - ', t.Full_name) AS `Teacher`,
-                        a.START_DATE AS 'START',
-                        a.FINISH_DATE AS 'FINISH',
-                        a.SCHEDULE AS 'SCHEDULE',
-                        a.NB_S AS 'N.O.S'
-                    FROM SYSTEM.CLASS a
-                    JOIN SYSTEM.SUBJECT s ON a.Sub_ID = s.SUB_ID
-                    JOIN SYSTEM.TEACHER t ON a.TEACHER_ID = t.TEACHER_ID
-                    ORDER BY a.CLASS_ID ASC
-                    LIMIT @PageSize OFFSET @Offset;", conn);
-                    cmd.Parameters.AddWithValue("@PageSize", pageSize);
-                    cmd.Parameters.AddWithValue("@Offset", (currFrom - 1) * pageSize);
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        System.Data.DataTable dataTable = new System.Data.DataTable();
-                        dataTable.Load(reader);
-                        dgvClass.DataSource = dataTable;
-                    }
+                    MessageBox.Show(GetLocalizedMessage("NoClassesFound"));
                 }
+                UpdatePaginationButtons();
             }
-            catch (Exception es)
+            catch (Exception ex)
             {
-                ShowMessage("An error occurred: " + es.Message, "Une erreur est survenue : " + es.Message, "Error", MessageBoxIcon.Error);
+                ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorLoadingClasses"));
             }
         }
-
         #endregion
 
         #region Event Handlers
-
-        private void dgvClass_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void DgvClass_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex < 0) return;
+
+            try
             {
-                isSelected = true;
                 DataGridViewRow row = dgvClass.Rows[e.RowIndex];
-
-                // Handle ID retrieval with conversion
-                txtID.Text = row.Cells[0].Value.ToString();
-                cbSubject.Text = row.Cells[1].Value.ToString();
-                cbTeacher.Text = row.Cells[2].Value.ToString();
-
-                // Handle date conversions (ensure the cells are not null)
-                if (row.Cells[3].Value != null)
-                    dtpStart.Value = Convert.ToDateTime(row.Cells[3].Value);
-
-                if (row.Cells[4].Value != null)
-                    dtpFinish.Value = Convert.ToDateTime(row.Cells[4].Value);
-
-                // Retrieve the full schedule from the database
-                string fullSchedule = row.Cells[5].Value != null ? row.Cells[5].Value.ToString() : string.Empty;
-                txtSchedule.Text = fullSchedule;
-
-                // Parse the schedule string to extract date, start time, and end time
-                ParseSchedule(fullSchedule);
-
-                // Handle the number of students
-                txtNOS.Text = row.Cells[6].Value != null ? row.Cells[6].Value.ToString() : "0";
-
-                // Correcting the class section and subject IDs correctly
-                ClassSectionID = txtID.Text;
-                SubjectID = cbSubject.Text;
-
-                // If 'limited' is meant to be an integer, parse it appropriately
-                int parsedValue;
-                int nbS;
-                if (int.TryParse(txtNOS.Text, out parsedValue))
+                // Explicitly declare studentLimit for C# 6.0 compatibility
+                int studentLimit;
+                if (row.Cells["N.O.S"].Value != null && int.TryParse(row.Cells["N.O.S"].Value.ToString(), out studentLimit))
                 {
-                    limited = parsedValue;
+                    StudentLimit = studentLimit;
                 }
                 else
                 {
-                    if (string.IsNullOrWhiteSpace(txtNOS.Text) || !Int32.TryParse(txtNOS.Text, out nbS))
-                    {
-                        // Vérification de la culture locale et affichage du message correspondant
-                        if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
-                        {
-                            MessageBox.Show("Format du nombre d'élèves invalide !");
-                        }
-                        else // Culture par défaut pour l'anglais
-                        {
-                            MessageBox.Show("Invalid number of students format!");
-                        }
-                        return;
-                    }
+                    throw new Exception("Invalid student limit value in the selected row.");
                 }
 
-                // Handle ComboBox selections
-                if (row.Cells[1].Value != null)
-                    cbSubject.SelectedItem = cbSubject.Items.Cast<string>()
-                        .FirstOrDefault(i => i.StartsWith(row.Cells[1].Value.ToString().Split(' ')[0]));
-                if (row.Cells[2].Value != null)
-                    cbTeacher.SelectedItem = cbTeacher.Items.Cast<string>()
-                        .FirstOrDefault(i => i.StartsWith(row.Cells[2].Value.ToString().Split(' ')[0]));
+                ClassSectionID = row.Cells["CLASS SECTION ID"].Value != null ? row.Cells["CLASS SECTION ID"].Value.ToString() : null;
+                if (string.IsNullOrEmpty(ClassSectionID))
+                {
+                    throw new Exception("Class Section ID is not set in the selected row.");
+                }
+
+                _isSelected = true;
+                PopulateFormFromRow(row);
+                showAction();
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorSelectingClass"));
+                _isSelected = false;
+                ClassSectionID = null;
+                StudentLimit = 0;
             }
         }
 
+        private async void PbSave_Click(object sender, EventArgs e)
+        {
+            await SaveClassAsync();
+        }
+
+        private void PbEdit_Click(object sender, EventArgs e)
+        {
+            if (!_isSelected)
+            {
+                MessageBox.Show(GetLocalizedMessage("NoRecordToEdit"));
+                return;
+            }
+            _action = 1;
+            ToggleUIForEditing(true);
+        }
+
+        private void PbStudents_Click(object sender, EventArgs e)
+        {
+            _action = 0;
+            ClearInputs();
+            ToggleUIForEditing(true);
+        }
+
+        private async void PbNext_Click(object sender, EventArgs e)
+        {
+            _currentPage++;
+            await LoadClassesAsync();
+        }
+
+        private async void PbPrev_Click(object sender, EventArgs e)
+        {
+            if (_currentPage > 1)
+            {
+                _currentPage--;
+                await LoadClassesAsync();
+            }
+        }
+
+        private async void PbDelete_Click(object sender, EventArgs e)
+        {
+            if (!_isSelected)
+            {
+                MessageBox.Show(GetLocalizedMessage("NoRecordToDelete"));
+                return;
+            }
+
+            if (MessageBox.Show(GetLocalizedMessage("ConfirmDelete"), "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                try
+                {
+                    await _classService.DeleteClassAsync(txtID.Text);
+                    MessageBox.Show(GetLocalizedMessage("DeleteSuccess"));
+                    RefreshClassList();
+                }
+                catch (MySqlException ex)
+                {
+                    if (ex.Number == 1451) // Foreign key constraint violation
+                    {
+                        MessageBox.Show(GetLocalizedMessage("CannotDeleteInUse"));
+                    }
+                    else
+                    {
+                        ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorDeleting"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorDeleting"));
+                }
+            }
+        }
+
+        private async void Label7_Click(object sender, EventArgs e)
+        {
+            await ExportToCsvAsync();
+        }
+
+        private void PbDetail_Click(object sender, EventArgs e)
+        {
+            if (!_isSelected)
+            {
+                MessageBox.Show(GetLocalizedMessage("NoRecordToShow"));
+                return;
+            }
+
+            if (string.IsNullOrEmpty(ClassSectionID))
+            {
+                MessageBox.Show(GetLocalizedMessage("NoRecordToShow"));
+                return;
+            }
+
+            using (var studentsForm = new StudentsInClass(ClassSectionID))
+            {
+                studentsForm.ShowDialog();
+            }
+        }
+
+        private async void BtnSearch_Click(object sender, EventArgs e)
+        {
+            string searchTerm = txtSearch.Text.Trim();
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                MessageBox.Show(GetLocalizedMessage("NoSearchTerm"));
+                return;
+            }
+
+            try
+            {
+                var filteredClasses = await _classService.GetClassesBySearchTermAsync(searchTerm);
+                dgvClass.DataSource = null; // Clear existing data
+                dgvClass.DataSource = filteredClasses;
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorSearching"));
+            }
+        }
+
+        private void ClassSectionManager_Load(object sender, EventArgs e)
+        {
+            // Additional initialization if needed
+        }
         #endregion
 
-        #region Schedule Parsing Method
+        #region Business Logic
+        private async Task SaveClassAsync()
+        {
+            try
+            {
+                ValidateDateTime();
+                ClassSection classSection = BuildClassSectionFromForm();
+                if (classSection == null)
+                {
+                    return; // Validation failed, error message already shown
+                }
+
+                bool success = _action == 0
+                    ? await _classService.AddClassAsync(classSection)
+                    : await _classService.UpdateClassAsync(classSection);
+
+                if (success)
+                {
+                    MessageBox.Show(GetLocalizedMessage(_action == 0 ? "AddSuccess" : "EditSuccess"));
+                    RefreshClassList();
+                }
+                else
+                {
+                    MessageBox.Show(GetLocalizedMessage("SaveFailed"));
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorSaving"));
+            }
+        }
+
+        private ClassSection BuildClassSectionFromForm()
+        {
+            // Explicitly declare variables for C# 6.0 compatibility
+            string subId = string.Empty;
+            if (!TryExtractId(cbSubject.Text, out subId))
+            {
+                MessageBox.Show(GetLocalizedMessage("InvalidSubject"));
+                return null;
+            }
+
+            string teacherId = string.Empty;
+            if (!TryExtractId(cbTeacher.Text, out teacherId))
+            {
+                MessageBox.Show(GetLocalizedMessage("InvalidTeacher"));
+                return null;
+            }
+
+            int numberOfStudents;
+            if (!int.TryParse(txtNOS.Text, out numberOfStudents) || numberOfStudents < 0)
+            {
+                MessageBox.Show(GetLocalizedMessage("InvalidNOS"));
+                return null;
+            }
+
+            // Replace string interpolation with string.Format for C# 6.0 compatibility
+            string schedule = string.Format("{0:dddd, dd MMMM yyyy} {1:HH:mm} - {2:HH:mm}", txtSchedule.Value, txtStartTime.Value, txtEndTime.Value);
+
+            return new ClassSection
+            {
+                ClassId = txtID.Text,
+                SubjectId = subId,
+                TeacherId = teacherId,
+                StartDate = dtpStart.Value,
+                FinishDate = dtpFinish.Value,
+                Schedule = schedule,
+                NumberOfStudents = numberOfStudents
+            };
+        }
+
+        private void PopulateFormFromRow(DataGridViewRow row)
+        {
+            try
+            {
+                txtID.Text = row.Cells["CLASS SECTION ID"].Value != null ? row.Cells["CLASS SECTION ID"].Value.ToString() : "";
+                cbSubject.Text = row.Cells["Subject"].Value != null ? row.Cells["Subject"].Value.ToString() : "";
+                cbTeacher.Text = row.Cells["Teacher"].Value != null ? row.Cells["Teacher"].Value.ToString() : "";
+
+                DateTime startDate;
+                if (row.Cells["START"].Value != null && DateTime.TryParse(row.Cells["START"].Value.ToString(), out startDate))
+                    dtpStart.Value = startDate;
+                else
+                    dtpStart.Value = DateTime.Now;
+
+                DateTime finishDate;
+                if (row.Cells["FINISH"].Value != null && DateTime.TryParse(row.Cells["FINISH"].Value.ToString(), out finishDate))
+                    dtpFinish.Value = finishDate;
+                else
+                    dtpFinish.Value = DateTime.Now;
+
+                txtNOS.Text = row.Cells["N.O.S"].Value != null ? row.Cells["N.O.S"].Value.ToString() : "0";
+                ParseSchedule(row.Cells["SCHEDULE"].Value != null ? row.Cells["SCHEDULE"].Value.ToString() : "");
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorParsingRow"));
+            }
+        }
 
         private void ParseSchedule(string fullSchedule)
         {
+            if (string.IsNullOrWhiteSpace(fullSchedule))
+            {
+                txtSchedule.Value = DateTime.Now;
+                txtStartTime.Value = DateTime.Now;
+                txtEndTime.Value = DateTime.Now;
+                return;
+            }
+
+            var parts = fullSchedule.Split(new[] { " - " }, StringSplitOptions.None);
+            if (parts.Length != 2)
+            {
+                txtSchedule.Value = DateTime.Now;
+                txtStartTime.Value = DateTime.Now;
+                txtEndTime.Value = DateTime.Now;
+                return;
+            }
+
+            string dateTimePart = parts[0].Trim();
+            string endTimePart = parts[1].Trim();
+
+            int lastSpaceIndex = dateTimePart.LastIndexOf(' ');
+            if (lastSpaceIndex == -1)
+            {
+                txtSchedule.Value = DateTime.Now;
+                txtStartTime.Value = DateTime.Now;
+                txtEndTime.Value = DateTime.Now;
+                return;
+            }
+
+            string datePart = dateTimePart.Substring(0, lastSpaceIndex).Trim();
+            string startTimePart = dateTimePart.Substring(lastSpaceIndex + 1).Trim();
+
+            DateTime parsedDate;
+            if (DateTime.TryParseExact(datePart, "dddd, dd MMMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+                txtSchedule.Value = parsedDate;
+            else
+                txtSchedule.Value = DateTime.Now;
+
+            DateTime startTime;
+            if (DateTime.TryParseExact(startTimePart, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out startTime))
+                txtStartTime.Value = DateTime.Today.Add(startTime.TimeOfDay);
+            else
+                txtStartTime.Value = DateTime.Now;
+
+            DateTime endTime;
+            if (DateTime.TryParseExact(endTimePart, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out endTime))
+                txtEndTime.Value = DateTime.Today.Add(endTime.TimeOfDay);
+            else
+                txtEndTime.Value = DateTime.Now;
+        }
+
+        private async Task ExportToCsvAsync()
+        {
             try
             {
-                // Trim and validate input
-                fullSchedule = fullSchedule != null ? fullSchedule.Trim() : null;
-                if (string.IsNullOrWhiteSpace(fullSchedule))
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                saveFileDialog.Title = "Save Class Sections as CSV";
+                saveFileDialog.FileName = "ClassSections_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".csv";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    // Vérification de la culture locale et affichage du message correspondant
-                    if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
+                    DataTable dataTable = await _classService.GetAllClassesAsync();
+
+                    if (dataTable != null && dataTable.Rows.Count > 0)
                     {
-                        MessageBox.Show("Erreur : La chaîne de planning est vide.");
+                        StringBuilder csvContent = new StringBuilder();
+
+                        // Écrire les en-têtes (replace LINQ with loop for C# 6.0 compatibility)
+                        string[] columnNames = new string[dataTable.Columns.Count];
+                        for (int i = 0; i < dataTable.Columns.Count; i++)
+                        {
+                            columnNames[i] = "\"" + dataTable.Columns[i].ColumnName + "\"";
+                        }
+                        csvContent.AppendLine(string.Join(",", columnNames));
+
+                        // Écrire les données (replace LINQ with loop for C# 6.0 compatibility)
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            string[] fields = new string[row.ItemArray.Length];
+                            for (int i = 0; i < row.ItemArray.Length; i++)
+                            {
+                                fields[i] = "\"" + (row[i] != null ? row[i].ToString().Replace("\"", "\"\"") : "") + "\"";
+                            }
+                            csvContent.AppendLine(string.Join(",", fields));
+                        }
+
+                        // Écrire dans le fichier
+                        File.WriteAllText(saveFileDialog.FileName, csvContent.ToString(), Encoding.UTF8);
+
+                        MessageBox.Show(GetLocalizedMessage("ExportSuccess"));
+                        System.Diagnostics.Process.Start(saveFileDialog.FileName); // Ouvre le fichier
                     }
-                    else // Culture par défaut pour l'anglais
+                    else
                     {
-                        MessageBox.Show("Error: Schedule string is empty.");
+                        MessageBox.Show("No data to export.");
                     }
                 }
-
-                // Split into date-time and end time parts
-                string[] scheduleParts = fullSchedule.Split(new string[] { " - " }, StringSplitOptions.None);
-                if (scheduleParts.Length != 2)
-                {
-                    // Vérification de la culture locale et affichage du message correspondant
-                    if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr")
-                    {
-                        MessageBox.Show("Erreur : format de planning invalide. Attendu 'Dimanche, 16 Mars 2025'.");
-                    }
-                    else // Culture par défaut pour l'anglais
-                    {
-                        MessageBox.Show("Error: Invalid schedule format. Expected 'Sunday, 16 March 2025'.");
-                    }
-                    return;
-                }
-
-                // Declare baseDate at a higher scope
-                DateTime baseDate = DateTime.Today; // Use today as a base date for all time assignments
-
-                // Extract date and start time from the first part
-                string dateTimePart = scheduleParts[0].Trim(); // "Sunday, 16 March 2025 09:00"
-                string endTimePart = scheduleParts[1].Trim();  // "10:00"
-                MessageBox.Show("end :" + endTimePart);
-
-                // Split dateTimePart into date and start time (last space separates them)
-                int lastSpaceIndex = dateTimePart.LastIndexOf(' ');
-                string datePart = dateTimePart.Substring(0, lastSpaceIndex).Trim(); // "Sunday, 16 March 2025"
-                string startTimePart = dateTimePart.Substring(lastSpaceIndex + 1).Trim(); // "09:00"
-
-                // Parse the date
-                DateTime parsedDate;
-                if (DateTime.TryParseExact(datePart, "dddd, dd MMMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
-                {
-                    txtSchedule.Text = parsedDate.ToString("dddd, dd MMMM yyyy");
-                    txtSchedule.Value = parsedDate;
-                }
-
-                // Parse the start time
-                DateTime startDateTime;
-                if (DateTime.TryParseExact(startTimePart, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDateTime))
-                {
-                    txtStartTime.Value = baseDate.Date + startDateTime.TimeOfDay; // Set start time (e.g., "09:00")
-                }
-
-                // Parse the end time
-                DateTime endDateTime;
-                if (DateTime.TryParseExact(endTimePart, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDateTime))
-                {
-                    txtEndTime.Value = baseDate.Date + endDateTime.TimeOfDay; // Set end time (e.g., "10:00")
-                }
-
-                // Ensure controls are enabled and refreshed
-                txtStartTime.Enabled = false;
-                txtEndTime.Enabled = false;
-                txtStartTime.Refresh();
-                txtEndTime.Refresh();
             }
             catch (Exception ex)
             {
-                ShowMessage("An error occurred: " + ex.Message, "Une erreur est survenue : " + ex.Message, "Error", MessageBoxIcon.Error);
+                ErrorHandler.ShowError(ex, GetLocalizedMessage("ErrorExporting"));
             }
         }
-
         #endregion
 
         #region Helper Methods
-
-       
-
-        #endregion
-
-
-       #region Event Handlers
-private void pbStudents_Click(object sender, EventArgs e)
-{
-    action = 0; // Setting the action for adding
-    ToggleUIForEditing(true); // Show the student addition UI
-}
-
-private void pbEdit_Click(object sender, EventArgs e)
-{
-    if (!isSelected)
-    {
-        string message = CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr" 
-            ? "Veuillez choisir une classe à modifier !" 
-            : "Please choose class to edit!";
-        
-        MessageBox.Show(message);
-        return;
-    }
-
-    action = 1;
-    ToggleUIForEditing(true);
-}
-
-private void pbSave_Click(object sender, EventArgs e)
-{
-    try
-    {
-        ValidateDateTime(); // Validate the date and time before saving
-
-        using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
+        private void showAction()
         {
-            conn.Open();
-            MySqlCommand cmd;
-
-            cmd = action == 0 ? new MySqlCommand("SP_CLASS_ADD", conn) : new MySqlCommand("SP_CLASS_UPDATE", conn);
-
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            string subId, teacherId;
-            int nbS;
-
-            // Validation subject
-            if (string.IsNullOrWhiteSpace(cbSubject.Text) || !TryExtractId(cbSubject.Text, out subId))
-            {
-                ShowValidationMessage("subject", "Sélection invalide de matière. Veuillez choisir une matière valide.", "Invalid subject selection. Please choose a valid subject.");
-                return;
-            }
-
-            // Validation teacher
-            if (string.IsNullOrWhiteSpace(cbTeacher.Text) || !TryExtractId(cbTeacher.Text, out teacherId))
-            {
-                ShowValidationMessage("teacher", "Sélection invalide de l'enseignant. Veuillez choisir un enseignant valide.", "Invalid teacher selection. Please choose a valid teacher.");
-                return;
-            }
-
-            // Validation number of students
-            if (!Int32.TryParse(txtNOS.Text, out nbS))
-            {
-                ShowValidationMessage("students", "Nombre d'élèves invalide. Veuillez entrer un nombre valide.", "Invalid number of students. Please enter a valid number.");
-                return;
-            }
-
-            // Validation start date
-            if (dtpStart.Value == DateTime.MinValue)
-            {
-                ShowValidationMessage("start date", "Veuillez entrer une date de début valide.", "Please enter a valid start date.");
-                return;
-            }
-
-            // Concatenate schedule details
-            string scheduleDetails = $"{txtSchedule.Value:dddd, dd MMMM yyyy} {txtStartTime.Value:HH:mm} - {txtEndTime.Value:HH:mm}";
-
-            cmd.Parameters.AddWithValue("p_SUB_ID", subId);
-            cmd.Parameters.AddWithValue("p_TEACHER_ID", teacherId);
-            cmd.Parameters.AddWithValue("p_START_DATE", dtpStart.Value);
-            cmd.Parameters.AddWithValue("p_FINISH_DATE", dtpFinish.Value);
-            cmd.Parameters.AddWithValue("p_SCHEDULE", scheduleDetails);
-            cmd.Parameters.AddWithValue("p_NB_S", nbS);
-            cmd.Parameters.AddWithValue("p_CLASS_ID", txtID.Text);
-
-            cmd.ExecuteNonQuery();
-
-            string successMessage = action == 0 ? "Classe ajoutée avec succès !" : "Classe mise à jour avec succès !";
-            string successMessageEnglish = action == 0 ? "Class added successfully!" : "Class updated successfully!";
-            MessageBox.Show(CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr" ? successMessage : successMessageEnglish);
-        }
-    }
-    catch (Exception ex)
-    {
-        ShowMessage("An error occurred: " + ex.Message, "Une erreur est survenue : " + ex.Message, "Error", MessageBoxIcon.Error);
-    }
-
-    RefreshClassList();
-}
-
-private void lbDelete_Click(object sender, EventArgs e)
-{
-    if (!isSelected)
-    {
-        string message = CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr" 
-            ? "Veuillez choisir une classe à supprimer !" 
-            : "Please choose a class to delete!";
-
-        MessageBox.Show(message);
-        return;
-    }
-
-    DialogResult dialogResult = MessageBox.Show("Are you sure to delete?", "Confirm", MessageBoxButtons.YesNo);
-
-    if (dialogResult == DialogResult.Yes)
-    {
-        try
-        {
-            using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
-            {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("DELETE FROM SYSTEM.CLASS WHERE CLASS_ID=@ClassID", conn);
-                cmd.Parameters.AddWithValue("@ClassID", txtID.Text); // Use the textual value
-                cmd.ExecuteNonQuery();
-            }
-            Refesh();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message);
-        }
-    }
-}
-
-private void pbPrev_Click(object sender, EventArgs e)
-{
-    if (currFrom > 1)
-    {
-        currFrom--;
-        LoadClasses();
-    }
-}
-#endregion
-
-#region Helper Methods
-private bool TryExtractId(string text, out string id)
-{
-    id = string.Empty;
-    if (text.Contains("-"))
-    {
-        id = text.Split('-')[0].Trim();
-        return true;
-    }
-    return false;
-}
-
-private void ShowValidationMessage(string type, string messageFr, string messageEn)
-{
-    string message = CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "fr" ? messageFr : messageEn;
-    MessageBox.Show(message);
-}
-
-private void ShowMessage(string messageEn, string messageFr, string title, MessageBoxIcon icon)
-{
-    if (CurrentLanguage == Language.English)
-    {
-        MessageBox.Show(messageEn, title, MessageBoxButtons.OK, icon);
-    }
-    else
-    {
-        MessageBox.Show(messageFr, title, MessageBoxButtons.OK, icon);
-    }
-}
-#endregion
-
-#region Excel Export
-private void ExportToExcel()
-{
-    try
-    {
-        Excel.Application excelApp = new Excel.Application();
-        excelApp.Visible = true;
-        Excel.Workbook workbook = excelApp.Workbooks.Add();
-        Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
-
-        // Add column headers to the Excel file
-        for (int col = 0; col < dgvClass.Columns.Count; col++)
-        {
-            worksheet.Cells[1, col + 1] = dgvClass.Columns[col].HeaderText;
-        }
-
-        List<DataRow> allRows = new List<DataRow>();
-        int totalRecords = GetTotalRecordCount();
-        int totalPages = (totalRecords + pageSize - 1) / pageSize;
-
-        for (int page = 1; page <= totalPages; page++)
-        {
-            currFrom = page;
-            LoadClasses();
-
-            foreach (DataGridViewRow row in dgvClass.Rows)
-            {
-                if (row.IsNewRow) continue;
-
-                DataRow dataRow = ((DataTable)dgvClass.DataSource).NewRow();
-                for (int col = 0; col < dgvClass.Columns.Count; col++)
-                {
-                    dataRow[col] = row.Cells[col].Value.ToString();
-                }
-
-                allRows.Add(dataRow);
-            }
-        }
-
-        int rowIndex = 2;
-        foreach (var row in allRows)
-        {
-            for (int col = 0; col < dgvClass.Columns.Count; col++)
-            {
-                worksheet.Cells[rowIndex, col + 1] = row[col].ToString();
-            }
-            rowIndex++;
-        }
-
-        MessageBox.Show("Exported to Excel successfully.");
-    }
-    catch (Exception ex)
-    {
-        MessageBox.Show("Error exporting to Excel: " + ex.Message);
-    }
-
-    LoadClasses();
-}
-#endregion
-
-
-        private int GetTotalRecordCount()
-        {
-            try
-            {
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
-                {
-                    conn.Open();
-                    string query = "SELECT COUNT(teacher_id) FROM SYSTEM.teacher";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        object result = cmd.ExecuteScalar();
-                        return result != null ? Convert.ToInt32(result) : 0;
-                    }
-                }
-            }
-            catch (MySqlException mysqlEx)
-            {
-                // Afficher un message d'erreur spécifique pour MySQL  
-                MessageBox.Show("MySQL Error: " + mysqlEx.Message);
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                // Afficher un message d'erreur général  
-                MessageBox.Show("Error: " + ex.Message);
-                return 0; // Return 0 in case of an error  
-            }
-        }
-    
-
-private void pbDetail_Click(object sender, EventArgs e)
-    {
-        if (!isSelected)
-        {
-            MessageBox.Show(GetLocalizedMessage("PleaseChooseClass", "Veuillez choisir une classe à afficher!"));
-            return;
-        }
-
-        StudentsInClassSection studentsInClassSection = new StudentsInClassSection(ClassSectionID);
-        studentsInClassSection.ShowDialog();
-    }
-
-    private void ValidateDateTime()
-    {
-        // Vérification de la date dans txtSchedule  
-        if (txtSchedule.Value.Date < DateTime.Now.Date)
-        {
-            MessageBox.Show(GetLocalizedMessage(
-                "InvalidDate",
-                "La date sélectionnée est invalide. La valeur sera réinitialisée."));
-            txtSchedule.Value = DateTime.Now; // Réinitialiser à la date actuelle si la valeur est invalide  
-        }
-
-        // Vérification de l'heure de début : ne pas permettre un début avant 8:00 AM  
-        if (txtStartTime.Value.TimeOfDay < TimeSpan.FromHours(8))
-        {
-            MessageBox.Show(GetLocalizedMessage(
-                "InvalidStartTime",
-                "L'heure de début ne peut pas être avant 8:00 AM. Elle sera réinitialisée à 8:00 AM."));
-
-            // Réinitialiser la valeur de txtStartTime à 8:00 AM  
-            DateTime validStartTime = txtStartTime.Value.Date.Add(TimeSpan.FromHours(8));
-
-            txtStartTime.Value = validStartTime;
-
-            // Log de débogage pour vérifier la valeur mise à jour  
-            Console.WriteLine($"Updated txtStartTime.Value to: {txtStartTime.Value:HH:mm}");
-        }
-
-        // Vérification de l'heure de fin : ne pas permettre un horaire après 18:00  
-        if (txtEndTime.Value.TimeOfDay > TimeSpan.FromHours(18))
-        {
-            MessageBox.Show(GetLocalizedMessage(
-                "InvalidEndTime",
-                "L'heure de fin ne peut pas être après 18:00. Elle sera réinitialisée à 18:00."));
-
-            DateTime validEndTime = txtEndTime.Value.Date.Add(TimeSpan.FromHours(18)); // Combine date and 6:00 PM  
-            txtEndTime.Value = validEndTime;
-        }
-
-        // Vérification de l'heure de fin : l'heure de fin ne doit pas être avant l'heure de début  
-        if (txtEndTime.Value <= txtStartTime.Value)
-        {
-            MessageBox.Show(GetLocalizedMessage(
-                "EndTimeBeforeStartTime",
-                "L'heure de fin ne peut pas être avant l'heure de début. Veuillez ajuster l'heure de fin."));
-
-            // Ajustez l'heure de fin en ajoutant des minutes  
-            DateTime newEndTime = txtStartTime.Value.AddMinutes(60); // Ajoutez 60 minutes à l'heure de début
-
-            // Assurez-vous que la nouvelle heure de fin est dans une plage valide (avant 18:00)
-            if (newEndTime.TimeOfDay > TimeSpan.FromHours(18))
-            {
-                newEndTime = txtSchedule.Value.Date.Add(TimeSpan.FromHours(18)); // Réinitialiser à 18:00  
-            }
-
-            txtEndTime.Value = newEndTime;  // Appliquer la nouvelle heure de fin valide  
-        }
-    }
-
-    // Helper function to return the localized message
-    private string GetLocalizedMessage(string englishMessage, string frenchMessage)
-    {
-        if (CultureInfo.CurrentCulture.Name == "fr-FR")
-        {
-            return frenchMessage;  // Return the French message
-        }
-        else
-        {
-            return englishMessage;  // Return the English message
-        }
-    }
-
-
-    // Méthode pour récupérer les horaires de début et de fin
-    private void GetScheduledTimes()
-        {
-            DateTime selectedDate = txtSchedule.Value.Date; // Récupère seulement la date
-            TimeSpan startTimeSpan = txtStartTime.Value.TimeOfDay; // Heure de début
-            TimeSpan endTimeSpan = txtEndTime.Value.TimeOfDay; // Heure de fin
-
-            // Combinez la date avec les heures
-            DateTime finalStart = selectedDate.Add(startTimeSpan);
-            DateTime finalEnd = selectedDate.Add(endTimeSpan);
-
-           
-        }
-        private void pbNext_Click(object sender, EventArgs e)
-        {
-            currFrom++;
-            LoadClasses();
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-            ExportToExcel();
-
-        }
-        private void pbReload_Click(object sender, EventArgs e)
-        {
-            Refesh();
-        }
-        private void Refesh()
-        {
-            LoadClasses();
-
-            // Reset UI elements
-            txtSearch.Text = "";
-            txtID.Text = "";
-            cbSubject.Text = "";
-            cbTeacher.Text = "";
-            txtSchedule.Text = "";
-            txtNOS.Text = "";
-            txtEndTime.Text = "";
-            txtStartTime.Text = "";
-
-            // Reset control states
-            cbSubject.Enabled = false;
-            cbTeacher.Enabled = false;
-            dtpStart.Enabled = false;
-            dtpFinish.Enabled = false;
-            txtSchedule.Enabled = false;
-            txtNOS.Enabled = false;
-            txtEndTime.Enabled = false;
-            txtStartTime.Enabled = false;
-
-            // Show relevant buttons and labels
             pbStudents.Visible = true;
             lbAddClass.Visible = true;
             pbEdit.Visible = true;
@@ -731,9 +525,125 @@ private void pbDetail_Click(object sender, EventArgs e)
             lbSave.Visible = false;
             pbDetail.Visible = true;
             lbShowStudents.Visible = true;
-
-            isSelected = false; // Reset selection status
         }
+
+        private void ValidateDateTime()
+        {
+            if (txtSchedule.Value.Date < DateTime.Now.Date)
+                txtSchedule.Value = DateTime.Now;
+
+            if (txtStartTime.Value.TimeOfDay < TimeSpan.FromHours(8))
+                txtStartTime.Value = txtStartTime.Value.Date.AddHours(8);
+
+            if (txtEndTime.Value.TimeOfDay > TimeSpan.FromHours(18))
+                txtEndTime.Value = txtEndTime.Value.Date.AddHours(18);
+
+            if (txtEndTime.Value <= txtStartTime.Value)
+                txtEndTime.Value = txtStartTime.Value.AddHours(1);
+        }
+
+        private bool TryExtractId(string text, out string id)
+        {
+            id = string.Empty;
+            if (string.IsNullOrWhiteSpace(text) || !text.Contains("-")) return false;
+            id = text.Split('-')[0].Trim();
+            return true;
+        }
+
+        private string GetLocalizedMessage(string messageKey)
+        {
+            string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+            var messages = currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase)
+                ? new Dictionary<string, string>
+                {
+                    { "NoRecordToEdit", "Veuillez choisir une classe à modifier !" },
+                    { "NoRecordToDelete", "Veuillez choisir une classe à supprimer !" },
+                    { "NoRecordToShow", "Veuillez choisir une classe à afficher !" },
+                    { "ConfirmDelete", "Êtes-vous sûr de vouloir supprimer ?" },
+                    { "AddSuccess", "Classe ajoutée avec succès !" },
+                    { "EditSuccess", "Classe mise à jour avec succès !" },
+                    { "DeleteSuccess", "Suppression réussie." },
+                    { "CannotDeleteInUse", "Impossible de supprimer cette classe car elle est en cours d'utilisation." },
+                    { "SaveFailed", "Échec de l'enregistrement de la classe." },
+                    { "InvalidSubject", "Sélection invalide de matière." },
+                    { "InvalidTeacher", "Sélection invalide de l'enseignant." },
+                    { "InvalidNOS", "Nombre d'élèves invalide." },
+                    { "NoSearchTerm", "Veuillez entrer un terme de recherche !" },
+                    { "ErrorLoadingInitialData", "Erreur lors du chargement des données initiales." },
+                    { "ErrorLoadingTeachers", "Erreur lors du chargement des enseignants." },
+                    { "ErrorLoadingSubjects", "Erreur lors du chargement des matières." },
+                    { "ErrorLoadingClasses", "Erreur lors du chargement des classes." },
+                    { "ErrorSaving", "Erreur lors de l'enregistrement de la classe." },
+                    { "ErrorDeleting", "Erreur lors de la suppression de la classe." },
+                    { "ErrorSearching", "Erreur lors de la recherche des classes." },
+                    { "ErrorExporting", "Erreur lors de l'exportation vers CSV." },
+                    { "ExportSuccess", "Exporté vers CSV avec succès." },
+                    { "ErrorSelectingClass", "Erreur lors de la sélection de la classe." },
+                    { "ErrorParsingRow", "Erreur lors de l'analyse des données de la ligne." },
+                    { "NoClassesFound", "Aucune classe trouvée dans la base de données." },
+                    { "NoTeachersFound", "Aucun enseignant trouvé dans la base de données." },
+                    { "NoSubjectsFound", "Aucune matière trouvée dans la base de données." }
+                }
+                : new Dictionary<string, string>
+                {
+                    { "NoRecordToEdit", "Please choose a class to edit!" },
+                    { "NoRecordToDelete", "Please choose a class to delete!" },
+                    { "NoRecordToShow", "Please choose a class to show!" },
+                    { "ConfirmDelete", "Are you sure you want to delete?" },
+                    { "AddSuccess", "Class added successfully!" },
+                    { "EditSuccess", "Class updated successfully!" },
+                    { "DeleteSuccess", "Delete successful." },
+                    { "CannotDeleteInUse", "Cannot delete this class because it is in use." },
+                    { "SaveFailed", "Failed to save the class." },
+                    { "InvalidSubject", "Invalid subject selection." },
+                    { "InvalidTeacher", "Invalid teacher selection." },
+                    { "InvalidNOS", "Invalid number of students." },
+                    { "NoSearchTerm", "Please enter a search term!" },
+                    { "ErrorLoadingInitialData", "Error loading initial data." },
+                    { "ErrorLoadingTeachers", "Error loading teachers." },
+                    { "ErrorLoadingSubjects", "Error loading subjects." },
+                    { "ErrorLoadingClasses", "Error loading classes." },
+                    { "ErrorSaving", "Error saving class." },
+                    { "ErrorDeleting", "Error deleting class." },
+                    { "ErrorSearching", "Error searching classes." },
+                    { "ErrorExporting", "Error exporting to CSV." },
+                    { "ExportSuccess", "Exported to CSV successfully." },
+                    { "ErrorSelectingClass", "Error selecting class." },
+                    { "ErrorParsingRow", "Error parsing row data." },
+                    { "NoClassesFound", "No classes found in the database." },
+                    { "NoTeachersFound", "No teachers found in the database." },
+                    { "NoSubjectsFound", "No subjects found in the database." }
+                };
+
+            string message = string.Empty;
+            if (messages.TryGetValue(messageKey, out message))
+            {
+                return message;
+            }
+            return "Unknown error";
+        }
+
+        private void RefreshClassList()
+        {
+            LoadClassesAsync();
+            ClearInputs();
+            ToggleUIForEditing(false);
+            _isSelected = false;
+        }
+
+        private void ClearInputs()
+        {
+            txtID.Clear();
+            txtNOS.Clear();
+            cbSubject.SelectedIndex = -1;
+            cbTeacher.SelectedIndex = -1;
+            dtpStart.Value = DateTime.Now;
+            dtpFinish.Value = DateTime.Now;
+            txtSchedule.Value = DateTime.Now;
+            txtStartTime.Value = DateTime.Now;
+            txtEndTime.Value = DateTime.Now;
+        }
+
         private void ToggleUIForEditing(bool isEditingMode)
         {
             pbStudents.Visible = !isEditingMode;
@@ -747,11 +657,7 @@ private void pbDetail_Click(object sender, EventArgs e)
             pbDetail.Visible = !isEditingMode;
             lbShowStudents.Visible = !isEditingMode;
 
-            // Clear input fields
-            txtSearch.Text = "";
-
-
-            // Enable or disable controls based on mode
+            txtID.Enabled = false; // Always read-only (auto-generated)
             cbSubject.Enabled = isEditingMode;
             cbTeacher.Enabled = isEditingMode;
             dtpStart.Enabled = isEditingMode;
@@ -760,51 +666,251 @@ private void pbDetail_Click(object sender, EventArgs e)
             txtNOS.Enabled = isEditingMode;
             txtEndTime.Enabled = isEditingMode;
             txtStartTime.Enabled = isEditingMode;
-
-
         }
+
         private void ConfigureDateTimePickers()
         {
-            // Configuration for txtSchedule (Date Picker)
-            txtSchedule.CustomFormat = "dddd, dd MMMM yyyy";  // Full Day, Day, Month, Year
+            txtSchedule.CustomFormat = "dddd, dd MMMM yyyy";
             txtSchedule.Format = DateTimePickerFormat.Custom;
-            txtSchedule.MinDate = DateTime.Today;  // Prevent selecting past dates
+            txtSchedule.MinDate = DateTime.Today;
 
-            // Configuration for txtStartTime (Start Time Picker)
-            txtStartTime.CustomFormat = "HH:mm";  // Format for start time
+            txtStartTime.CustomFormat = "HH:mm";
             txtStartTime.Format = DateTimePickerFormat.Custom;
-            txtStartTime.ShowUpDown = true; // Show up/down arrows for time selection
-            dtpStart.MinDate = DateTime.Today;  // Prevent selecting past dates (today)
-            dtpFinish.MinDate = DateTime.Today;
-            // Configuration for txtEndTime (End Time Picker)
-            txtEndTime.CustomFormat = "HH:mm";  // Format for end time
+            txtStartTime.ShowUpDown = true;
+            txtStartTime.Enabled = false; // Ensure consistency with ToggleUIForEditing
+
+            txtEndTime.CustomFormat = "HH:mm";
             txtEndTime.Format = DateTimePickerFormat.Custom;
-            txtEndTime.ShowUpDown = true; // Show up/down arrows for time selection
+            txtEndTime.ShowUpDown = true;
+            txtEndTime.Enabled = false; // Ensure consistency with ToggleUIForEditing
 
+            dtpStart.MinDate = DateTime.Today;
+            dtpFinish.MinDate = DateTime.Today;
         }
 
-        private void RefreshClassList()
+        private void UpdatePaginationButtons()
         {
-            // Logic to reload or refresh the list/grid showing classes
-            LoadClasses();
-            ClearInputs();
-            ToggleUIForEditing(false);
+            pbPrev.Enabled = _currentPage > 1;
+            pbNext.Enabled = dgvClass.Rows.Count == PageSize; // Assumes full page means more data exists
         }
+        #endregion
 
-        private void ClearInputs()
+        #region Service Layer
+        public class ClassService
         {
-            // Clear all input fields after saving
-            txtID.Clear();
-            txtNOS.Clear();
-            cbSubject.SelectedIndex = -1;
-            cbTeacher.SelectedIndex = -1;
-            dtpStart.Value = DateTime.Now;
-            dtpFinish.Value = DateTime.Now;
-        }
+            private readonly string _connectionString;
 
-        private void ClassSectionManager_Load(object sender, EventArgs e)
+            public ClassService(string connectionString)
+            {
+                _connectionString = connectionString;
+            }
+
+            public async Task<List<Teacher>> GetTeachersAsync()
+            {
+                var teachers = new List<Teacher>();
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+                    var cmd = new MySqlCommand("SELECT TEACHER_ID, FULL_NAME FROM SYSTEM.teacher ORDER BY FULL_NAME", conn);
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            teachers.Add(new Teacher { Id = reader.GetString(0), FullName = reader.GetString(1) });
+                        }
+                    }
+                }
+                return teachers;
+            }
+
+            public async Task<List<Subject>> GetSubjectsAsync()
+            {
+                var subjects = new List<Subject>();
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+                    var cmd = new MySqlCommand("SELECT SUB_ID, SUB_NAME FROM SYSTEM.subject ORDER BY SUB_NAME", conn);
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            subjects.Add(new Subject { Id = reader.GetInt32(0).ToString(), Name = reader.GetString(1) });
+                        }
+                    }
+                }
+                return subjects;
+            }
+
+            public async Task<DataTable> GetClassesAsync(int page, int pageSize)
+            {
+                var dataTable = new DataTable();
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+                    var cmd = new MySqlCommand(
+                        "SELECT " +
+                            "a.CLASS_ID AS 'CLASS SECTION ID', " +
+                            "CONCAT(a.SUB_ID, ' - ', s.SUB_NAME) AS 'Subject', " +
+                            "CONCAT(a.TEACHER_ID, ' - ', t.FULL_NAME) AS 'Teacher', " +
+                            "a.START_DATE AS 'START', " +
+                            "a.FINISH_DATE AS 'FINISH', " +
+                            "a.SCHEDULE AS 'SCHEDULE', " +
+                            "a.NB_S AS 'N.O.S' " +
+                        "FROM SYSTEM.class a " +
+                        "LEFT JOIN SYSTEM.subject s ON a.SUB_ID = s.SUB_ID " +
+                        "LEFT JOIN SYSTEM.teacher t ON a.TEACHER_ID = t.TEACHER_ID " +
+                        "ORDER BY a.CLASS_ID ASC " +
+                        "LIMIT @PageSize OFFSET @Offset", conn);
+                    cmd.Parameters.AddWithValue("@PageSize", pageSize);
+                    cmd.Parameters.AddWithValue("@Offset", (page - 1) * pageSize);
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        dataTable.Load(reader);
+                    }
+                }
+                return dataTable;
+            }
+
+            public async Task<DataTable> GetAllClassesAsync()
+            {
+                var dataTable = new DataTable();
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+                    var cmd = new MySqlCommand(
+                        "SELECT " +
+                            "a.CLASS_ID AS 'CLASS SECTION ID', " +
+                            "CONCAT(a.SUB_ID, ' - ', s.SUB_NAME) AS 'Subject', " +
+                            "CONCAT(a.TEACHER_ID, ' - ', t.FULL_NAME) AS 'Teacher', " +
+                            "a.START_DATE AS 'START', " +
+                            "a.FINISH_DATE AS 'FINISH', " +
+                            "a.SCHEDULE AS 'SCHEDULE', " +
+                            "a.NB_S AS 'N.O.S' " +
+                        "FROM SYSTEM.class a " +
+                        "LEFT JOIN SYSTEM.subject s ON a.SUB_ID = s.SUB_ID " +
+                        "LEFT JOIN SYSTEM.teacher t ON a.TEACHER_ID = t.TEACHER_ID " +
+                        "ORDER BY a.CLASS_ID ASC", conn);
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        dataTable.Load(reader);
+                    }
+                }
+                return dataTable;
+            }
+
+            public async Task<DataTable> GetClassesBySearchTermAsync(string searchTerm)
+            {
+                var dataTable = new DataTable();
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+                    var cmd = new MySqlCommand(
+                        "SELECT " +
+                            "a.CLASS_ID AS 'CLASS SECTION ID', " +
+                            "CONCAT(a.SUB_ID, ' - ', s.SUB_NAME) AS 'Subject', " +
+                            "CONCAT(a.TEACHER_ID, ' - ', t.FULL_NAME) AS 'Teacher', " +
+                            "a.START_DATE AS 'START', " +
+                            "a.FINISH_DATE AS 'FINISH', " +
+                            "a.SCHEDULE AS 'SCHEDULE', " +
+                            "a.NB_S AS 'N.O.S' " +
+                        "FROM SYSTEM.class a " +
+                        "LEFT JOIN SYSTEM.subject s ON a.SUB_ID = s.SUB_ID " +
+                        "LEFT JOIN SYSTEM.teacher t ON a.TEACHER_ID = t.TEACHER_ID " +
+                        "WHERE a.CLASS_ID LIKE @SearchTerm " +
+                           "OR s.SUB_NAME LIKE @SearchTerm " +
+                           "OR t.FULL_NAME LIKE @SearchTerm " +
+                           "OR a.SCHEDULE LIKE @SearchTerm " +
+                        "ORDER BY a.CLASS_ID ASC", conn);
+                    cmd.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%");
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        dataTable.Load(reader);
+                    }
+                }
+                return dataTable;
+            }
+
+            public async Task<bool> AddClassAsync(ClassSection classSection)
+            {
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+                    var cmd = new MySqlCommand("SP_CLASS_ADD", conn) { CommandType = CommandType.StoredProcedure };
+                    AddClassParameters(cmd, classSection);
+                    await cmd.ExecuteNonQueryAsync();
+                    return true;
+                }
+            }
+
+            public async Task<bool> UpdateClassAsync(ClassSection classSection)
+            {
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+                    var cmd = new MySqlCommand("SP_CLASS_UPDATE", conn) { CommandType = CommandType.StoredProcedure };
+                    AddClassParameters(cmd, classSection);
+                    await cmd.ExecuteNonQueryAsync();
+                    return true;
+                }
+            }
+
+            public async Task DeleteClassAsync(string classId)
+            {
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+                    var cmd = new MySqlCommand("DELETE FROM SYSTEM.class WHERE CLASS_ID = @ClassID", conn);
+                    cmd.Parameters.AddWithValue("@ClassID", classId);
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+
+            private void AddClassParameters(MySqlCommand cmd, ClassSection classSection)
+            {
+                cmd.Parameters.AddWithValue("p_SUB_ID", classSection.SubjectId);
+                cmd.Parameters.AddWithValue("p_TEACHER_ID", classSection.TeacherId);
+                cmd.Parameters.AddWithValue("p_START_DATE", classSection.StartDate);
+                cmd.Parameters.AddWithValue("p_FINISH_DATE", classSection.FinishDate);
+                cmd.Parameters.AddWithValue("p_SCHEDULE", classSection.Schedule);
+                cmd.Parameters.AddWithValue("p_NB_S", classSection.NumberOfStudents);
+                cmd.Parameters.AddWithValue("p_CLASS_ID", classSection.ClassId);
+            }
+        }
+        #endregion
+
+        #region Models
+        public class ClassSection
         {
-
+            public string ClassId { get; set; }
+            public string SubjectId { get; set; }
+            public string TeacherId { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime FinishDate { get; set; }
+            public string Schedule { get; set; }
+            public int NumberOfStudents { get; set; }
         }
+
+        public class Teacher
+        {
+            public string Id { get; set; }
+            public string FullName { get; set; }
+        }
+
+        public class Subject
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+        }
+        #endregion
+
+        #region Error Handling
+        public static class ErrorHandler
+        {
+            public static void ShowError(Exception ex, string context)
+            {
+                MessageBox.Show("An error occurred " + context + ": " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
     }
 }

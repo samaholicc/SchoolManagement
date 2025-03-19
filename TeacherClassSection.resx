@@ -162,10 +162,7 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="dgvClass.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 50</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
+  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritToolTipTitle" type="System.Boolean, mscorlib">
@@ -960,9 +957,6 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ExtraText" xml:space="preserve">
     <value />
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ToolTipTitle" xml:space="preserve">
-    <value />
-  </data>
   <data name="&gt;&gt;kryptonPalette1.Name" xml:space="preserve">
     <value>kryptonPalette1</value>
   </data>
@@ -1019,9 +1013,6 @@
         KSP7sNPGEUe+B199GMY2MZWCwS7UVM1XIZZ3lzj1JuV3amhl/9k=
 </value>
   </data>
-  <data name="pictureBox1.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ExtraText" xml:space="preserve">
     <value />
   </data>
@@ -1046,8 +1037,9 @@
   <data name="&gt;&gt;lbExport.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritExtraText" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <assembly alias="ComponentFactory.Krypton.Toolkit" name="ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
+    <value>Inherit</value>
   </data>
   <data name="&gt;&gt;pbReload.ZOrder" xml:space="preserve">
     <value>6</value>
@@ -1293,7 +1285,6 @@
   <data name="btnSearch.Location" type="System.Drawing.Point, System.Drawing">
     <value>330, 11</value>
   </data>
-  <assembly alias="ComponentFactory.Krypton.Toolkit" name="ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
   <data name="kryptonPalette1.ButtonSpecs.FormMax.Edge" type="ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign, ComponentFactory.Krypton.Toolkit">
     <value>Inherit</value>
   </data>
@@ -1784,6 +1775,9 @@
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>982, 406</value>
   </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritExtraText" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
   <data name="&gt;&gt;pbNext.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
@@ -1793,8 +1787,8 @@
   <data name="&gt;&gt;pbPrev.Name" xml:space="preserve">
     <value>pbPrev</value>
   </data>
-  <data name="pictureBox2.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
+  <data name="lbExport.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="pbReload.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>Zoom</value>
@@ -2283,8 +2277,14 @@
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
   </data>
+  <data name="&gt;&gt;btnSearch.Name" xml:space="preserve">
+    <value>btnSearch</value>
+  </data>
   <data name="btnSearch.Values.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value />
+  </data>
+  <data name="pictureBox2.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>Zoom</value>
   </data>
   <data name="lbShowStudents.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2292,7 +2292,7 @@
   <data name="&gt;&gt;lbShowStudents.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
   <data name="btnSearch.Values.Text" xml:space="preserve">
@@ -2352,6 +2352,9 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.ColorMap" type="System.Drawing.Color, System.Drawing">
+    <value />
+  </data>
   <data name="pbReload.Location" type="System.Drawing.Point, System.Drawing">
     <value>432, 11</value>
   </data>
@@ -2383,6 +2386,9 @@
     <value>941, 11</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedTracking" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageTracking" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -2450,6 +2456,9 @@
   <data name="lbExport.Size" type="System.Drawing.Size, System.Drawing">
     <value>54, 20</value>
   </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedTracking" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
   <data name="lbShowStudents.Location" type="System.Drawing.Point, System.Drawing">
     <value>871, 20</value>
   </data>
@@ -2481,6 +2490,42 @@
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ToolTipTitle" xml:space="preserve">
     <value />
+  </data>
+  <data name="&gt;&gt;pictureBox1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="pbReload.TabIndex" type="System.Int32, mscorlib">
+    <value>157</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.Type" xml:space="preserve">
+    <value>ComponentFactory.Krypton.Toolkit.KryptonButton, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
+  </data>
+  <data name="&gt;&gt;lbExport.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="&gt;&gt;txtSearch.Type" xml:space="preserve">
+    <value>ComponentFactory.Krypton.Toolkit.KryptonTextBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
+  </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormMax.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>810, 12</value>
+  </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
+    <value>Inherit</value>
+  </data>
+  <data name="dgvClass.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1, 50</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2735,48 +2780,6 @@
         tT3a49rH2qeaKUPpjgMA8MOftd9oT2t7tYWaeSXY8cnL+/8obeE3wFS+mQAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="&gt;&gt;pictureBox1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="pbReload.TabIndex" type="System.Int32, mscorlib">
-    <value>157</value>
-  </data>
-  <data name="&gt;&gt;btnSearch.Type" xml:space="preserve">
-    <value>ComponentFactory.Krypton.Toolkit.KryptonButton, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
-  </data>
-  <data name="&gt;&gt;lbExport.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;txtSearch.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="&gt;&gt;txtSearch.Type" xml:space="preserve">
-    <value>ComponentFactory.Krypton.Toolkit.KryptonTextBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>810, 12</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="&gt;&gt;txtSearch.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
-  </data>
-  <data name="lbExport.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
@@ -2804,33 +2807,14 @@
   <data name="&gt;&gt;dgvClass.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
-        DhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQU
-        FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAbABoDAREAAhEBAxEB/8QA
-        GQAAAgMBAAAAAAAAAAAAAAAABgcECAkC/8QAKxAAAgEDAwMCBQUAAAAAAAAAAQIDBAURAAchBjFxCFES
-        ExVBgRQiMnKi/8QAHAEAAQQDAQAAAAAAAAAAAAAABgQFBwgAAQMC/8QALhEAAQMCBAUCBQUAAAAAAAAA
-        AQACAwQRBSExcQYSE0GRImEHFSOhsVGBweHw/9oADAMBAAIRAxEAPwDQHcjc+0bZWpKq4s01VMStNRQ4
-        +ZMRjOM8BRnljx5JAKOpqo6VvM/wiDBsDq8cn6VMMhq46D+z2H8ZpDVHq16jepZoLNa4YM8RSGSRgP7h
-        lH+dDxxqS+TBZS6z4cUgZZ87i72AA8Z/lNjajfe2bkz/AE6enNpvYT4xTM/xxzgdzG3GSByVIB9sgE6e
-        aPEI6r06O/RR3xBwpVYGOsDzxHuO247b6bJoadEDKlnqFvFRdd2Lyk0jNFR/LpoEPZEEasQPLMx/OgbF
-        JC+pcD2Vn+CKWODBontGb7k+SPwAlvpoR8pdpvNR09c6W6UrlKmilWojKnHKnOPB7H3BOu0MhikD26hI
-        K+ljraaSnlGTgR/tloejB0VhkAjPOpKVMiLGyq16nNt6u39RSdWUkMk9trVQVbKM/p5VUKGbHZGVV5PA
-        IOT+4aE8WpHc/XaLg6qeOA8dhNP8rmcA9t+X3BN7bg3/AG2KReNDamS6Ododt6zcXqqmhSFvpNNKslfU
-        lcoEBBMefuzdsdwDn7ac6CkdUyg29I1QVxRj0OD0b2h31XAho755X2Gv2V4dHqquuZEWVGR1DowIZWGQ
-        R7HWarYJBuEF1eyvQ1bXCrl6ZoBMDnESGOM+UUhT+RpE6ip3HmLAiOPiPF4o+k2pdbe58nP7ott1so7R
-        SJS0FJBRUsf8IKeMRovhQABpW1rWCzRYJhlmkneZJXFzj3JufJUnXpcV/9k=
-</value>
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritImage" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedTracking" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="pictureBox1.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>Zoom</value>
   </data>
   <data name="pbNext.Size" type="System.Drawing.Size, System.Drawing">
     <value>39, 33</value>
@@ -2853,11 +2837,27 @@
   <data name="&gt;&gt;dgvClass.Type" xml:space="preserve">
     <value>ComponentFactory.Krypton.Toolkit.KryptonDataGridView, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ColorMap" type="System.Drawing.Color, System.Drawing">
-    <value />
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
+        DhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQU
+        FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAbABoDAREAAhEBAxEB/8QA
+        GQAAAgMBAAAAAAAAAAAAAAAABgcECAkC/8QAKxAAAgEDAwMCBQUAAAAAAAAAAQIDBAURAAchBjFxCFES
+        ExVBgRQiMnKi/8QAHAEAAQQDAQAAAAAAAAAAAAAABgQFBwgAAQMC/8QALhEAAQMCBAUCBQUAAAAAAAAA
+        AQACAwQRBSExcQYSE0GRImEHFSOhsVGBweHw/9oADAMBAAIRAxEAPwDQHcjc+0bZWpKq4s01VMStNRQ4
+        +ZMRjOM8BRnljx5JAKOpqo6VvM/wiDBsDq8cn6VMMhq46D+z2H8ZpDVHq16jepZoLNa4YM8RSGSRgP7h
+        lH+dDxxqS+TBZS6z4cUgZZ87i72AA8Z/lNjajfe2bkz/AE6enNpvYT4xTM/xxzgdzG3GSByVIB9sgE6e
+        aPEI6r06O/RR3xBwpVYGOsDzxHuO247b6bJoadEDKlnqFvFRdd2Lyk0jNFR/LpoEPZEEasQPLMx/OgbF
+        JC+pcD2Vn+CKWODBontGb7k+SPwAlvpoR8pdpvNR09c6W6UrlKmilWojKnHKnOPB7H3BOu0MhikD26hI
+        K+ljraaSnlGTgR/tloejB0VhkAjPOpKVMiLGyq16nNt6u39RSdWUkMk9trVQVbKM/p5VUKGbHZGVV5PA
+        IOT+4aE8WpHc/XaLg6qeOA8dhNP8rmcA9t+X3BN7bg3/AG2KReNDamS6Ododt6zcXqqmhSFvpNNKslfU
+        lcoEBBMefuzdsdwDn7ac6CkdUyg29I1QVxRj0OD0b2h31XAho755X2Gv2V4dHqquuZEWVGR1DowIZWGQ
+        R7HWarYJBuEF1eyvQ1bXCrl6ZoBMDnESGOM+UUhT+RpE6ip3HmLAiOPiPF4o+k2pdbe58nP7ott1so7R
+        SJS0FJBRUsf8IKeMRovhQABpW1rWCzRYJhlmkneZJXFzj3JufJUnXpcV/9k=
+</value>
   </data>
-  <data name="&gt;&gt;btnSearch.Name" xml:space="preserve">
-    <value>btnSearch</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.ToolTipTitle" xml:space="preserve">
+    <value />
   </data>
   <data name="&gt;&gt;lbExport.Parent" xml:space="preserve">
     <value>$this</value>

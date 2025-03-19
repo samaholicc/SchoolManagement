@@ -237,7 +237,6 @@ namespace SchoolManagement
             this.dgvClass.StateCommon.HeaderRow.Border.Width = 1;
             this.dgvClass.StateSelected.DataCell.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(165)))), ((int)(((byte)(166)))));
             this.dgvClass.StateSelected.DataCell.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(165)))), ((int)(((byte)(166)))));
-            this.dgvClass.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvClass_CellMouseClick);
             // 
             // txtID
             // 
@@ -401,7 +400,6 @@ namespace SchoolManagement
             resources.ApplyResources(this.lbExport, "lbExport");
             this.lbExport.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbExport.Name = "lbExport";
-            this.lbExport.Click += new System.EventHandler(this.label7_Click);
             // 
             // btnSearch
             // 
@@ -490,21 +488,18 @@ namespace SchoolManagement
             resources.ApplyResources(this.lbDelete, "lbDelete");
             this.lbDelete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbDelete.Name = "lbDelete";
-            this.lbDelete.Click += new System.EventHandler(this.lbDelete_Click);
             // 
             // lbEditClass
             // 
             resources.ApplyResources(this.lbEditClass, "lbEditClass");
             this.lbEditClass.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbEditClass.Name = "lbEditClass";
-            this.lbEditClass.Click += new System.EventHandler(this.pbEdit_Click);
             // 
             // lbAddClass
             // 
             resources.ApplyResources(this.lbAddClass, "lbAddClass");
             this.lbAddClass.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbAddClass.Name = "lbAddClass";
-            this.lbAddClass.Click += new System.EventHandler(this.pbStudents_Click);
             // 
             // lbShowStudents
             // 
@@ -587,7 +582,7 @@ namespace SchoolManagement
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.label7_Click);
+            this.pictureBox1.Click += new System.EventHandler(this.Label7_Click);
             // 
             // pbDetail
             // 
@@ -595,7 +590,7 @@ namespace SchoolManagement
             this.pbDetail.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbDetail.Name = "pbDetail";
             this.pbDetail.TabStop = false;
-            this.pbDetail.Click += new System.EventHandler(this.pbDetail_Click);
+            this.pbDetail.Click += new System.EventHandler(this.PbDetail_Click);
             // 
             // pbSave
             // 
@@ -603,7 +598,7 @@ namespace SchoolManagement
             this.pbSave.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbSave.Name = "pbSave";
             this.pbSave.TabStop = false;
-            this.pbSave.Click += new System.EventHandler(this.pbSave_Click);
+            this.pbSave.Click += new System.EventHandler(this.PbSave_Click);
             // 
             // pbDelete
             // 
@@ -611,7 +606,6 @@ namespace SchoolManagement
             this.pbDelete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbDelete.Name = "pbDelete";
             this.pbDelete.TabStop = false;
-            this.pbDelete.Click += new System.EventHandler(this.lbDelete_Click);
             // 
             // pbEdit
             // 
@@ -619,7 +613,7 @@ namespace SchoolManagement
             this.pbEdit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbEdit.Name = "pbEdit";
             this.pbEdit.TabStop = false;
-            this.pbEdit.Click += new System.EventHandler(this.pbEdit_Click);
+            this.pbEdit.Click += new System.EventHandler(this.PbEdit_Click);
             // 
             // pbStudents
             // 
@@ -627,7 +621,7 @@ namespace SchoolManagement
             this.pbStudents.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbStudents.Name = "pbStudents";
             this.pbStudents.TabStop = false;
-            this.pbStudents.Click += new System.EventHandler(this.pbStudents_Click);
+            this.pbStudents.Click += new System.EventHandler(this.PbStudents_Click);
             // 
             // pbPrev
             // 
@@ -635,7 +629,7 @@ namespace SchoolManagement
             this.pbPrev.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbPrev.Name = "pbPrev";
             this.pbPrev.TabStop = false;
-            this.pbPrev.Click += new System.EventHandler(this.pbPrev_Click);
+            this.pbPrev.Click += new System.EventHandler(this.PbPrev_Click);
             // 
             // pbNext
             // 
@@ -643,14 +637,13 @@ namespace SchoolManagement
             this.pbNext.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbNext.Name = "pbNext";
             this.pbNext.TabStop = false;
-            this.pbNext.Click += new System.EventHandler(this.pbNext_Click);
+            this.pbNext.Click += new System.EventHandler(this.PbNext_Click);
             // 
             // pbReload
             // 
             resources.ApplyResources(this.pbReload, "pbReload");
             this.pbReload.Name = "pbReload";
             this.pbReload.TabStop = false;
-            this.pbReload.Click += new System.EventHandler(this.pbReload_Click);
             // 
             // ClassSectionManager
             // 

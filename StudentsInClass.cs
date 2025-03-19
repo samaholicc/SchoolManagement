@@ -2,17 +2,24 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Primitives;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace SchoolManagement
 {
     public partial class StudentsInClass : KryptonForm
     {
         private const int CS_DropShadow = 0x00020000;
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
+        private readonly string classID;
+        private bool isSelected = false;
+
         protected override CreateParams CreateParams
         {
             get
@@ -23,55 +30,78 @@ namespace SchoolManagement
             }
         }
 
-        private bool isSelected = false;
-        private string ClassID;
-        public StudentsInClass(string ClassID)
+        public StudentsInClass(string classID)
         {
             InitializeComponent();
-            this.ClassID = ClassID;
+            this.classID = classID;
             LoadStudents();
-            
         }
 
+        #region Load Students
         private void LoadStudents()
         {
-            using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    string query = "SELECT s.Student_id AS `Student ID`, s.Full_name AS `Name`, " +
-                                   "IFNULL(r.mid_term, 0) AS `Mid Term`, " +
-                                   "IFNULL(r.final_term, 0) AS `Final Term`, " +
-                                   "IFNULL(r.average, 0) AS `Average` " +
-                                   "FROM studentstable s " +
-                                   "LEFT JOIN results r ON s.student_id = r.student_id AND r.class_id = @ClassID " +
-                                   "JOIN student_classes sc ON s.student_id = sc.student_id " +
-                                   "WHERE sc.class_id = @ClassID";
+                    string query = @"
+                        SELECT s.Student_id AS `Student ID`, s.Full_name AS `Name`, 
+                               IFNULL(r.mid_term, 0) AS `Mid Term`, 
+                               IFNULL(r.final_term, 0) AS `Final Term`, 
+                               IFNULL(r.average, 0) AS `Average`
+                        FROM studentstable s
+                        LEFT JOIN results r ON s.student_id = r.student_id AND r.class_id = @ClassID
+                        JOIN student_classes sc ON s.student_id = sc.student_id
+                        WHERE sc.class_id = @ClassID";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ClassID", ClassID);  // Use the passed ClassSectionID
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                        DataTable dataTable = new DataTable();
-                        adapter.Fill(dataTable);
-                        dgvStudents.DataSource = dataTable;
-                        count.Text = dgvStudents.RowCount.ToString() + "/" + ClassSectionManager.limited;
+                        cmd.Parameters.AddWithValue("@ClassID", classID);
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        {
+                            DataTable dataTable = new DataTable();
+                            adapter.Fill(dataTable);
+                            dgvStudents.DataSource = dataTable;
+                            count.Text = $"{dgvStudents.RowCount}/{ClassSectionManager.StudentLimit}";
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(GetLocalizedMessage("Error: " + ex.Message, "Erreur : " + ex.Message));
+                    MessageBox.Show(GetLocalizedMessage("Error") + " " + ex.Message);
                 }
             }
         }
+        #endregion
 
+        #region Event Handlers
         private void pbStudents_Click(object sender, EventArgs e)
         {
-            // Use TeacherClassSection.ClassID directly
-            StudentClassList studentList = new StudentClassList(TeacherClassSection.ClassID);
-            studentList.ShowDialog();
-            LoadStudents(); // Refresh the list of students
+            // Check if the number of students exceeds the limit
+            if (dgvStudents.RowCount >= ClassSectionManager.StudentLimit)
+            {
+                MessageBox.Show(GetLocalizedMessage("ClassFull"));
+                return;
+            }
+
+            try
+            {
+                // Pass both ClassSectionId (classID) and StudentLimit to StudentClassList
+                using (StudentClassList studentList = new StudentClassList(classID, ClassSectionManager.StudentLimit))
+                {
+                    studentList.ShowDialog();
+                }
+                LoadStudents();
+            }
+            catch (ObjectDisposedException ex)
+            {
+                MessageBox.Show(GetLocalizedMessage("Error") + " " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(GetLocalizedMessage("Error") + " " + ex.Message);
+            }
         }
 
         private void dgvStudents_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -87,113 +117,62 @@ namespace SchoolManagement
                 isSelected = true;
             }
         }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!isSelected) return;
-
-            double mid, final, avg;
-            if (!double.TryParse(txtMid.Text, out mid) || !double.TryParse(txtFinal.Text, out final))
+            if (!isSelected)
             {
-                MessageBox.Show(GetLocalizedMessage("Invalid input!", "Entrée invalide!"));
+                MessageBox.Show(GetLocalizedMessage("NoRecordSelected"));
                 return;
             }
 
-            avg = (mid + final) / 2;
+            double mid, finalTerm, avg;
+            if (!double.TryParse(txtMid.Text, out mid) || !double.TryParse(txtFinal.Text, out finalTerm))
+            {
+                MessageBox.Show(GetLocalizedMessage("InvalidInput"));
+                return;
+            }
+
+            // Validate grade range (0 to 20)
+            if (mid < 0 || mid > 20 || finalTerm < 0 || finalTerm > 20)
+            {
+                MessageBox.Show(GetLocalizedMessage("GradeOutOfRange"));
+                return;
+            }
+
+            avg = (mid + finalTerm) / 2;
             txtAver.Text = avg.ToString("F2");
 
-            using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
                     string query = @"
-                INSERT INTO results (student_id, class_id, mid_term, final_term, average)
-                VALUES (@StudentID, @ClassID, @Mid, @Final, @Avg)
-                ON DUPLICATE KEY UPDATE 
-                    mid_term = @Mid, 
-                    final_term = @Final, 
-                    average = @Avg";
+                        INSERT INTO results (student_id, class_id, mid_term, final_term, average)
+                        VALUES (@StudentID, @ClassID, @Mid, @Final, @Avg)
+                        ON DUPLICATE KEY UPDATE 
+                            mid_term = @Mid, 
+                            final_term = @Final, 
+                            average = @Avg";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Mid", mid);
-                        cmd.Parameters.AddWithValue("@Final", final);
+                        cmd.Parameters.AddWithValue("@Final", finalTerm);
                         cmd.Parameters.AddWithValue("@Avg", avg);
                         cmd.Parameters.AddWithValue("@StudentID", lbMSSV.Text);
-                        cmd.Parameters.AddWithValue("@ClassID", ClassID);
+                        cmd.Parameters.AddWithValue("@ClassID", classID);
 
                         cmd.ExecuteNonQuery();
-                        MessageBox.Show(GetLocalizedMessage("Save success", "Sauvegarde réussie"));
+                        MessageBox.Show(GetLocalizedMessage("SaveSuccess"));
                         LoadStudents();
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(GetLocalizedMessage("Error: " + ex.Message, "Erreur : " + ex.Message));
+                    MessageBox.Show(GetLocalizedMessage("Error") + " " + ex.Message);
                 }
-                LoadStudents();
-            }
-        }
-       
-
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            ExportToExcel();
-
-        }
-
-        private void ExportToExcel()
-        {
-            try
-            {
-                // Create a new Excel application instance
-                Excel.Application excelApp = new Excel.Application();
-                excelApp.Visible = true;
-                Excel.Workbook workbook = excelApp.Workbooks.Add();
-                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
-
-                // Add column headers to the Excel file
-                for (int col = 0; col < dgvStudents.Columns.Count; col++)
-                {
-                    worksheet.Cells[1, col + 1] = dgvStudents.Columns[col].HeaderText;
-                }
-
-                // Collect rows from the DataGridView for export
-                List<DataRow> allRows = new List<DataRow>();
-
-                // Loop through the DataGridView rows and add them to the list for export
-                foreach (DataGridViewRow row in dgvStudents.Rows)
-                {
-                    if (row.IsNewRow) continue; // Skip the new row placeholder
-
-                    DataRow dataRow = ((DataTable)dgvStudents.DataSource).NewRow();
-
-                    // Copy the row values to DataRow
-                    for (int col = 0; col < dgvStudents.Columns.Count; col++)
-                    {
-                        dataRow[col] = row.Cells[col].Value.ToString();
-                    }
-
-                    allRows.Add(dataRow); // Add the row to the list
-                }
-
-                // Populate the Excel worksheet with the collected rows
-                int rowIndex = 2; // Start from row 2 (because row 1 is the header)
-                foreach (var row in allRows)
-                {
-                    for (int col = 0; col < dgvStudents.Columns.Count; col++)
-                    {
-                        worksheet.Cells[rowIndex, col + 1] = row[col].ToString();
-                    }
-                    rowIndex++;
-                }
-
-                MessageBox.Show("Exported to Excel successfully.");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error exporting to Excel: " + ex.Message);
             }
         }
 
@@ -201,83 +180,187 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show(GetLocalizedMessage("Please select a student first.", "Veuillez d'abord sélectionner un étudiant."));
+                MessageBox.Show(GetLocalizedMessage("NoRecordSelected"));
                 return;
             }
 
-            // Make sure lbMSSV.Text and ClassSectionManager.ClassSectionID are correct
             string studentId = lbMSSV.Text;
-            string classId = ClassID;
-
-            if (string.IsNullOrEmpty(studentId) || string.IsNullOrEmpty(classId))
+            if (string.IsNullOrEmpty(studentId))
             {
-                MessageBox.Show(GetLocalizedMessage("Student ID or Class ID is invalid.", "L'ID de l'étudiant ou l'ID de la classe est invalide."));
+                MessageBox.Show(GetLocalizedMessage("NoRecordToDelete"));
                 return;
             }
 
-            // Debugging: Check the current values of studentId and classId
-            MessageBox.Show($"Student ID: {studentId}, Class ID: {classId}");
-
-            using (MySqlConnection conn = new MySqlConnection("Server=localhost;Database=system;User ID=root;Password=samia;"))
+            if (MessageBox.Show(GetLocalizedMessage("ConfirmDelete"), "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                try
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    conn.Open();
-                    string query = "DELETE FROM student_classes WHERE student_id = @StudentID AND class_id = @ClassID";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    try
                     {
-                        // Add parameters
-                        cmd.Parameters.AddWithValue("@StudentID", studentId);
-                        cmd.Parameters.AddWithValue("@ClassID", classId);
+                        conn.Open();
+                        string query = "DELETE FROM student_classes WHERE student_id = @StudentID AND class_id = @ClassID";
 
-                        int rowsAffected = cmd.ExecuteNonQuery();
+                        using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@StudentID", studentId);
+                            cmd.Parameters.AddWithValue("@ClassID", classID);
 
-                        // Check if any row was affected
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show(GetLocalizedMessage("Deleted successfully.", "Supprimé avec succès."));
-                            LoadStudents(); // Reload the list of students
-                        }
-                        else
-                        {
-                            MessageBox.Show(GetLocalizedMessage("No matching record found to delete.", "Aucun enregistrement trouvé à supprimer."));
+                            int rowsAffected = cmd.ExecuteNonQuery();
+                            if (rowsAffected > 0)
+                            {
+                                MessageBox.Show(GetLocalizedMessage("DeleteSuccess"));
+                                LoadStudents();
+                            }
+                            else
+                            {
+                                MessageBox.Show(GetLocalizedMessage("NoRecordToDelete"));
+                            }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(GetLocalizedMessage("Error") + " " + ex.Message);
+                    }
                 }
-                catch (Exception ex)
+            }
+        }
+
+        private async void pictureBox1_Click(object sender, EventArgs e)
+        {
+            await ExportToCsvAsync();
+        }
+        #endregion
+
+        #region Export to CSV
+        private async Task ExportToCsvAsync()
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                saveFileDialog.Title = "Save Students in Class as CSV";
+                saveFileDialog.FileName = $"StudentsInClass_{classID}_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show(GetLocalizedMessage("Error: " + ex.Message, "Erreur : " + ex.Message));
+                    DataTable dataTable = await FetchStudentsDataAsync();
+
+                    if (dataTable != null && dataTable.Rows.Count > 0)
+                    {
+                        StringBuilder csvContent = new StringBuilder();
+
+                        // Écrire les en-têtes
+                        string[] columnNames = dataTable.Columns.Cast<DataColumn>()
+                            .Select(column => $"\"{column.ColumnName}\"")
+                            .ToArray();
+                        csvContent.AppendLine(string.Join(",", columnNames));
+
+                        // Écrire les données
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            string[] fields = row.ItemArray.Select(field =>
+                                $"\"{(field != null ? field.ToString().Replace("\"", "\"\"") : "")}\"")
+                                .ToArray();
+                            csvContent.AppendLine(string.Join(",", fields));
+                        }
+
+                        // Écrire dans le fichier
+                        File.WriteAllText(saveFileDialog.FileName, csvContent.ToString(), Encoding.UTF8);
+
+                        MessageBox.Show(GetLocalizedMessage("ExportSuccess"));
+                        System.Diagnostics.Process.Start(saveFileDialog.FileName); // Ouvre le fichier
+                    }
+                    else
+                    {
+                        MessageBox.Show("No data to export.");
+                    }
                 }
-                LoadStudents();
             }
-        }
-
-        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
-        {
-            if (CultureInfo.CurrentCulture.Name == "fr-FR")
+            catch (Exception ex)
             {
-                return frenchMessage;  // Return the French message if culture is French
+                MessageBox.Show(GetLocalizedMessage("Error") + " " + ex.Message);
             }
-            else
+        }
+
+        private async Task<DataTable> FetchStudentsDataAsync()
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            try
             {
-                return englishMessage;  // Return the English message by default
+                await conn.OpenAsync();
+                string query = @"
+                    SELECT s.Student_id AS `Student ID`, s.Full_name AS `Name`, 
+                           IFNULL(r.mid_term, 0) AS `Mid Term`, 
+                           IFNULL(r.final_term, 0) AS `Final Term`, 
+                           IFNULL(r.average, 0) AS `Average`
+                    FROM studentstable s
+                    LEFT JOIN results r ON s.student_id = r.student_id AND r.class_id = @ClassID
+                    JOIN student_classes sc ON s.student_id = sc.student_id
+                    WHERE sc.class_id = @ClassID";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@ClassID", classID);
+                try
+                {
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    try
+                    {
+                        DataTable dataTable = new DataTable();
+                        await Task.Run(() => adapter.Fill(dataTable));
+                        return dataTable;
+                    }
+                    finally
+                    {
+                        adapter.Dispose();
+                    }
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+            }
+            finally
+            {
+                conn.Dispose();
             }
         }
+        #endregion
 
-        private void StudensInClass_Load(object sender, EventArgs e)
+        #region Localization
+        private string GetLocalizedMessage(string messageKey)
         {
-            // Additional load logic if necessary.
-        }
+            string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+            var messages = currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase)
+                ? new Dictionary<string, string>
+                {
+                    { "InvalidInput", "Entrée invalide ! Les notes doivent être des nombres." },
+                    { "GradeOutOfRange", "Les notes doivent être comprises entre 0 et 20 !" },
+                    { "NoRecordSelected", "Aucun étudiant sélectionné." },
+                    { "SaveSuccess", "Enregistrement réussi." },
+                    { "DeleteSuccess", "Suppression réussie." },
+                    { "NoRecordToDelete", "Aucun enregistrement trouvé à supprimer." },
+                    { "ConfirmDelete", "Êtes-vous sûr de vouloir supprimer ?" },
+                    { "Error", "Erreur : " },
+                    { "ExportSuccess", "Export réussi vers CSV." },
+                    { "ClassFull", "La classe est pleine." }
+                }
+                : new Dictionary<string, string>
+                {
+                    { "InvalidInput", "Invalid input! Grades must be numbers." },
+                    { "GradeOutOfRange", "Grades must be between 0 and 20!" },
+                    { "NoRecordSelected", "No student selected." },
+                    { "SaveSuccess", "Save successful." },
+                    { "DeleteSuccess", "Deleted successfully." },
+                    { "NoRecordToDelete", "No matching record found to delete." },
+                    { "ConfirmDelete", "Are you sure you want to delete?" },
+                    { "Error", "Error: " },
+                    { "ExportSuccess", "Exported successfully to CSV." },
+                    { "ClassFull", "Class is full." }
+                };
 
-        private void dgvStudents_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // Handle any content click events for the DataGridView if necessary.
+            string message;
+            return messages.TryGetValue(messageKey, out message) ? message : "Unknown error";
         }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
+        #endregion
     }
 }

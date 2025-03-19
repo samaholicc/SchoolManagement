@@ -191,7 +191,6 @@ C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\SchoolManagement.exe
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\SchoolManagement.pdb
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\fr\SchoolManagement.resources.dll
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\fi-FI\SchoolManagement.resources.dll
-C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\BouncyCastle.Crypto.dll
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\MySql.Data.dll
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\MySqlConnector.dll
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\System.Buffers.dll
@@ -200,7 +199,6 @@ C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\System.Numerics.Vector
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\System.Threading.Tasks.Extensions.dll
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\System.ValueTuple.dll
-C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\BouncyCastle.Crypto.xml
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\MySql.Data.xml
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\MySqlConnector.xml
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\System.Buffers.xml
@@ -229,3 +227,12 @@ C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.Stude
 C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.SubjectManager.en.resources
 C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.TeacherProfile.en.resources
 C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.StudentMenu.en.resources
+C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\SchoolManagement.exe.manifest
+C:\Users\dddd\Desktop\projects\SchoolManagement\bin\Debug\SchoolManagement.application
+C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.exe.manifest
+C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.application
+C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.StudentGrade.en.resources
+C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.StudentManager.en.resources
+C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.TeacherClassSection.en.resources
+C:\Users\dddd\Desktop\projects\SchoolManagement\obj\Debug\SchoolManagement.TeacherManager.en.resources

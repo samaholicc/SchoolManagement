@@ -1,22 +1,27 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
-using MySql.Data.MySqlClient; // Using MySQL data access
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Primitives;
+using System.Configuration;
 using System.Data;
-using System.Drawing.Printing;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
-
 
 namespace SchoolManagement
 {
     public partial class DepartmentManager : KryptonForm
     {
         private const int CS_DropShadow = 0x00020000;
-        private int action; // 0 - add, 1 - edit  
-        private bool isSelected = false; // Variable pour vérifier la sélection
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
+        private int action; // 0 - add, 1 - edit
+        private bool isSelected = false;
 
         protected override CreateParams CreateParams
         {
@@ -32,176 +37,213 @@ namespace SchoolManagement
         {
             InitializeComponent();
             LoadDepartments();
-      
-
-
         }
 
-
+        #region Load Data Methods
         private void LoadDepartments()
         {
             try
             {
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "SELECT DEP_ID AS `Department ID`, DEP_NAME AS `Name` FROM DEP";
+                    string query = "SELECT DEP_ID AS `Department ID`, DEP_NAME AS `Name` FROM SYSTEM.DEP ORDER BY DEP_ID";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
                             DataTable dataTable = new DataTable();
-                            dataTable.Load(reader);
-                            dgvDepartments.DataSource = dataTable; // Assurez-vous que ce DataGridView existe  
+                            adapter.Fill(dataTable);
+                            dgvDepartments.DataSource = dataTable;
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(GetLocalizedMessage("ErrorLoading") + " " + ex.Message);
             }
         }
 
+        private async Task<DataTable> FetchDepartmentsDataAsync()
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            try
+            {
+                await conn.OpenAsync();
+                string query = "SELECT DEP_ID AS `Department ID`, DEP_NAME AS `Name` FROM SYSTEM.DEP ORDER BY DEP_ID";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dataTable = new DataTable();
+                        await Task.Run(() => adapter.Fill(dataTable));
+                        return dataTable;
+                    }
+                }
+            }
+            finally
+            {
+                conn.Dispose();
+            }
+        }
+        #endregion
+
+        #region Event Handlers
         private void dgvDepartments_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0) // Vérifier que l'indice de la ligne est valide  
+            if (e.RowIndex >= 0)
             {
-                isSelected = true; // Marquer comme sélectionné  
-                showAction(); // Afficher les actions possibles
+                isSelected = true;
+                showAction();
 
-                DataGridViewRow row = dgvDepartments.Rows[e.RowIndex]; // Obtenir la ligne sélectionnée
-
-                // Remplir les champs avec les valeurs de la ligne sélectionnée  
-                txtID.Text = row.Cells["Department ID"].Value.ToString(); // Assurez-vous que ce nom correspond bien  
-                txtName.Text = row.Cells["Name"].Value.ToString(); // Assurez-vous que ce nom correspond bien  
+                DataGridViewRow row = dgvDepartments.Rows[e.RowIndex];
+                txtID.Text = row.Cells["Department ID"].Value.ToString();
+                txtName.Text = row.Cells["Name"].Value.ToString();
             }
-        }
-
-        private void showAction()
-        {
-            pbStudents.Visible = true;      // Afficher le bouton "Add"  
-            lbDepAdd.Visible = true;      // Afficher le label des étudiants  
-            pbEdit.Visible = true;          // Afficher le bouton "Edit"  
-            lbDepEdit.Visible = true;
-            pbDelete.Visible = true;        // Afficher le bouton "Delete"  
-            lbDeleteDep.Visible = true;
-            pbSave.Visible = false;         // Masquer le bouton "Save"  
-            lbSave.Visible = false;
         }
 
         private void pbStudents_Click(object sender, EventArgs e)
         {
-            action = 0; // Définir l'action à ajouter
-
-            pbStudents.Visible = false;
-            lbDepAdd.Visible = false;
-            pbEdit.Visible = false;
-            lbDepEdit.Visible = false;
-            pbDelete.Visible = false;
-            lbDeleteDep.Visible = false;
-            pbSave.Visible = true; // Afficher le bouton "Save"
-            lbSave.Visible = true;
-
-            // Préparation pour l'ajout  
-            txtID.Visible = true;           // Afficher le champ ID pour l'ajout  
-            lbDepID.Visible = true;         // Afficher le label pour ID  
-            txtID.Enabled =false;
-
-            // Effacer et activer le champ Name  
-            txtName.Text = "";
-            txtName.Enabled = true;
+            action = 0;
+            SetAddMode();
         }
 
         private void pbEdit_Click(object sender, EventArgs e)
         {
-            if (!isSelected) // Vérifiez si une sélection a été faite  
+            if (!isSelected)
             {
-                MessageBox.Show(GetLocalizedMessage("Please choose a department to edit!", "Veuillez choisir un département à éditer!"));
+                MessageBox.Show(GetLocalizedMessage("NoRecordToEdit"));
                 return;
             }
-            action = 1; // Définir l'action à éditer
+            action = 1;
+            SetEditMode();
+        }
 
+        private void pbSave_Click(object sender, EventArgs e)
+        {
+            SaveDepartment();
+        }
+
+        private void pbDelete_Click(object sender, EventArgs e)
+        {
+            if (!isSelected)
+            {
+                MessageBox.Show(GetLocalizedMessage("NoRecordToDelete"));
+                return;
+            }
+
+            if (MessageBox.Show(GetLocalizedMessage("ConfirmDelete"), "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                try
+                {
+                    using (MySqlConnection conn = new MySqlConnection(connectionString))
+                    {
+                        conn.Open();
+                        string query = "DELETE FROM SYSTEM.DEP WHERE DEP_ID = @ID";
+
+                        using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@ID", txtID.Text.Trim());
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    MessageBox.Show(GetLocalizedMessage("DeleteSuccess"));
+                    RefreshData();
+                }
+                catch (MySqlException ex)
+                {
+                    if (ex.Number == 1451) // Foreign key constraint violation
+                    {
+                        MessageBox.Show(GetLocalizedMessage("CannotDeleteInUse"));
+                    }
+                    else
+                    {
+                        MessageBox.Show(GetLocalizedMessage("ErrorDeleting") + " " + ex.Message);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(GetLocalizedMessage("Error") + " " + ex.Message);
+                }
+                finally
+                {
+                    isSelected = false;
+                }
+            }
+        }
+
+        private void pbReload_Click(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        
+
+        private async void pictureBox2_Click(object sender, EventArgs e)
+        {
+            await ExportToCsvAsync();
+        }
+
+        private void DepartmentManager_Load(object sender, EventArgs e)
+        {
+            // Additional initialization if needed
+        }
+        #endregion
+
+        #region Helper Methods
+        private void showAction()
+        {
+            pbStudents.Visible = true;
+            lbDepAdd.Visible = true;
+            pbEdit.Visible = true;
+            lbDepEdit.Visible = true;
+            pbDelete.Visible = true;
+            lbDeleteDep.Visible = true;
+            pbSave.Visible = false;
+            lbSave.Visible = false;
+        }
+
+        private void SetAddMode()
+        {
             pbStudents.Visible = false;
             lbDepAdd.Visible = false;
             pbEdit.Visible = false;
             lbDepEdit.Visible = false;
             pbDelete.Visible = false;
             lbDeleteDep.Visible = false;
-            pbSave.Visible = true; // Afficher le bouton "Save"
+            pbSave.Visible = true;
             lbSave.Visible = true;
 
-            // Activer le champ Name pour l'édition  
-            txtID.Enabled = false;           // Désactiver le champ ID pendant l'édition  
-            txtName.Enabled = true;          // Activer le champ Name pour l'édition  
+            txtID.Visible = false; // ID is auto-generated
+            lbDepID.Visible = false;
+            txtName.Text = "";
+            txtName.Enabled = true;
         }
 
-        private void pbSave_Click(object sender, EventArgs e)
+        private void SetEditMode()
         {
-            // Vérifiez que les champs nécessaires ne sont pas vides  
-            if (string.IsNullOrWhiteSpace(txtName.Text))
-            {
-                MessageBox.Show("Please fill in all fields.");
-                return;
-            }
+            pbStudents.Visible = false;
+            lbDepAdd.Visible = false;
+            pbEdit.Visible = false;
+            lbDepEdit.Visible = false;
+            pbDelete.Visible = false;
+            lbDeleteDep.Visible = false;
+            pbSave.Visible = true;
+            lbSave.Visible = true;
 
-            string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
-                {
-                    conn.Open();
-                    MySqlCommand cmd;
-
-                    if (action == 0) // Pour ajouter un nouveau département  
-                    {
-                        string query = "INSERT INTO DEP (DEP_NAME) VALUES ( @name)";
-
-                        cmd = new MySqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@name", txtName.Text.Trim()); // Nom du département
-
-                        cmd.ExecuteNonQuery(); // Exécutez la requête  
-                        MessageBox.Show(GetLocalizedMessage("Add success", "Ajout réussi")); // Message de succès  
-                    }
-                    else // Pour modifier un département existant  
-                    {
-                        string query = "UPDATE DEP SET DEP_NAME = @name WHERE DEP_ID = @id";
-
-                        cmd = new MySqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@name", txtName.Text.Trim()); // Nom du département  
-                        cmd.Parameters.AddWithValue("@id", txtID.Text.Trim()); // ID du département
-
-                        cmd.ExecuteNonQuery(); // Exécutez la mise à jour  
-                        MessageBox.Show(GetLocalizedMessage("Edit success", "Édition réussie"));
-                    }
-
-                    RefreshData(); // Réinitialiser le formulaire et recharger les données  
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message); // Gérer les erreurs  
-            }
+            txtID.Enabled = false;
+            txtName.Enabled = true;
         }
-        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
-        {
-            if (CultureInfo.CurrentCulture.Name == "fr-FR")
-            {
-                return frenchMessage;  // Return the French message
-            }
-            else
-            {
-                return englishMessage;  // Return the English message
-            }
-        }
+
         private void RefreshData()
         {
-            LoadDepartments(); // Rechargez les départements  
-            showAction();      // Affichez les actions appropriées  
-            ClearInputs();     // Vide les champs de saisie  
+            LoadDepartments();
+            showAction();
+            ClearInputs();
+            isSelected = false;
         }
 
         private void ClearInputs()
@@ -210,133 +252,173 @@ namespace SchoolManagement
             txtName.Text = "";
         }
 
-        private void pbDelete_Click(object sender, EventArgs e)
+        private void SaveDepartment()
         {
-            if (!isSelected)
-            {
-                MessageBox.Show(GetLocalizedMessage("Please choose a department to delete!", "Veuillez choisir un département à supprimer!"));
-                return;
-            }
+            if (!ValidateInputs()) return;
 
-            DialogResult dialogResult = MessageBox.Show("Are you sure to delete?", "Confirm", MessageBoxButtons.YesNo);
-
-            if (dialogResult == DialogResult.Yes)
-            {
-                try
-                {
-                    string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-                    using (MySqlConnection conn = new MySqlConnection(mySqlDb))
-                    {
-                        conn.Open();
-                        string query = "DELETE FROM DEP WHERE DEP_ID = @ID";
-
-                        using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@ID", txtID.Text);
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-
-                    MessageBox.Show(GetLocalizedMessage("Delete success", "Suppression réussie"));
-                    RefreshData(); // Actualisez l'interface après la suppression  
-                }
-                catch (MySqlException ex)
-                {
-                    // Check for foreign key constraint violation  
-                    if (ex.Number == 1451) // Error code for foreign key constraint violation  
-                    {
-                        MessageBox.Show(GetLocalizedMessage("Cannot delete this department because it is in use.", "Impossible de supprimer ce département car il est en cours d'utilisation."));
-                    }
-                    else
-                    {
-                        MessageBox.Show(GetLocalizedMessage("Database error: " + ex.Message, "Erreur de base de données: " + ex.Message));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(GetLocalizedMessage("An error occurred: " + ex.Message, "Une erreur est survenue: " + ex.Message));
-                }
-            }
-
-            isSelected = false; // Reset selection  
-        }
-
-        private void pbReload_Click(object sender, EventArgs e)
-        {
-            RefreshData(); // Recharge les départements et réinitialise l'interface  
-        }
-
-        private void DepartmentManager_Load(object sender, EventArgs e)
-        {
-            // Logique additionnelle de chargement, si nécessaire  
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            ExportToExcel();
-        }
-        private void ExportToExcel()
-        {
             try
             {
-                // Create a new Excel application instance
-                Excel.Application excelApp = new Excel.Application();
-                excelApp.Visible = true;
-                Excel.Workbook workbook = excelApp.Workbooks.Add();
-                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
-
-                // Add column headers to the Excel file
-                for (int col = 0; col < dgvDepartments.Columns.Count; col++)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    worksheet.Cells[1, col + 1] = dgvDepartments.Columns[col].HeaderText;
-                }
+                    conn.Open();
+                    MySqlCommand cmd;
 
-                // Fetch all data for the export, not just the current page
-                List<DataRow> allRows = new List<DataRow>();
-
-                // Loop through all pages and collect all data
-               
-
-                    LoadDepartments();   // This loads students for the current page
-
-                    // Collect rows from the DataGridView
-                    foreach (DataGridViewRow row in dgvDepartments.Rows)
+                    if (action == 0) // Add new department
                     {
-                        if (row.IsNewRow) continue; // Skip the new row placeholder
-
-                        DataRow dataRow = ((DataTable)dgvDepartments.DataSource).NewRow();
-
-                        // Copy row values to DataRow
-                        for (int col = 0; col < dgvDepartments.Columns.Count; col++)
-                        {
-                            dataRow[col] = row.Cells[col].Value.ToString();
-                        }
-
-                        allRows.Add(dataRow); // Add the row to the list
+                        string query = "INSERT INTO SYSTEM.DEP (DEP_NAME) VALUES (@Name)";
+                        cmd = new MySqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@Name", txtName.Text.Trim());
                     }
-                
-
-                // Populate Excel worksheet with all rows collected
-                int rowIndex = 2; // Start from row 2 (because row 1 is the header)
-                foreach (var row in allRows)
-                {
-                    for (int col = 0; col < dgvDepartments.Columns.Count; col++)
+                    else // Edit existing department
                     {
-                        worksheet.Cells[rowIndex, col + 1] = row[col].ToString();
+                        string query = "UPDATE SYSTEM.DEP SET DEP_NAME = @Name WHERE DEP_ID = @ID";
+                        cmd = new MySqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@Name", txtName.Text.Trim());
+                        cmd.Parameters.AddWithValue("@ID", txtID.Text.Trim());
                     }
-                    rowIndex++;
-                }
 
-                MessageBox.Show(GetLocalizedMessage("Exported to Excel successfully.", "Exportation vers Excel réussie."));
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show(GetLocalizedMessage(action == 0 ? "AddSuccess" : "EditSuccess"));
+                    RefreshData();
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(GetLocalizedMessage("Error exporting to Excel: " + ex.Message, "Erreur lors de l'exportation vers Excel : " + ex.Message));
+                MessageBox.Show(GetLocalizedMessage("ErrorSaving") + " " + ex.Message);
             }
-            LoadDepartments();
- 
-        
-        
         }
-}
+
+        private bool ValidateInputs()
+        {
+            if (string.IsNullOrWhiteSpace(txtName.Text))
+            {
+                MessageBox.Show(GetLocalizedMessage("NameRequired"));
+                return false;
+            }
+            return true;
+        }
+
+        
+        private async Task ExportToCsvAsync()
+        {
+            SaveFileDialog saveFileDialog = null;
+            DataTable dataTable = null;
+            string filePath = null;
+
+            try
+            {
+                saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv",
+                    Title = "Save Departments as CSV",
+                    FileName = $"Departments_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv"
+                };
+
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                filePath = saveFileDialog.FileName;
+
+                dataTable = await FetchDepartmentsDataAsync();
+                if (dataTable == null || dataTable.Rows.Count == 0)
+                {
+                    throw new Exception("No data to export.");
+                }
+
+                StringBuilder csvContent = new StringBuilder();
+                string[] columnNames = dataTable.Columns.Cast<DataColumn>()
+                    .Select(column => $"\"{column.ColumnName}\"")
+                    .ToArray();
+                csvContent.AppendLine(string.Join(",", columnNames));
+
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    string[] fields = row.ItemArray.Select(field =>
+                        $"\"{(field != null ? field.ToString().Replace("\"", "\"\"") : "")}\"")
+                        .ToArray();
+                    csvContent.AppendLine(string.Join(",", fields));
+                }
+
+                File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
+
+                MessageBox.Show(GetLocalizedMessage("ExportSuccess"));
+                System.Diagnostics.Process.Start(new ProcessStartInfo
+                {
+                    FileName = filePath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Export failed: " + ex.Message + "\nStack Trace: " + ex.StackTrace);
+            }
+            finally
+            {
+                if (dataTable != null)
+                {
+                    dataTable.Dispose();
+                    dataTable = null;
+                }
+                if (saveFileDialog != null)
+                {
+                    saveFileDialog.Dispose();
+                    saveFileDialog = null;
+                }
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+        }
+
+        private string GetLocalizedMessage(string messageKey)
+        {
+            string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+            var messages = currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase)
+                ? new Dictionary<string, string>
+                {
+                    { "NoRecordToEdit", "Veuillez choisir un département à éditer !" },
+                    { "NoRecordToDelete", "Veuillez choisir un département à supprimer !" },
+                    { "ConfirmDelete", "Êtes-vous sûr de vouloir supprimer ?" },
+                    { "AddSuccess", "Ajout réussi." },
+                    { "EditSuccess", "Édition réussie." },
+                    { "DeleteSuccess", "Suppression réussie." },
+                    { "CannotDeleteInUse", "Impossible de supprimer ce département car il est en cours d'utilisation." },
+                    { "NameRequired", "Le nom du département est requis." },
+                    { "ErrorLoading", "Erreur lors du chargement des départements : " },
+                    { "ErrorSaving", "Erreur lors de l'enregistrement du département : " },
+                    { "ErrorDeleting", "Erreur lors de la suppression du département : " },
+                    { "ErrorExporting", "Erreur lors de l'exportation : " },
+                    { "ExportSuccess", "Exportation réussie." }
+                }
+                : new Dictionary<string, string>
+                {
+                    { "NoRecordToEdit", "Please choose a department to edit!" },
+                    { "NoRecordToDelete", "Please choose a department to delete!" },
+                    { "ConfirmDelete", "Are you sure you want to delete?" },
+                    { "AddSuccess", "Add successful." },
+                    { "EditSuccess", "Edit successful." },
+                    { "DeleteSuccess", "Delete successful." },
+                    { "CannotDeleteInUse", "Cannot delete this department because it is in use." },
+                    { "NameRequired", "Department name is required." },
+                    { "ErrorLoading", "Error loading departments: " },
+                    { "ErrorSaving", "Error saving department: " },
+                    { "ErrorDeleting", "Error deleting department: " },
+                    { "ErrorExporting", "Error exporting: " },
+                    { "ExportSuccess", "Export successful." }
+                };
+
+            string message;
+            if (messages.TryGetValue(messageKey, out message))
+            {
+                return message;
+            }
+            return "Unknown error";
+        }
+        #endregion
+
+        private void DepartmentManager_Load_1(object sender, EventArgs e)
+        {
+        }
     }
+}

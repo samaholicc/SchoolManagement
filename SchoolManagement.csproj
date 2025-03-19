@@ -15,22 +15,26 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <InstallUrl>http://SchoolManagement.com/</InstallUrl>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,6 +57,18 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>FE1BD43CB38E55130D52CBBE61C7339A323DA2AF</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>SchoolManagement_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ComponentFactory.Krypton.Docking">
@@ -141,6 +157,7 @@
     <Compile Include="ClassSectionManager.Designer.cs">
       <DependentUpon>ClassSectionManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClassService.cs" />
     <Compile Include="DepartmentManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,6 +165,7 @@
       <DependentUpon>DepartmentManager.cs</DependentUpon>
     </Compile>
     <Compile Include="Encrypt.cs" />
+    <Compile Include="ExportExcel.cs" />
     <Compile Include="insertData.cs" />
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
@@ -330,11 +348,20 @@
     <EmbeddedResource Include="StudentClassSectionList.resx">
       <DependentUpon>StudentClassSectionList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="StudentGrade.en.resx">
+      <DependentUpon>StudentGrade.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StudentGrade.fr.resx">
       <DependentUpon>StudentGrade.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="StudentManager.en.resx">
+      <DependentUpon>StudentManager.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StudentManager.fr.resx">
       <DependentUpon>StudentManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentMenu.en.resx">
+      <DependentUpon>StudentMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StudentMenu.fr.resx">
       <DependentUpon>StudentMenu.cs</DependentUpon>
@@ -387,11 +414,17 @@
     <EmbeddedResource Include="SubjectManager.resx">
       <DependentUpon>SubjectManager.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TeacherClassSection.en.resx">
+      <DependentUpon>TeacherClassSection.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TeacherClassSection.fr.resx">
       <DependentUpon>TeacherClassSection.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TeacherClassSection.resx">
       <DependentUpon>TeacherClassSection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherManager.en.resx">
+      <DependentUpon>TeacherManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TeacherManager.fr.resx">
       <DependentUpon>TeacherManager.cs</DependentUpon>
@@ -424,6 +457,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="SchoolManagement_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -431,7 +465,6 @@
   <ItemGroup>
     <Content Include="Resources\red.jpg" />
     <Content Include="Resources\red.png" />
-    <Content Include="system.sql" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">

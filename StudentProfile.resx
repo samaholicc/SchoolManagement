@@ -159,6 +159,9 @@
   <data name="&gt;&gt;kryptonPalette1.Type" xml:space="preserve">
     <value>ComponentFactory.Krypton.Toolkit.KryptonPalette, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
+  <data name="&gt;&gt;txtBirth.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -320,9 +323,6 @@
   </data>
   <data name="&gt;&gt;txtPassword.Name" xml:space="preserve">
     <value>txtPassword</value>
-  </data>
-  <data name="&gt;&gt;btnSave.Type" xml:space="preserve">
-    <value>ComponentFactory.Krypton.Toolkit.KryptonButton, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
   <data name="lbBirth.Font" type="System.Drawing.Font, System.Drawing">
     <value>Century Gothic, 11.25pt</value>
@@ -821,8 +821,8 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="&gt;&gt;txtBirth.ZOrder" xml:space="preserve">
-    <value>14</value>
+  <data name="&gt;&gt;btnSave.Type" xml:space="preserve">
+    <value>ComponentFactory.Krypton.Toolkit.KryptonButton, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
   <data name="&gt;&gt;txtClass.Type" xml:space="preserve">
     <value>ComponentFactory.Krypton.Toolkit.KryptonTextBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>

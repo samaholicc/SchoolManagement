@@ -1361,9 +1361,6 @@
   <data name="&gt;&gt;lbID.Name" xml:space="preserve">
     <value>lbID</value>
   </data>
-  <data name="&gt;&gt;btnLogin.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ToolTipTitle" xml:space="preserve">
     <value />
   </data>
@@ -1397,9 +1394,6 @@
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ExtraText" xml:space="preserve">
     <value />
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ColorMap" type="System.Drawing.Color, System.Drawing">
-    <value />
-  </data>
   <data name="&gt;&gt;label1.Name" xml:space="preserve">
     <value>label1</value>
   </data>
@@ -1411,9 +1405,6 @@
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritToolTipTitle" type="System.Boolean, mscorlib">
-    <value>True</value>
   </data>
   <data name="pictureBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>386, 381</value>
@@ -1469,9 +1460,6 @@
   <data name="lbID.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="&gt;&gt;lbID.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
   <data name="&gt;&gt;error.Name" xml:space="preserve">
     <value>error</value>
   </data>
@@ -1487,11 +1475,11 @@
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
     <value>29, 196</value>
   </data>
-  <data name="&gt;&gt;error.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>
+  </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritToolTipTitle" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritText" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1505,8 +1493,14 @@
   <data name="&gt;&gt;lbClassSectionID.Name" xml:space="preserve">
     <value>lbClassSectionID</value>
   </data>
+  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="label2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Century Gothic, 11.25pt</value>
+  </data>
+  <data name="&gt;&gt;btnLogin.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>109</value>
@@ -1568,9 +1562,6 @@
   <data name="lbClassSectionID.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ToolTipTitle" xml:space="preserve">
     <value />
   </data>
@@ -1589,8 +1580,8 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Se connecter</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="lbClassSectionID.Size" type="System.Drawing.Size, System.Drawing">
+    <value>87, 20</value>
   </data>
   <data name="error.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1603,6 +1594,12 @@
   </data>
   <data name="label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="&gt;&gt;txtUsername.Type" xml:space="preserve">
+    <value>ComponentFactory.Krypton.Toolkit.KryptonTextBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
+  </data>
+  <data name="btnLogin.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.Orientation" type="ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation, ComponentFactory.Krypton.Toolkit">
     <value>Inherit</value>
@@ -1654,9 +1651,6 @@
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>113, 20</value>
-  </data>
-  <data name="label1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Century Gothic, 20pt, style=Bold</value>
   </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1726,6 +1720,9 @@
         lRP08PdI7zuY4RK2Uypt02Ih+KU4DyVS7N2cew70RkYKEcrOddT48UVF4Yqnr//Z
 </value>
   </data>
+  <data name="BtnSwitch.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
   <data name="lbID.Location" type="System.Drawing.Point, System.Drawing">
     <value>29, 128</value>
   </data>
@@ -1765,8 +1762,8 @@
   <data name="lbClassSectionID.Font" type="System.Drawing.Font, System.Drawing">
     <value>Century Gothic, 11.25pt</value>
   </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;error.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 4, 4, 4</value>
@@ -1785,9 +1782,6 @@
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ExtraText" xml:space="preserve">
     <value />
-  </data>
-  <data name="txtPassword.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1812,14 +1806,17 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="lbClassSectionID.TabIndex" type="System.Int32, mscorlib">
+    <value>108</value>
+  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ColorMap" type="System.Drawing.Color, System.Drawing">
     <value />
   </data>
   <data name="&gt;&gt;txtPassword.Type" xml:space="preserve">
     <value>ComponentFactory.Krypton.Toolkit.KryptonTextBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
-  <data name="BtnSwitch.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
+  <data name="txtPassword.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
     <value>Enter ID</value>
@@ -1857,8 +1854,8 @@
   <data name="kryptonPalette1.ButtonSpecs.FormClose.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
     <value>Inherit</value>
   </data>
-  <data name="&gt;&gt;btnLogin.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>0, 20</value>
@@ -1875,14 +1872,14 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritExtraText" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="lbClassSectionID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 20</value>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="lbClassSectionID.TabIndex" type="System.Int32, mscorlib">
-    <value>108</value>
+  <data name="label1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Century Gothic, 20pt, style=Bold</value>
   </data>
-  <data name="btnLogin.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="&gt;&gt;btnLogin.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="error.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9.75pt</value>
@@ -1890,11 +1887,30 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
+        DhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQU
+        FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAbABoDAREAAhEBAxEB/8QA
+        GQAAAgMBAAAAAAAAAAAAAAAABgcECAkC/8QAKxAAAgEDAwMCBQUAAAAAAAAAAQIDBAURAAchBjFxCFES
+        ExVBgRQiMnKi/8QAHAEAAQQDAQAAAAAAAAAAAAAABgQFBwgAAQMC/8QALhEAAQMCBAUCBQUAAAAAAAAA
+        AQACAwQRBSExcQYSE0GRImEHFSOhsVGBweHw/9oADAMBAAIRAxEAPwDQHcjc+0bZWpKq4s01VMStNRQ4
+        +ZMRjOM8BRnljx5JAKOpqo6VvM/wiDBsDq8cn6VMMhq46D+z2H8ZpDVHq16jepZoLNa4YM8RSGSRgP7h
+        lH+dDxxqS+TBZS6z4cUgZZ87i72AA8Z/lNjajfe2bkz/AE6enNpvYT4xTM/xxzgdzG3GSByVIB9sgE6e
+        aPEI6r06O/RR3xBwpVYGOsDzxHuO247b6bJoadEDKlnqFvFRdd2Lyk0jNFR/LpoEPZEEasQPLMx/OgbF
+        JC+pcD2Vn+CKWODBontGb7k+SPwAlvpoR8pdpvNR09c6W6UrlKmilWojKnHKnOPB7H3BOu0MhikD26hI
+        K+ljraaSnlGTgR/tloejB0VhkAjPOpKVMiLGyq16nNt6u39RSdWUkMk9trVQVbKM/p5VUKGbHZGVV5PA
+        IOT+4aE8WpHc/XaLg6qeOA8dhNP8rmcA9t+X3BN7bg3/AG2KReNDamS6Ododt6zcXqqmhSFvpNNKslfU
+        lcoEBBMefuzdsdwDn7ac6CkdUyg29I1QVxRj0OD0b2h31XAho755X2Gv2V4dHqquuZEWVGR1DowIZWGQ
+        R7HWarYJBuEF1eyvQ1bXCrl6ZoBMDnESGOM+UUhT+RpE6ip3HmLAiOPiPF4o+k2pdbe58nP7ott1so7R
+        SJS0FJBRUsf8IKeMRovhQABpW1rWCzRYJhlmkneZJXFzj3JufJUnXpcV/9k=
+</value>
+  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;lbID.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
   <data name="BtnSwitch.Location" type="System.Drawing.Point, System.Drawing">
     <value>87, 352</value>
@@ -1920,30 +1936,14 @@
   <data name="&gt;&gt;BtnSwitch.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="&gt;&gt;txtUsername.Type" xml:space="preserve">
-    <value>ComponentFactory.Krypton.Toolkit.KryptonTextBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
   <data name="lbID.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
-        DhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQU
-        FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAbABoDAREAAhEBAxEB/8QA
-        GQAAAgMBAAAAAAAAAAAAAAAABgcECAkC/8QAKxAAAgEDAwMCBQUAAAAAAAAAAQIDBAURAAchBjFxCFES
-        ExVBgRQiMnKi/8QAHAEAAQQDAQAAAAAAAAAAAAAABgQFBwgAAQMC/8QALhEAAQMCBAUCBQUAAAAAAAAA
-        AQACAwQRBSExcQYSE0GRImEHFSOhsVGBweHw/9oADAMBAAIRAxEAPwDQHcjc+0bZWpKq4s01VMStNRQ4
-        +ZMRjOM8BRnljx5JAKOpqo6VvM/wiDBsDq8cn6VMMhq46D+z2H8ZpDVHq16jepZoLNa4YM8RSGSRgP7h
-        lH+dDxxqS+TBZS6z4cUgZZ87i72AA8Z/lNjajfe2bkz/AE6enNpvYT4xTM/xxzgdzG3GSByVIB9sgE6e
-        aPEI6r06O/RR3xBwpVYGOsDzxHuO247b6bJoadEDKlnqFvFRdd2Lyk0jNFR/LpoEPZEEasQPLMx/OgbF
-        JC+pcD2Vn+CKWODBontGb7k+SPwAlvpoR8pdpvNR09c6W6UrlKmilWojKnHKnOPB7H3BOu0MhikD26hI
-        K+ljraaSnlGTgR/tloejB0VhkAjPOpKVMiLGyq16nNt6u39RSdWUkMk9trVQVbKM/p5VUKGbHZGVV5PA
-        IOT+4aE8WpHc/XaLg6qeOA8dhNP8rmcA9t+X3BN7bg3/AG2KReNDamS6Ododt6zcXqqmhSFvpNNKslfU
-        lcoEBBMefuzdsdwDn7ac6CkdUyg29I1QVxRj0OD0b2h31XAho755X2Gv2V4dHqquuZEWVGR1DowIZWGQ
-        R7HWarYJBuEF1eyvQ1bXCrl6ZoBMDnESGOM+UUhT+RpE6ip3HmLAiOPiPF4o+k2pdbe58nP7ott1so7R
-        SJS0FJBRUsf8IKeMRovhQABpW1rWCzRYJhlmkneZJXFzj3JufJUnXpcV/9k=
-</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.ColorMap" type="System.Drawing.Color, System.Drawing">
+    <value />
   </data>
   <data name="txtPassword.Location" type="System.Drawing.Point, System.Drawing">
     <value>18, 219</value>

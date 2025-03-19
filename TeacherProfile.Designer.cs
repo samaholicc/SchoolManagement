@@ -482,6 +482,7 @@ namespace SchoolManagement
             this.Name = "TeacherProfile";
             this.Palette = this.kryptonPalette1;
             this.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
+            this.Load += new System.EventHandler(this.TeacherProfile_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

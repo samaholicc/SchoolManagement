@@ -2,21 +2,35 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
+using System.Data;
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
 
 namespace SchoolManagement
 {
     public partial class Login : KryptonForm
     {
-        public static string ID { get; private set; } // Dernière Identité de l'utilisateur  
-        public static string TYPE_USER { get; private set; } // Type d'utilisateur (Admin, Teacher, Student)
+        public static string ID { get; private set; } // User's last identity
+        public static string TYPE_USER { get; private set; } // User type (Admin, Teacher, Student)
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
 
         public Login()
         {
             InitializeComponent();
+            ConfigureForm();
         }
 
+        #region Initialization
+        private void ConfigureForm()
+        {
+            txtPassword.UseSystemPasswordChar = true; // Mask password input
+            this.FormClosed += (s, e) => Application.Exit(); // Ensure app exits when form closes
+        }
+        #endregion
+
+        #region Event Handlers
         private void btnLogin_Click(object sender, EventArgs e)
         {
             if (IsInputValid())
@@ -25,6 +39,30 @@ namespace SchoolManagement
             }
         }
 
+        private void BtnSwitch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var currentLanguage = GetCurrentLanguage();
+                var newLanguage = currentLanguage == "fr-FR" ? "en-US" : "fr-FR";
+                var changeLanguage = new ChangeLanguage();
+                changeLanguage.UpdateConfig("language", newLanguage);
+                MessageBox.Show(GetLocalizedMessage("Language switched. Restarting application...", "Langue changée. Redémarrage de l'application..."));
+                Application.Restart();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(GetLocalizedMessage("Error switching language: " + ex.Message, "Erreur lors du changement de langue : " + ex.Message));
+            }
+        }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            // Additional initialization if needed
+        }
+        #endregion
+
+        #region Authentication Methods
         private bool IsInputValid()
         {
             if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
@@ -37,17 +75,17 @@ namespace SchoolManagement
 
         private void AuthenticateUser()
         {
-            string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "SELECT ID, ROLE, PASSWORD FROM SYSTEM.ACCOUNT WHERE ID=@username";
+                    string query = "SELECT ID, ROLE, PASSWORD FROM SYSTEM.ACCOUNT WHERE ID = @username";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@username", txtUsername.Text);
+
                         using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
                             if (dr.Read())
@@ -76,13 +114,18 @@ namespace SchoolManagement
 
         private void ValidateUser(MySqlDataReader dr)
         {
-            string IDName = dr.GetString(0);
+            string id = dr.GetString(0);
             string userRole = dr.GetString(1);
-            string hashedPasswordFromDb = dr.GetString(2);
+            string hashedPasswordFromDb = dr.GetString(2); // Stored hash from the database
 
-            if (Encrypt.HashString(txtPassword.Text) == hashedPasswordFromDb)
+            // Hash the entered password using Encrypt.HashString
+            string enteredPassword = txtPassword.Text;
+            string hashedEnteredPassword = Encrypt.HashString(enteredPassword);
+
+            // Compare the hashed entered password with the stored hash
+            if (hashedEnteredPassword == hashedPasswordFromDb)
             {
-                ID = IDName;
+                ID = id;
                 TYPE_USER = userRole;
                 OpenUserMenu(userRole);
             }
@@ -97,19 +140,19 @@ namespace SchoolManagement
             this.Hide();
 
             Form userMenu = null;
-
-            switch (userRole)
+            switch (userRole.ToLower())
             {
-                case "Admin":
+                case "admin":
                     userMenu = new MenuAdmin();
                     break;
-                case "Teacher":
+                case "teacher":
                     userMenu = new TeacherMenu();
                     break;
-                case "Student":
+                case "student":
                     userMenu = new StudentMenu();
                     break;
                 default:
+                    MessageBox.Show(GetLocalizedMessage("Unknown user role.", "Rôle d'utilisateur inconnu."));
                     break;
             }
 
@@ -120,46 +163,21 @@ namespace SchoolManagement
 
             this.Close();
         }
+        #endregion
 
-
+        #region Helper Methods
         private string GetCurrentLanguage()
         {
-            return ConfigurationManager.AppSettings["language"];
+            return ConfigurationManager.AppSettings["language"] ?? "en-US"; // Default to English if not set
         }
 
-        private void BtnSwitch_Click(object sender, EventArgs e)
-        {
-            var currentLanguage = GetCurrentLanguage();
-            var newLanguage = currentLanguage == "fr-FR" ? "en-US" : "fr-FR";
-            var changeLanguage = new ChangeLanguage();
-            changeLanguage.UpdateConfig("language", newLanguage);
-            Application.Restart();
-        }
         private string GetLocalizedMessage(string englishMessage, string frenchMessage)
         {
-            if (CultureInfo.CurrentCulture.Name == "fr-FR")
-            {
-                return frenchMessage;  // Return French message if culture is French
-            }
-            else
-            {
-                return englishMessage;  // Return English message by default
-            }
+            string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+            return currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase) ? frenchMessage : englishMessage;
         }
-
-        private void kryptonWrapLabel1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Login_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtPassword_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        #endregion
     }
+
+    
 }

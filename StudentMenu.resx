@@ -264,6 +264,9 @@
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ColorMap" type="System.Drawing.Color, System.Drawing">
     <value />
   </data>
+  <data name="&gt;&gt;pbLogout.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
   <data name="pbCalendar.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
   </data>
@@ -1928,9 +1931,6 @@
   <data name="lbLogout.Font" type="System.Drawing.Font, System.Drawing">
     <value>Century Gothic, 11.25pt</value>
   </data>
-  <data name="lbProfile.TabIndex" type="System.Int32, mscorlib">
-    <value>24</value>
-  </data>
   <data name="&gt;&gt;pbCalendar.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
@@ -2590,8 +2590,8 @@
   <data name="lbHello.Size" type="System.Drawing.Size, System.Drawing">
     <value>108, 20</value>
   </data>
-  <data name="&gt;&gt;pbLogout.ZOrder" xml:space="preserve">
-    <value>5</value>
+  <data name="lbProfile.TabIndex" type="System.Int32, mscorlib">
+    <value>24</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -2628,7 +2628,7 @@
     <value>True</value>
   </metadata>
   <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>en</value>
+    <value>fr</value>
   </metadata>
   <metadata name="kryptonPalette1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

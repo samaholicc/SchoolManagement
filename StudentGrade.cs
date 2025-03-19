@@ -1,17 +1,23 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
-using MySql.Data.MySqlClient; // Using MySQL data access
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace SchoolManagement
 {
     public partial class StudentGrade : KryptonForm
     {
         private const int CS_DropShadow = 0x00020000;
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
+
         protected override CreateParams CreateParams
         {
             get
@@ -26,32 +32,44 @@ namespace SchoolManagement
         {
             InitializeComponent();
             LoadStudents();
-           
         }
 
+        #region Load Data Methods
         private void LoadStudents()
         {
             try
             {
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
+                if (string.IsNullOrEmpty(Login.ID))
+                {
+                    MessageBox.Show(GetLocalizedMessage("LoginIDNotSet"));
+                    return;
+                }
 
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "SELECT A.CLASS_ID AS `Class ID`, D.SUB_ID AS `Subject ID`, D.SUB_NAME AS `Subject name`, D.credits AS `Subject credits`, A.Mid_TERM AS `Mid term`, A.Final_term AS `Final term`, A.Average AS `Average` " +
-                                   "FROM results A " +
-                                   "JOIN Class B ON A.Class_ID = B.CLASS_ID " +
-                                   "JOIN Subject D ON B.SUB_ID = D.SUB_ID " +
-                                   "WHERE A.STUDENT_ID = @id";
+                    string query = @"
+                        SELECT 
+                            A.CLASS_ID AS `Class ID`, 
+                            D.SUB_ID AS `Subject ID`, 
+                            D.SUB_NAME AS `Subject Name`, 
+                            D.CREDITS AS `Subject Credits`, 
+                            A.MID_TERM AS `Mid Term`, 
+                            A.FINAL_TERM AS `Final Term`, 
+                            A.AVERAGE AS `Average`
+                        FROM SYSTEM.results A
+                        JOIN SYSTEM.class B ON A.CLASS_ID = B.CLASS_ID
+                        JOIN SYSTEM.subject D ON B.SUB_ID = D.SUB_ID
+                        WHERE A.STUDENT_ID = @ID";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@id", Login.ID);
+                        cmd.Parameters.AddWithValue("@ID", Login.ID);
 
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
                             DataTable dataTable = new DataTable();
-                            dataTable.Load(reader);
+                            adapter.Fill(dataTable);
                             dgvStudents.DataSource = dataTable;
                         }
                     }
@@ -59,36 +77,55 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show(GetLocalizedMessage("Error loading students: " + ex.Message, "Erreur lors du chargement des étudiants : " + ex.Message));
+                MessageBox.Show(GetLocalizedMessage("ErrorLoading") + " " + ex.Message);
             }
         }
+        #endregion
 
-
+        #region Event Handlers
         private void btnLogin_Click(object sender, EventArgs e)
         {
             try
             {
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
+                if (string.IsNullOrEmpty(Login.ID))
+                {
+                    MessageBox.Show(GetLocalizedMessage("LoginIDNotSet"));
+                    return;
+                }
 
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "SELECT A.CLASS_ID AS `Class section ID`, D.SUB_ID AS `Subject ID`, D.SUB_NAME AS `Subject name`, D.credits AS `Subject credits`, A.Mid_Term AS `Mid term`, A.Final_Term AS `Final term`, A.Average AS `Average` " +
-                                   "FROM results A " +
-                                   "JOIN class B ON A.CLASS_ID = B.CLASS_ID " +
-                                   "JOIN Subject D ON B.SUB_ID = D.SUB_ID " +
-                                   "WHERE A.STUDENT_ID = @ID AND (" +
-                                   "A.CLASS_ID LIKE @search OR D.SUB_ID LIKE @search OR D.SUB_NAME LIKE @search OR D.credits LIKE @search OR A.mid_term LIKE @search OR A.final_term LIKE @search OR A.average LIKE @search)";
+                    string query = @"
+                        SELECT 
+                            A.CLASS_ID AS `Class ID`, 
+                            D.SUB_ID AS `Subject ID`, 
+                            D.SUB_NAME AS `Subject Name`, 
+                            D.CREDITS AS `Subject Credits`, 
+                            A.MID_TERM AS `Mid Term`, 
+                            A.FINAL_TERM AS `Final Term`, 
+                            A.AVERAGE AS `Average`
+                        FROM SYSTEM.results A
+                        JOIN SYSTEM.class B ON A.CLASS_ID = B.CLASS_ID
+                        JOIN SYSTEM.subject D ON B.SUB_ID = D.SUB_ID
+                        WHERE A.STUDENT_ID = @ID 
+                          AND (A.CLASS_ID LIKE @search 
+                               OR D.SUB_ID LIKE @search 
+                               OR D.SUB_NAME LIKE @search 
+                               OR D.CREDITS LIKE @search 
+                               OR A.MID_TERM LIKE @search 
+                               OR A.FINAL_TERM LIKE @search 
+                               OR A.AVERAGE LIKE @search)";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", Login.ID);
                         cmd.Parameters.AddWithValue("@search", "%" + txtSearch.Text + "%");
 
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
                             DataTable dataTable = new DataTable();
-                            dataTable.Load(reader);
+                            adapter.Fill(dataTable);
                             dgvStudents.DataSource = dataTable;
                         }
                     }
@@ -96,98 +133,154 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show(GetLocalizedMessage("Error during search: " + ex.Message, "Erreur lors de la recherche : " + ex.Message));
+                MessageBox.Show(GetLocalizedMessage("ErrorSearching") + " " + ex.Message);
             }
         }
-
 
         private void pbReload_Click(object sender, EventArgs e)
         {
             LoadStudents();
             txtSearch.Text = "";
-            MessageBox.Show(GetLocalizedMessage("Students reloaded successfully.", "Étudiants rechargés avec succès."));
+            MessageBox.Show(GetLocalizedMessage("ReloadSuccess"));
         }
 
-
-        private void label6_Click(object sender, EventArgs e)
+        private async void label6_Click(object sender, EventArgs e)
         {
-            ExportToExcel();
+            await ExportToCsvAsync();
         }
+        #endregion
 
-        private void ExportToExcel()
+        #region Export to CSV
+        private async Task ExportToCsvAsync()
         {
             try
             {
-                // Create a new Excel application instance
-                Excel.Application excelApp = new Excel.Application();
-                excelApp.Visible = true;
-                Excel.Workbook workbook = excelApp.Workbooks.Add();
-                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                saveFileDialog.Title = "Save Student Grades as CSV";
+                saveFileDialog.FileName = $"StudentGrades_{Login.ID}_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv";
 
-                // Add column headers to the Excel file
-                for (int col = 0; col < dgvStudents.Columns.Count; col++)
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    worksheet.Cells[1, col + 1] = dgvStudents.Columns[col].HeaderText;
-                }
+                    DataTable dataTable = await FetchGradesDataAsync();
 
-                // Fetch all data for the export (without pagination)
-                List<DataRow> allRows = new List<DataRow>();
-
-                // Load all rows from the DataGridView
-                foreach (DataGridViewRow row in dgvStudents.Rows)
-                {
-                    if (row.IsNewRow) continue; // Skip the new row placeholder
-
-                    DataRow dataRow = ((DataTable)dgvStudents.DataSource).NewRow();
-
-                    // Copy row values to DataRow
-                    for (int col = 0; col < dgvStudents.Columns.Count; col++)
+                    if (dataTable != null && dataTable.Rows.Count > 0)
                     {
-                        dataRow[col] = row.Cells[col].Value.ToString();
+                        StringBuilder csvContent = new StringBuilder();
+
+                        // Écrire les en-têtes
+                        string[] columnNames = dataTable.Columns.Cast<DataColumn>()
+                            .Select(column => $"\"{column.ColumnName}\"")
+                            .ToArray();
+                        csvContent.AppendLine(string.Join(",", columnNames));
+
+                        // Écrire les données
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            string[] fields = row.ItemArray.Select(field =>
+                                $"\"{(field != null ? field.ToString().Replace("\"", "\"\"") : "")}\"")
+                                .ToArray();
+                            csvContent.AppendLine(string.Join(",", fields));
+                        }
+
+                        // Écrire dans le fichier
+                        File.WriteAllText(saveFileDialog.FileName, csvContent.ToString(), Encoding.UTF8);
+
+                        MessageBox.Show(GetLocalizedMessage("ExportSuccess"));
+                        System.Diagnostics.Process.Start(saveFileDialog.FileName); // Ouvre le fichier
                     }
-
-                    allRows.Add(dataRow); // Add the row to the list
-                }
-
-                // Populate Excel worksheet with all rows collected
-                int rowIndex = 2; // Start from row 2 (because row 1 is the header)
-                foreach (var row in allRows)
-                {
-                    for (int col = 0; col < dgvStudents.Columns.Count; col++)
+                    else
                     {
-                        worksheet.Cells[rowIndex, col + 1] = row[col].ToString();
+                        MessageBox.Show("No data to export.");
                     }
-                    rowIndex++;
                 }
-
-                MessageBox.Show(GetLocalizedMessage("Exported to Excel successfully.", "Exporté avec succès vers Excel."));
             }
             catch (Exception ex)
             {
-                MessageBox.Show(GetLocalizedMessage("Error exporting to Excel: " + ex.Message, "Erreur d'exportation vers Excel : " + ex.Message));
+                MessageBox.Show(GetLocalizedMessage("ErrorExporting") + " " + ex.Message);
             }
         }
 
-
-        private string GetLocalizedMessage(string englishMessage, string frenchMessage)
+        private async Task<DataTable> FetchGradesDataAsync()
         {
-            if (CultureInfo.CurrentCulture.Name == "fr-FR")
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            try
             {
-                return frenchMessage;  // Return the French message if culture is French
+                await conn.OpenAsync();
+                string query = @"
+                    SELECT 
+                        A.CLASS_ID AS `Class ID`, 
+                        D.SUB_ID AS `Subject ID`, 
+                        D.SUB_NAME AS `Subject Name`, 
+                        D.CREDITS AS `Subject Credits`, 
+                        A.MID_TERM AS `Mid Term`, 
+                        A.FINAL_TERM AS `Final Term`, 
+                        A.AVERAGE AS `Average`
+                    FROM SYSTEM.results A
+                    JOIN SYSTEM.class B ON A.CLASS_ID = B.CLASS_ID
+                    JOIN SYSTEM.subject D ON B.SUB_ID = D.SUB_ID
+                    WHERE A.STUDENT_ID = @ID";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@ID", Login.ID);
+                try
+                {
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    try
+                    {
+                        DataTable dataTable = new DataTable();
+                        await Task.Run(() => adapter.Fill(dataTable));
+                        return dataTable;
+                    }
+                    finally
+                    {
+                        adapter.Dispose();
+                    }
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
             }
-            else
+            finally
             {
-                return englishMessage;  // Return the English message by default
+                conn.Dispose();
             }
         }
+        #endregion
 
-
-
-
-        private void dgvStudents_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        #region Helper Methods
+        private string GetLocalizedMessage(string messageKey)
         {
-            // Optionally handle cell content clicks here if needed
+            string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+            var messages = currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase)
+                ? new Dictionary<string, string>
+                {
+                    { "LoginIDNotSet", "L'ID de connexion n'est pas défini. Veuillez vous reconnecter." },
+                    { "ErrorLoading", "Erreur lors du chargement des étudiants : " },
+                    { "ErrorSearching", "Erreur lors de la recherche : " },
+                    { "ErrorExporting", "Erreur d'exportation vers CSV : " },
+                    { "ReloadSuccess", "Étudiants rechargés avec succès." },
+                    { "ExportSuccess", "Exporté avec succès vers CSV." }
+                }
+                : new Dictionary<string, string>
+                {
+                    { "LoginIDNotSet", "Login ID is not set. Please log in again." },
+                    { "ErrorLoading", "Error loading students: " },
+                    { "ErrorSearching", "Error during search: " },
+                    { "ErrorExporting", "Error exporting to CSV: " },
+                    { "ReloadSuccess", "Students reloaded successfully." },
+                    { "ExportSuccess", "Exported to CSV successfully." }
+                };
+
+            string message;
+            if (messages.TryGetValue(messageKey, out message))
+            {
+                return message;
+            }
+            return "Unknown error";
         }
+        #endregion
 
         private void StudentGrade_Load(object sender, EventArgs e)
         {

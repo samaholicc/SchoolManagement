@@ -56,7 +56,6 @@ namespace SchoolManagement
             resources.ApplyResources(this.lbExport, "lbExport");
             this.lbExport.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbExport.Name = "lbExport";
-            this.lbExport.Click += new System.EventHandler(this.lbExport_Click);
             // 
             // kryptonContextMenuMonthCalendar1
             // 
@@ -108,7 +107,6 @@ namespace SchoolManagement
             this.dgvClass.StateCommon.HeaderRow.Border.Width = 1;
             this.dgvClass.StateSelected.DataCell.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(165)))), ((int)(((byte)(166)))));
             this.dgvClass.StateSelected.DataCell.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(165)))), ((int)(((byte)(166)))));
-            this.dgvClass.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClass_CellContentClick);
             this.dgvClass.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvClass_CellMouseClick);
             // 
             // kryptonPalette1
@@ -335,7 +333,7 @@ namespace SchoolManagement
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click_1);
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // pbReload
             // 
@@ -363,6 +361,7 @@ namespace SchoolManagement
             this.Palette = this.kryptonPalette1;
             this.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
             this.Load += new System.EventHandler(this.TeacherClassSection_Load);
+            this.Click += new System.EventHandler(this.pictureBox2_Click);
             ((System.ComponentModel.ISupportInitialize)(this.dgvClass)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPrev)).EndInit();

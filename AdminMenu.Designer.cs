@@ -175,7 +175,7 @@ namespace SchoolManagement
             resources.ApplyResources(this.lbClasses, "lbClasses");
             this.lbClasses.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbClasses.Name = "lbClasses";
-            this.lbClasses.Click += new System.EventHandler(this.lbClasses_Click);
+
             // 
             // lbLogout
             // 
@@ -270,7 +270,6 @@ namespace SchoolManagement
             this.menu4.Values.ExtraText = resources.GetString("menu4.Values.ExtraText");
             this.menu4.Values.ImageTransparentColor = ((System.Drawing.Color)(resources.GetObject("menu4.Values.ImageTransparentColor")));
             this.menu4.Values.Text = resources.GetString("menu4.Values.Text");
-            this.menu4.Click += new System.EventHandler(this.menu4_Click);
             // 
             // lbToTalStudent
             // 

@@ -1,13 +1,15 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
-using MySql.Data.MySqlClient; // Use MySQL data access
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
-
-
 
 namespace SchoolManagement
 {
@@ -29,58 +31,214 @@ namespace SchoolManagement
         private bool isSelected = false;
         private int currFrom = 1;
         private int pageSize = 20;
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
 
         public SubjectManager()
         {
             InitializeComponent();
-            LoadSubjects();
-           
+            this.Load += async (s, e) => await LoadSubjectsAsync();
         }
 
-        private void LoadSubjects()
+        #region Load Data Methods
+
+        private async Task LoadSubjectsAsync()
         {
             try
             {
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                MySqlConnection conn = new MySqlConnection(connectionString);
+                try
                 {
-                    conn.Open();
-                    string query = "SELECT a.SUB_ID AS `Subject ID`,    a.SUB_NAME AS `Name`,    a.CREDITS AS `Credits`FROM  SUBJECT a ORDER BY     a.SUB_ID ASC;";
+                    await conn.OpenAsync();
+                    string query = @"
+                        SELECT SUB_ID AS `Subject ID`, SUB_NAME AS `Name`, CREDITS AS `Credits`
+                        FROM SUBJECT
+                        ORDER BY SUB_ID ASC
+                        LIMIT @limit OFFSET @offset";
 
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    try
                     {
-                        cmd.Parameters.AddWithValue("@start", (currFrom - 1) * pageSize + 1);
-                        cmd.Parameters.AddWithValue("@end", currFrom * pageSize);
+                        cmd.Parameters.AddWithValue("@limit", pageSize);
+                        cmd.Parameters.AddWithValue("@offset", (currFrom - 1) * pageSize);
 
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        try
                         {
                             DataTable dataTable = new DataTable();
-                            dataTable.Load(reader);
+                            await Task.Run(() => adapter.Fill(dataTable));
                             dgvStudents.DataSource = dataTable;
                         }
+                        finally
+                        {
+                            adapter.Dispose();
+                        }
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
                     }
                 }
+                finally
+                {
+                    conn.Dispose();
+                }
             }
-            catch (Exception es)
+            catch (Exception ex)
             {
-                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + es.Message);
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
             }
         }
 
-        private void pbPrev_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Button Click Events
+
+        private async void pbPrev_Click(object sender, EventArgs e)
         {
             if (currFrom > 1)
             {
                 currFrom--;
-                LoadSubjects();
+                await LoadSubjectsAsync();
             }
         }
 
-        private void pbNext_Click(object sender, EventArgs e)
+        private async void pbNext_Click(object sender, EventArgs e)
         {
             currFrom++;
-            LoadSubjects();
+            await LoadSubjectsAsync();
         }
+
+        private void pbStudents_Click(object sender, EventArgs e)
+        {
+            action = 0;
+            SetAddMode();
+        }
+
+        private void pbEdit_Click(object sender, EventArgs e)
+        {
+            if (!isSelected)
+            {
+                MessageBox.Show(GetLocalizedErrorMessage("NoRecordToEdit"));
+                return;
+            }
+            action = 1;
+            SetEditMode();
+        }
+
+        private void pbSave_Click(object sender, EventArgs e)
+        {
+            SaveSubjectAsync();
+        }
+
+        private async void pbDelete_Click(object sender, EventArgs e)
+        {
+            if (!isSelected)
+            {
+                MessageBox.Show(GetLocalizedErrorMessage("NoRecordToDelete"));
+                return;
+            }
+
+            if (MessageBox.Show(GetLocalizedErrorMessage("ConfirmDelete"), "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                try
+                {
+                    MySqlConnection conn = new MySqlConnection(connectionString);
+                    try
+                    {
+                        await conn.OpenAsync();
+                        MySqlCommand cmd = new MySqlCommand("SP_SUBJECT_DELETE", conn);
+                        try
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("p_SUB_ID", txtID.Text);
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                        finally
+                        {
+                            cmd.Dispose();
+                        }
+                    }
+                    finally
+                    {
+                        conn.Dispose();
+                    }
+                    MessageBox.Show(GetLocalizedErrorMessage("DeleteSuccess"));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
+                }
+                finally
+                {
+                    isSelected = false;
+                    await RefreshFormAsync();
+                }
+            }
+        }
+
+        private async void pbReload_Click(object sender, EventArgs e)
+        {
+            await RefreshFormAsync();
+        }
+
+        private async void pictureBox1_Click(object sender, EventArgs e)
+        {
+            await ExportToCsvAsync();
+        }
+
+        private async void btnSearch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(connectionString);
+                try
+                {
+                    await conn.OpenAsync();
+                    string query = @"
+                        SELECT SUB_ID AS `Subject ID`, SUB_NAME AS `Name`, CREDITS AS `Credits`
+                        FROM SUBJECT
+                        WHERE SUB_NAME LIKE @search OR SUB_ID LIKE @search
+                        ORDER BY SUB_ID ASC
+                        LIMIT @limit OFFSET @offset";
+
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    try
+                    {
+                        cmd.Parameters.AddWithValue("@search", "%" + txtSearch.Text + "%");
+                        cmd.Parameters.AddWithValue("@limit", pageSize);
+                        cmd.Parameters.AddWithValue("@offset", (currFrom - 1) * pageSize);
+
+                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        try
+                        {
+                            DataTable dataTable = new DataTable();
+                            await Task.Run(() => adapter.Fill(dataTable));
+                            dgvStudents.DataSource = dataTable;
+                        }
+                        finally
+                        {
+                            adapter.Dispose();
+                        }
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                    }
+                }
+                finally
+                {
+                    conn.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Helper Methods
 
         private void dgvStudents_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -108,10 +266,8 @@ namespace SchoolManagement
             lbSave.Visible = false;
         }
 
-        private void pbStudents_Click(object sender, EventArgs e)
+        private void SetAddMode()
         {
-            action = 0;
-
             pbStudents.Visible = false;
             lbSubjAdd.Visible = false;
             pbEdit.Visible = false;
@@ -121,6 +277,7 @@ namespace SchoolManagement
             pbSave.Visible = true;
             lbSave.Visible = true;
 
+            txtID.Text = "";
             txtID.Visible = true;
             lbSubjID.Visible = true;
             txtID.Enabled = true;
@@ -132,15 +289,8 @@ namespace SchoolManagement
             txtAddress.Enabled = true;
         }
 
-        private void pbEdit_Click(object sender, EventArgs e)
+        private void SetEditMode()
         {
-            if (!isSelected)
-            {
-                MessageBox.Show(GetLocalizedErrorMessage("NoRecordToEdit"));
-                return;
-            }
-            action = 1;
-
             pbStudents.Visible = false;
             lbSubjAdd.Visible = false;
             pbEdit.Visible = false;
@@ -155,282 +305,216 @@ namespace SchoolManagement
             txtAddress.Enabled = true;
         }
 
-        private void pbReload_Click(object sender, EventArgs e)
+        private async Task RefreshFormAsync()
         {
-            Refesh();
-        }
-
-        private void Refesh()
-        {
-            pbStudents.Visible = true;
-            lbSubjAdd.Visible = true;
-            pbEdit.Visible = true;
-            lbSubjEdit.Visible = true;
-            pbDelete.Visible = true;
-            lbSubjDelete.Visible = true;
-            pbSave.Visible = false;
-            lbSave.Visible = false;
-
-            LoadSubjects();
+            isSelected = false;
+            currFrom = 1;
+            showAction();
+            await LoadSubjectsAsync();
             txtSearch.Text = "";
             txtID.Text = "";
             txtName.Text = "";
             txtAddress.Text = "";
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private async void SaveSubjectAsync()
         {
-            ExportToExcel();
-        }
-        private void ExportToExcel()
-        {
+            if (!ValidateInputs()) return;
+
             try
             {
-                // Create a new Excel application instance
-                Excel.Application excelApp = new Excel.Application();
-                excelApp.Visible = true;
-                Excel.Workbook workbook = excelApp.Workbooks.Add();
-                Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
-
-                // Add column headers to the Excel file
-                for (int col = 0; col < dgvStudents.Columns.Count; col++)
-                {
-                    worksheet.Cells[1, col + 1] = dgvStudents.Columns[col].HeaderText;
-                }
-
-                // Fetch all data for the export, not just the current page
-                List<DataRow> allRows = new List<DataRow>();
-
-                // Loop through all pages and collect all data
-
-               
-                
-                    LoadSubjects();  // This loads students for the current page
-
-                    // Collect rows from the DataGridView
-                    foreach (DataGridViewRow row in dgvStudents.Rows)
-                    {
-                        if (row.IsNewRow) continue; // Skip the new row placeholder
-
-                        DataRow dataRow = ((DataTable)dgvStudents.DataSource).NewRow();
-
-                        // Copy row values to DataRow
-                        for (int col = 0; col < dgvStudents.Columns.Count; col++)
-                        {
-                            dataRow[col] = row.Cells[col].Value.ToString();
-                        }
-
-                        allRows.Add(dataRow); // Add the row to the list
-                    }
-                
-
-                // Populate Excel worksheet with all rows collected
-                int rowIndex = 2; // Start from row 2 (because row 1 is the header)
-                foreach (var row in allRows)
-                {
-                    for (int col = 0; col < dgvStudents.Columns.Count; col++)
-                    {
-                        worksheet.Cells[rowIndex, col + 1] = row[col].ToString();
-                    }
-                    rowIndex++;
-                }
-
-                MessageBox.Show(GetLocalizedErrorMessage("Exports"));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
-            }
-            LoadSubjects();
-        }
-
-        private void pbDelete_Click(object sender, EventArgs e)
-        {
-            if (!isSelected)
-            {
-                MessageBox.Show(GetLocalizedErrorMessage("NoRecordToDelete"));
-                return;
-            }
-
-            DialogResult dialogResult = MessageBox.Show(GetLocalizedErrorMessage("DeleteSuccess"), "Confirm", MessageBoxButtons.YesNo);
-
-            if (dialogResult == DialogResult.Yes)
-            {
+                MySqlConnection conn = new MySqlConnection(connectionString);
                 try
                 {
-                    string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-                    using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                    await conn.OpenAsync();
+                    MySqlCommand cmd;
+
+                    if (action == 0) // Add new subject
                     {
-                        MySqlCommand cmd = new MySqlCommand("SP_SUBJECT_DELETE", conn);
+                        cmd = new MySqlCommand("SP_SUBJECT_ADD", conn);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("p_SUB_NAME", txtName.Text);
+                        cmd.Parameters.AddWithValue("p_CREDITS", int.Parse(txtAddress.Text));
+                    }
+                    else // Edit existing subject
+                    {
+                        cmd = new MySqlCommand("SP_SUBJECT_UPDATE", conn);
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("p_SUB_ID", txtID.Text);
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
+                        cmd.Parameters.AddWithValue("p_SUB_NAME", txtName.Text);
+                        cmd.Parameters.AddWithValue("p_CREDITS", int.Parse(txtAddress.Text));
                     }
 
-                    MessageBox.Show(GetLocalizedErrorMessage("DeleteSuccess"));
+                    try
+                    {
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                    }
+                    MessageBox.Show(GetLocalizedErrorMessage("SaveSuccess"));
                 }
-                catch (Exception ex)
+                finally
                 {
-                    MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
+                    conn.Dispose();
                 }
             }
-
-            isSelected = false;
-            Refesh();
+            catch (Exception ex)
+            {
+                MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
+            }
+            finally
+            {
+                await RefreshFormAsync();
+            }
         }
 
-
-        private void pbSave_Click(object sender, EventArgs e)
+        private bool ValidateInputs()
         {
-            if (action == 0) // Add new subject
+            if (string.IsNullOrWhiteSpace(txtName.Text))
             {
-                try
-                {
-                    string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-                    using (MySqlConnection conn = new MySqlConnection(mySqlDb))
-                    {
-                        MySqlCommand cmd = new MySqlCommand("SP_SUBJECT_ADD", conn);
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("p_SUB_NAME", txtName.Text); // Ensure this matches your stored procedure
-                        cmd.Parameters.AddWithValue("p_CREDITS", Int32.Parse(txtAddress.Text)); // If txtAddress holds credits
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    MessageBox.Show(GetLocalizedErrorMessage("SaveSuccess"));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
-                }
+                MessageBox.Show(GetLocalizedErrorMessage("NameRequired"));
+                return false;
             }
-            else // Edit existing subject
+            int credits;
+            if (string.IsNullOrWhiteSpace(txtAddress.Text) ||
+                !int.TryParse(txtAddress.Text, out credits) ||
+                credits < 0)
             {
-                try
-                {
-                    string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
-                    using (MySqlConnection conn = new MySqlConnection(mySqlDb))
-                    {
-                        MySqlCommand cmd = new MySqlCommand("SP_SUBJECT_UPDATE", conn); // Assuming you have a proper procedure set up
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        // Add parameters for update operation correctly
-                        cmd.Parameters.AddWithValue("p_SUB_ID", txtID.Text); // Add subject ID parameter
-                        cmd.Parameters.AddWithValue("p_SUB_NAME", txtName.Text); // Ensure this parameter is correctly referenced
-                        cmd.Parameters.AddWithValue("p_CREDITS", Int32.Parse(txtAddress.Text)); // Assuming txtAddress holds credits
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    MessageBox.Show(GetLocalizedErrorMessage("SaveSuccess"));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
-                }
+                MessageBox.Show(GetLocalizedErrorMessage("InvalidCredits"));
+                return false;
             }
-
-            Refesh(); // Call refresh to update the UI
+            return true;
         }
-        private void btnSearch_Click(object sender, EventArgs e)
+
+        private async Task ExportToCsvAsync()
         {
             try
             {
-                // Database connection string
-                string mySqlDb = "Server=localhost;Database=system;User ID=root;Password=samia;";
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                saveFileDialog.Title = "Save Subjects as CSV";
+                saveFileDialog.FileName = "Subjects_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".csv";
 
-                // Create and open a connection
-                using (MySqlConnection conn = new MySqlConnection(mySqlDb))
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    conn.Open();
+                    DataTable dataTable = await FetchDataFromDatabaseAsync();
 
-                    // SQL query to search subjects by SUB_NAME or SUB_ID
-                    string query = "SELECT a.SUB_ID AS `Subject ID`, a.SUB_NAME AS `Name`, a.CREDITS AS `Credits` " +
-                                   "FROM SUBJECT a " +
-                                   "WHERE a.SUB_NAME LIKE @search OR a.SUB_ID LIKE @search " +
-                                   "ORDER BY a.SUB_ID ASC;";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    if (dataTable != null && dataTable.Rows.Count > 0)
                     {
-                        // Add the search parameter to match the search text
-                        cmd.Parameters.AddWithValue("@search", "%" + txtSearch.Text + "%");
+                        StringBuilder csvContent = new StringBuilder();
 
-                        // Execute the query and load the results into a DataTable
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        // Écrire les en-têtes
+                        string[] columnNames = dataTable.Columns.Cast<DataColumn>()
+                            .Select(column => $"\"{column.ColumnName}\"")
+                            .ToArray();
+                        csvContent.AppendLine(string.Join(",", columnNames));
+
+                        // Écrire les données
+                        foreach (DataRow row in dataTable.Rows)
                         {
-                            DataTable dataTable = new DataTable();
-                            dataTable.Load(reader);
-
-                            // Bind the results to the DataGridView
-                            dgvStudents.DataSource = dataTable;
+                            string[] fields = row.ItemArray.Select(field =>
+                                $"\"{(field != null ? field.ToString().Replace("\"", "\"\"") : "")}\"")
+                                .ToArray();
+                            csvContent.AppendLine(string.Join(",", fields));
                         }
+
+                        // Écrire dans le fichier
+                        File.WriteAllText(saveFileDialog.FileName, csvContent.ToString(), Encoding.UTF8);
+
+                        MessageBox.Show(GetLocalizedErrorMessage("Exports"));
+                        System.Diagnostics.Process.Start(saveFileDialog.FileName); // Ouvre le fichier
+                    }
+                    else
+                    {
+                        MessageBox.Show("No data to export.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Handle any errors
                 MessageBox.Show(GetLocalizedErrorMessage("Error") + " " + ex.Message);
             }
         }
 
-    private string GetLocalizedErrorMessage(string messageKey)
-    {
-        // Detect the current culture (language setting of the system)
-        string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
-
-        // Handle messages based on language
-        if (currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase)) // French culture
+        private async Task<DataTable> FetchDataFromDatabaseAsync()
         {
-            // French messages
-            switch (messageKey)
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            try
             {
-                case "NoRecordToEdit":
-                    return "Aucune matière trouvé à éditer";
-                case "SaveSuccess":
-                    return "Enregistrement réussi";
-                case "DeleteSuccess":
-                    return "Suppression réussie";
-                case "NoRecordToDelete":
-                    return "Aucun enregistrement trouvé à supprimer";
-                case "Error":
-                    return "Erreur : ";
-                case "Exports":
-                    return "Export réussi.";
+                await conn.OpenAsync();
 
-                default:
-                    return "Erreur inconnue";
+                const string query = @"
+                    SELECT SUB_ID AS `Subject ID`, 
+                           SUB_NAME AS `Name`, 
+                           CREDITS AS `Credits`
+                    FROM SUBJECT 
+                    ORDER BY SUB_ID ASC";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                try
+                {
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    try
+                    {
+                        DataTable dataTable = new DataTable();
+                        await Task.Run(() => adapter.Fill(dataTable));
+                        return dataTable;
+                    }
+                    finally
+                    {
+                        adapter.Dispose();
+                    }
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+            }
+            finally
+            {
+                conn.Dispose();
             }
         }
-        else // Default to English culture
+
+        private string GetLocalizedErrorMessage(string messageKey)
         {
-            // English messages
-            switch (messageKey)
+            string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+            Dictionary<string, string> messages = currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase)
+                ? new Dictionary<string, string>
+                {
+                    { "NoRecordToEdit", "Aucune matière trouvée à éditer." },
+                    { "NoRecordToDelete", "Aucun enregistrement trouvé à supprimer." },
+                    { "ConfirmDelete", "Êtes-vous sûr de vouloir supprimer ?" },
+                    { "SaveSuccess", "Enregistrement réussi." },
+                    { "DeleteSuccess", "Suppression réussie." },
+                    { "Error", "Erreur : " },
+                    { "Exports", "Export réussi." },
+                    { "NameRequired", "Le nom de la matière est requis." },
+                    { "InvalidCredits", "Les crédits doivent être un nombre positif." }
+                }
+                : new Dictionary<string, string>
+                {
+                    { "NoRecordToEdit", "No selected subject found to edit." },
+                    { "NoRecordToDelete", "No matching record found to delete." },
+                    { "ConfirmDelete", "Are you sure you want to delete?" },
+                    { "SaveSuccess", "Save successful." },
+                    { "DeleteSuccess", "Deleted successfully." },
+                    { "Error", "Error: " },
+                    { "Exports", "Exported successfully." },
+                    { "NameRequired", "Subject name is required." },
+                    { "InvalidCredits", "Credits must be a positive number." }
+                };
+
+            string message;
+            if (messages.TryGetValue(messageKey, out message))
             {
-                case "NoRecordToEdit":
-                    return "No selected subject found to edit.";
-                case "SaveSuccess":
-                    return "Save success";
-                case "DeleteSuccess":
-                    return "Deleted successfully.";
-                case "NoRecordToDelete":
-                    return "No matching record found to delete.";
-                case "Error":
-                    return "Error: ";
-                case "Exports":
-                        return "Exported successfully.";
-
-
-                default:
-                    return "Unknown error";
+                return message;
             }
+            return "Unknown error";
         }
-    }
 
-    private void SubjectManager_Load(object sender, EventArgs e)
-        {
-            // Any additional load logic can be added here
-        }
+        #endregion
     }
 }

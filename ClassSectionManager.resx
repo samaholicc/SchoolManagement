@@ -1496,6 +1496,9 @@
   <data name="&gt;&gt;lbDelete.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;lbSchedule.ZOrder" xml:space="preserve">
+    <value>23</value>
+  </data>
   <data name="&gt;&gt;lbDelete.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
@@ -2353,9 +2356,6 @@
         rj6HPpc+pz63voa+Vl3li9Jc95S0N385lNTvD72vdTKv9xxZOq9errooHZWBiLzEyP8HvphtNhUnNhEA
         AAAASUVORK5CYII=
 </value>
-  </data>
-  <data name="cbTeacher.Size" type="System.Drawing.Size, System.Drawing">
-    <value>315, 36</value>
   </data>
   <data name="pbNext.Size" type="System.Drawing.Size, System.Drawing">
     <value>39, 33</value>
@@ -4434,8 +4434,8 @@
   <data name="lbFinish.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 186</value>
   </data>
-  <data name="&gt;&gt;pbDelete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="cbTeacher.Size" type="System.Drawing.Size, System.Drawing">
+    <value>315, 36</value>
   </data>
   <data name="&gt;&gt;dgvClass.Parent" xml:space="preserve">
     <value>$this</value>
@@ -4571,8 +4571,8 @@
   <data name="pictureBox1.TabIndex" type="System.Int32, mscorlib">
     <value>126</value>
   </data>
-  <data name="&gt;&gt;lbSchedule.ZOrder" xml:space="preserve">
-    <value>23</value>
+  <data name="&gt;&gt;pbDelete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label2.Name" xml:space="preserve">
     <value>label2</value>

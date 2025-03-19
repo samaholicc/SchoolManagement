@@ -18,11 +18,7 @@ namespace SchoolManagement
         private void AdminMenu_Load(object sender, EventArgs e)
         {
             LoadTotals();
-          
-
-
-
-
+         
         }
 
         private void pbLogout_Click(object sender, EventArgs e)
@@ -117,14 +113,5 @@ namespace SchoolManagement
             departmentManager.Show();
         }
 
-        private void menu4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lbClasses_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

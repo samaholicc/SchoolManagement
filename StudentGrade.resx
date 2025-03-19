@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="pbReload.Size" type="System.Drawing.Size, System.Drawing">
-    <value>39, 33</value>
-  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ColorMap" type="System.Drawing.Color, System.Drawing">
+    <value />
+  </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lbExport.Size" type="System.Drawing.Size, System.Drawing">
@@ -132,10 +132,6 @@
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ToolTipTitle" xml:space="preserve">
     <value />
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritText" type="System.Boolean, mscorlib">
-    <value>True</value>
   </data>
   <data name="&gt;&gt;btnSearch.Name" xml:space="preserve">
     <value>btnSearch</value>
@@ -161,6 +157,7 @@
         KSP7sNPGEUe+B199GMY2MZWCwS7UVM1XIZZ3lzj1JuV3amhl/9k=
 </value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="pbReload.TabIndex" type="System.Int32, mscorlib">
     <value>70</value>
   </data>
@@ -180,6 +177,9 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMin.Orientation" type="ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation, ComponentFactory.Krypton.Toolkit">
     <value>Inherit</value>
   </data>
+  <data name="&gt;&gt;pbReload.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ExtraText" xml:space="preserve">
     <value />
   </data>
@@ -198,6 +198,9 @@
   </data>
   <data name="&gt;&gt;txtSearch.Parent" xml:space="preserve">
     <value>$this</value>
+  </data>
+  <data name="txtSearch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 22</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedTracking" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -222,12 +225,6 @@
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.Orientation" type="ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation, ComponentFactory.Krypton.Toolkit">
-    <value>Inherit</value>
   </data>
   <data name="btnSearch.Values.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value />
@@ -258,6 +255,9 @@
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.AllowInheritImage" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="pictureBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>71</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -316,11 +316,11 @@
   <data name="&gt;&gt;dgvStudents.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="&gt;&gt;dgvStudents.Type" xml:space="preserve">
+    <value>ComponentFactory.Krypton.Toolkit.KryptonDataGridView, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
-  <data name="lbExport.Location" type="System.Drawing.Point, System.Drawing">
-    <value>864, 30</value>
+  <data name="&gt;&gt;pbReload.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
     <value>Inherit</value>
@@ -340,6 +340,26 @@
         1rmt1uXdauAXrFB8RSkgAVKc7EwACnykSScEZvKm3zW0OBU5jyFNbS2deRbZjIQVazGvUfpAKrfzROYd
         AcrfB9MdKWtTmz9uDhn/ADA/Zn165cNdKFS8y+LDzCwmr2lDVOuhOh2Yss5b3JcbXo0NvfZMaw8Q1NwK
         lRP08PdI7zuY4RK2Uypt02Ih+KU4DyVS7N2cew70RkYKEcrOddT48UVF4Yqnr//Z
+</value>
+  </data>
+  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
+        DhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQU
+        FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAaABkDAREAAhEBAxEB/8QA
+        GQAAAwADAAAAAAAAAAAAAAAABQcIAgMJ/8QALxAAAQMCBAMGBgMAAAAAAAAAAQIDBAURAAYHIQgSMRRB
+        QlGBkRMWMjRSYVNUkv/EABsBAAMAAwEBAAAAAAAAAAAAAAUGBwECBAAD/8QALhEAAQMDAgMGBgMAAAAA
+        AAAAAQACAwQFERIxBiFRE0FhcaHBFCIyUoHwkdHh/9oADAMBAAIRAxEAPwC+tUtVKfpjSmnX21TKjJ5h
+        FhIVylduqlK8KRcXO/XYHA2uro6Fmp3MnYIFd7vDaIdcnNx2HX/FPU/ibzpJmh1qRT4TQP27cYKSR+yo
+        lR9CPTCc+/VTnZbgDyUvk4xuL36mBoHTGU09JeIdrOlTao1cjMwKm/cR5Ecn4D6vwsokoV1sLkG3UGwJ
+        +33htW7spRh3d0Kc7JxOy4yCnqG6XnbGx8PAp0YZE9KLuJasyHNSsxuKG9PYaZYCunIGEugf6cUfXE3v
+        Ty+tc092B6Z91C+KpHTXZ0btm6QPLAPupoqNPpWteX+3QSiJX4qAlTajuD+CvNJ3sru9xgWC6B2Dsg7H
+        yW2TQ/mw/v8AKN6JNTaBlZ9Kw5Cnw5y1jwracSEFJH7BAIOPSPLZA9hWlZMW1TJojsAQfyuj/wA2zv6L
+        ntin9u7or18U/wC1KTic0jmVxbmY6Ww7KQ7H7PUI7CeZxIAIS6lIF1bGx62CUm1r2Xr1b3yOFTEMkbj3
+        SVxVZpZ3ivpm5I+od/LY/wBqOcvaPQMt1NqoU6rVBDrZsbLQUrHelQ5dwcJ75XOGkhTaavklaY5GD1T7
+        0j0rmaj1xlRjqRQGnAqZLIslxIO7aD4lG1jb6R1tsCStlufVyBzh8g3PsEYsFjmuM7ZHtxE08z18B+8l
+        aHZ2v40+2KXgK86R0WzGVsgs3JGXajKVKl0ClypKjdTz0NtayfMkpvjndTwvOpzAT5Bcb6OmkdrfE0nq
+        QEXZZbjtIaaQlppACUoQLBI8gO7H3AAGAusANGAOSzxlZX//2Q==
 </value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritImage" type="System.Boolean, mscorlib">
@@ -372,17 +392,14 @@
   <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>39, 33</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="txtSearch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>307, 33</value>
   </data>
   <data name="&gt;&gt;txtSearch.Name" xml:space="preserve">
     <value>txtSearch</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.Style" type="ComponentFactory.Krypton.Toolkit.PaletteButtonStyle, ComponentFactory.Krypton.Toolkit">
     <value>Inherit</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>StudentGrade</value>
   </data>
   <data name="btnSearch.Values.Text" xml:space="preserve">
     <value>Search</value>
@@ -393,10 +410,7 @@
   <data name="&gt;&gt;kryptonPalette1.Name" xml:space="preserve">
     <value>kryptonPalette1</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.ColorMap" type="System.Drawing.Color, System.Drawing">
-    <value />
-  </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.Text" xml:space="preserve">
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
   <data name="&gt;&gt;lbExport.Name" xml:space="preserve">
@@ -411,25 +425,8 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
-        DhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQU
-        FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAaABkDAREAAhEBAxEB/8QA
-        GQAAAwADAAAAAAAAAAAAAAAABQcIAgMJ/8QALxAAAQMCBAMGBgMAAAAAAAAAAQIDBAURAAYHIQgSMRRB
-        QlGBkRMWMjRSYVNUkv/EABsBAAMAAwEBAAAAAAAAAAAAAAUGBwECBAAD/8QALhEAAQMDAgMGBgMAAAAA
-        AAAAAQACAwQFERIxBiFRE0FhcaHBFCIyUoHwkdHh/9oADAMBAAIRAxEAPwC+tUtVKfpjSmnX21TKjJ5h
-        FhIVylduqlK8KRcXO/XYHA2uro6Fmp3MnYIFd7vDaIdcnNx2HX/FPU/ibzpJmh1qRT4TQP27cYKSR+yo
-        lR9CPTCc+/VTnZbgDyUvk4xuL36mBoHTGU09JeIdrOlTao1cjMwKm/cR5Ecn4D6vwsokoV1sLkG3UGwJ
-        +33htW7spRh3d0Kc7JxOy4yCnqG6XnbGx8PAp0YZE9KLuJasyHNSsxuKG9PYaZYCunIGEugf6cUfXE3v
-        Ty+tc092B6Z91C+KpHTXZ0btm6QPLAPupoqNPpWteX+3QSiJX4qAlTajuD+CvNJ3sru9xgWC6B2Dsg7H
-        yW2TQ/mw/v8AKN6JNTaBlZ9Kw5Cnw5y1jwracSEFJH7BAIOPSPLZA9hWlZMW1TJojsAQfyuj/wA2zv6L
-        ntin9u7or18U/wC1KTic0jmVxbmY6Ww7KQ7H7PUI7CeZxIAIS6lIF1bGx62CUm1r2Xr1b3yOFTEMkbj3
-        SVxVZpZ3ivpm5I+od/LY/wBqOcvaPQMt1NqoU6rVBDrZsbLQUrHelQ5dwcJ75XOGkhTaavklaY5GD1T7
-        0j0rmaj1xlRjqRQGnAqZLIslxIO7aD4lG1jb6R1tsCStlufVyBzh8g3PsEYsFjmuM7ZHtxE08z18B+8l
-        aHZ2v40+2KXgK86R0WzGVsgs3JGXajKVKl0ClypKjdTz0NtayfMkpvjndTwvOpzAT5Bcb6OmkdrfE0nq
-        QEXZZbjtIaaQlppACUoQLBI8gO7H3AAGAusANGAOSzxlZX//2Q==
-</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormMax.Orientation" type="ComponentFactory.Krypton.Toolkit.PaletteButtonOrientation, ComponentFactory.Krypton.Toolkit">
+    <value>Inherit</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImagePressed" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -467,8 +464,11 @@
   <data name="&gt;&gt;pictureBox1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;pbReload.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritImage" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>StudentGrade</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.AllowInheritText" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -482,8 +482,8 @@
   <data name="&gt;&gt;dgvStudents.Name" xml:space="preserve">
     <value>dgvStudents</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritImage" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageNormal" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormClose.Edge" type="ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign, ComponentFactory.Krypton.Toolkit">
     <value>Inherit</value>
@@ -491,14 +491,17 @@
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>968, 453</value>
   </data>
-  <data name="txtSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 33</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritText" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="txtSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 22</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageCheckedPressed" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
   <data name="lbExport.TabIndex" type="System.Int32, mscorlib">
     <value>72</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="kryptonPalette1.ButtonSpecs.FormMax.Text" xml:space="preserve">
     <value />
@@ -762,8 +765,8 @@
         tT3a49rH2qeaKUPpjgMA8MOftd9oT2t7tYWaeSXY8cnL+/8obeE3wFS+mQAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="&gt;&gt;dgvStudents.Type" xml:space="preserve">
-    <value>ComponentFactory.Krypton.Toolkit.KryptonDataGridView, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormMin.ColorMap" type="System.Drawing.Color, System.Drawing">
+    <value />
   </data>
   <data name="&gt;&gt;btnSearch.Type" xml:space="preserve">
     <value>ComponentFactory.Krypton.Toolkit.KryptonButton, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
@@ -771,27 +774,8 @@
   <data name="&gt;&gt;txtSearch.Type" xml:space="preserve">
     <value>ComponentFactory.Krypton.Toolkit.KryptonTextBox, ComponentFactory.Krypton.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e</value>
   </data>
-  <data name="kryptonPalette1.ButtonSpecs.FormClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
-        DhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQU
-        FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAbABoDAREAAhEBAxEB/8QA
-        GQAAAgMBAAAAAAAAAAAAAAAABgcECAkC/8QAKxAAAgEDAwMCBQUAAAAAAAAAAQIDBAURAAchBjFxCFES
-        ExVBgRQiMnKi/8QAHAEAAQQDAQAAAAAAAAAAAAAABgQFBwgAAQMC/8QALhEAAQMCBAUCBQUAAAAAAAAA
-        AQACAwQRBSExcQYSE0GRImEHFSOhsVGBweHw/9oADAMBAAIRAxEAPwDQHcjc+0bZWpKq4s01VMStNRQ4
-        +ZMRjOM8BRnljx5JAKOpqo6VvM/wiDBsDq8cn6VMMhq46D+z2H8ZpDVHq16jepZoLNa4YM8RSGSRgP7h
-        lH+dDxxqS+TBZS6z4cUgZZ87i72AA8Z/lNjajfe2bkz/AE6enNpvYT4xTM/xxzgdzG3GSByVIB9sgE6e
-        aPEI6r06O/RR3xBwpVYGOsDzxHuO247b6bJoadEDKlnqFvFRdd2Lyk0jNFR/LpoEPZEEasQPLMx/OgbF
-        JC+pcD2Vn+CKWODBontGb7k+SPwAlvpoR8pdpvNR09c6W6UrlKmilWojKnHKnOPB7H3BOu0MhikD26hI
-        K+ljraaSnlGTgR/tloejB0VhkAjPOpKVMiLGyq16nNt6u39RSdWUkMk9trVQVbKM/p5VUKGbHZGVV5PA
-        IOT+4aE8WpHc/XaLg6qeOA8dhNP8rmcA9t+X3BN7bg3/AG2KReNDamS6Ododt6zcXqqmhSFvpNNKslfU
-        lcoEBBMefuzdsdwDn7ac6CkdUyg29I1QVxRj0OD0b2h31XAho755X2Gv2V4dHqquuZEWVGR1DowIZWGQ
-        R7HWarYJBuEF1eyvQ1bXCrl6ZoBMDnESGOM+UUhT+RpE6ip3HmLAiOPiPF4o+k2pdbe58nP7ott1so7R
-        SJS0FJBRUsf8IKeMRovhQABpW1rWCzRYJhlmkneZJXFzj3JufJUnXpcV/9k=
-</value>
-  </data>
-  <data name="&gt;&gt;pbReload.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lbExport.Location" type="System.Drawing.Point, System.Drawing">
+    <value>864, 30</value>
   </data>
   <data name="&gt;&gt;pbReload.Name" xml:space="preserve">
     <value>pbReload</value>
@@ -799,8 +783,8 @@
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
   </data>
-  <data name="&gt;&gt;btnSearch.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="pbReload.Size" type="System.Drawing.Size, System.Drawing">
+    <value>39, 33</value>
   </data>
   <data name="pbReload.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1078,8 +1062,24 @@
   <data name="kryptonPalette1.ButtonSpecs.FormMin.AllowInheritExtraText" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="pictureBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>71</value>
+  <data name="kryptonPalette1.ButtonSpecs.FormClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsN
+        DhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQU
+        FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAbABoDAREAAhEBAxEB/8QA
+        GQAAAgMBAAAAAAAAAAAAAAAABgcECAkC/8QAKxAAAgEDAwMCBQUAAAAAAAAAAQIDBAURAAchBjFxCFES
+        ExVBgRQiMnKi/8QAHAEAAQQDAQAAAAAAAAAAAAAABgQFBwgAAQMC/8QALhEAAQMCBAUCBQUAAAAAAAAA
+        AQACAwQRBSExcQYSE0GRImEHFSOhsVGBweHw/9oADAMBAAIRAxEAPwDQHcjc+0bZWpKq4s01VMStNRQ4
+        +ZMRjOM8BRnljx5JAKOpqo6VvM/wiDBsDq8cn6VMMhq46D+z2H8ZpDVHq16jepZoLNa4YM8RSGSRgP7h
+        lH+dDxxqS+TBZS6z4cUgZZ87i72AA8Z/lNjajfe2bkz/AE6enNpvYT4xTM/xxzgdzG3GSByVIB9sgE6e
+        aPEI6r06O/RR3xBwpVYGOsDzxHuO247b6bJoadEDKlnqFvFRdd2Lyk0jNFR/LpoEPZEEasQPLMx/OgbF
+        JC+pcD2Vn+CKWODBontGb7k+SPwAlvpoR8pdpvNR09c6W6UrlKmilWojKnHKnOPB7H3BOu0MhikD26hI
+        K+ljraaSnlGTgR/tloejB0VhkAjPOpKVMiLGyq16nNt6u39RSdWUkMk9trVQVbKM/p5VUKGbHZGVV5PA
+        IOT+4aE8WpHc/XaLg6qeOA8dhNP8rmcA9t+X3BN7bg3/AG2KReNDamS6Ododt6zcXqqmhSFvpNNKslfU
+        lcoEBBMefuzdsdwDn7ac6CkdUyg29I1QVxRj0OD0b2h31XAho755X2Gv2V4dHqquuZEWVGR1DowIZWGQ
+        R7HWarYJBuEF1eyvQ1bXCrl6ZoBMDnESGOM+UUhT+RpE6ip3HmLAiOPiPF4o+k2pdbe58nP7ott1so7R
+        SJS0FJBRUsf8IKeMRovhQABpW1rWCzRYJhlmkneZJXFzj3JufJUnXpcV/9k=
+</value>
   </data>
   <data name="dgvStudents.Size" type="System.Drawing.Size, System.Drawing">
     <value>944, 372</value>

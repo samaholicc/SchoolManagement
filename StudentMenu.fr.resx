@@ -315,6 +315,9 @@
   <data name="lbProfile.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
+  <data name="lbProfile.Location" type="System.Drawing.Point, System.Drawing">
+    <value>57, 181</value>
+  </data>
   <data name="lbProfile.Size" type="System.Drawing.Size, System.Drawing">
     <value>110, 20</value>
   </data>
