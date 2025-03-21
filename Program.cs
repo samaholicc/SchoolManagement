@@ -21,7 +21,15 @@ namespace SchoolManagement
         [STAThread]
         static void Main()
         {
-
+            try
+            {
+                DatabaseInitializer.InitializeDatabase();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur fatale : {ex.Message}");
+            }
+            Console.ReadLine();
             var language = ConfigurationManager.AppSettings["language"];
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(language);
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(language);
