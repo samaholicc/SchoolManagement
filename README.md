@@ -1,58 +1,4 @@
-# Logiciel de Gestion des Étudiants (LGE)
-
-## Aperçu
-
-Le **Logiciel de Gestion des Étudiants (LGE)** est une application de bureau conçue pour simplifier la gestion des étudiants, des enseignants et des tâches administratives dans les établissements éducatifs. Développé dans le cadre d’un projet pour Webitech (Paris), ce logiciel répond aux limites des outils traditionnels tels que les registres papier et les fichiers Excel en offrant un système centralisé, sécurisé et convivial. Il automatise des processus comme la gestion des notes, l’inscription des étudiants et la consultation des emplois du temps tout en garantissant la sécurité des données et la conformité aux réglementations comme le RGPD.
-
-Ce projet a été réalisé par **Samia Boutezrout** dans le cadre d’une initiative académique visant à améliorer la gestion des affaires étudiantes et de l’éducation.
-
----
-
-## Fonctionnalités
-
-### Objectifs Généraux
-- Centraliser les informations sur les étudiants, les enseignants et les cours.
-- Automatiser les processus administratifs.
-- Assurer la sécurité et la confidentialité des données grâce à un contrôle d’accès et des sauvegardes régulières.
-
-### Fonctionnalités Spécifiques par Utilisateur
-#### Administrateurs
-- Gérer les inscriptions des étudiants et des enseignants.
-- Attribuer des cours aux enseignants.
-- Modifier des documents académiques (listes d’étudiants, listes d’enseignants, relevés de notes, etc.).
-
-#### Enseignants
-- Gérer et saisir les notes des étudiants.
-- Consulter les listes de classes et les détails des étudiants.
-- Accéder aux emplois du temps.
-
-#### Étudiants
-- Consulter leurs notes et emplois du temps.
-- Accéder aux informations relatives aux cours.
-
----
-
-## Technologies Utilisées
-- **IDE** : Visual Studio 2022
-- **Langage de Programmation** : C#
-- **Base de Données** : MariaDB / MySQL
-- **Outils de Documentation** : Microsoft Word, Excel
-
----
-
-## Installation
-
-### Prérequis
-- **Visual Studio 2022** installé sur votre machine.
-- Serveur **MariaDB** ou **MySQL** installé et opérationnel.
-- Connaissances de base en C# et en configuration de bases de données.
-
-### Étapes
-1. **Cloner le Dépôt**
-   ```bash
-   git clone https://github.com/<votre-nom-utilisateur>/logiciel-gestion-etudiants.git
-
-   # Guide d'Installation et d'Utilisation
+# Guide d'Installation et d'Utilisation
 
 ## Ouvrir le Projet
 1. Lancez **Visual Studio 2022**.
@@ -68,7 +14,7 @@ Ce projet a été réalisé par **Samia Boutezrout** dans le cadre d’une initi
 }
 ```
 
-3. Exécutez les scripts SQL fournis (si inclus) pour configurer les tables et les données initiales.
+//Sinon exécutez les scripts SQL fournis pour configurer les tables et les données initiales.
 
 ## Compiler et Lancer
 1. Compilez la solution dans **Visual Studio** (`Ctrl+Shift+B`).
@@ -96,7 +42,6 @@ Voici quelques écrans clés de l’application :
 - **Vue des Classes Enseignant**
 - **Vue des Notes Étudiant**
 
-*(Remarque : Remplacez les chemins placeholders ci-dessus par les noms réels des fichiers de captures d’écran une fois disponibles.)*
 
 ## Structure du Projet
 ```
@@ -122,6 +67,12 @@ Pour toute question ou assistance, contactez :
 **Samia Boutezrout**
 - **Email** : samaholiccs@gmail.com
 - **Établissement** : Webitech, 6-8 Rue Firmin Gillot, 75015 Paris
+  
+![Écran de Connexion](screenshots/Login.png)
+![Écran de Connexion](screenshots/EditClass.png)
+![Écran de Connexion](screenshots/AddStudent.png)
+![Écran de Connexion](screenshots/AddDep.png)
+![Écran de Connexion](screenshots/AddSubject.png)
+
 
 **Dernière mise à jour : 21 mars 2025**
-
