@@ -1,0 +1,543 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <LangVersion>6.0</LangVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CCA30E90-ADB4-47C2-94AD-C98BF093A40A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>SchoolManagement</RootNamespace>
+    <AssemblyName>SchoolManagement</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://SchoolManagement.com/</InstallUrl>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>FE1BD43CB38E55130D52CBBE61C7339A323DA2AF</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>SchoolManagement_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <Reference Include="ComponentFactory.Krypton.Docking">
+      <HintPath>..\..\..\..\Download\Krypton-master\Bin\ComponentFactory.Krypton.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Navigator">
+      <HintPath>..\..\..\..\Download\Krypton-master\Bin\ComponentFactory.Krypton.Navigator.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Ribbon">
+      <HintPath>..\..\..\..\Download\Krypton-master\Bin\ComponentFactory.Krypton.Ribbon.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Toolkit">
+      <HintPath>..\..\..\..\Download\Krypton-master\Bin\ComponentFactory.Krypton.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Workspace">
+      <HintPath>..\..\..\..\Download\Krypton-master\Bin\ComponentFactory.Krypton.Workspace.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=9.0.0.3, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.3\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=9.2.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>packages\MySql.Data.9.2.0\lib\net48\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySqlConnector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d33d3e53aa5f8c92, processorArchitecture=MSIL">
+      <HintPath>packages\MySqlConnector.2.4.0\lib\net471\MySqlConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.6.0\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.6.0\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.6.0\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.1.0\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.6.0\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountRepository.cs" />
+    <Compile Include="AdminMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdminMenu.Designer.cs">
+      <DependentUpon>AdminMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ChangeLanguage.cs" />
+    <Compile Include="ClassSectionManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClassSectionManager.Designer.cs">
+      <DependentUpon>ClassSectionManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ClassSectionRepository.cs" />
+    <Compile Include="ClassSectionService.cs" />
+    <Compile Include="ClassService.cs" />
+    <Compile Include="DatabaseInitializer.cs" />
+    <Compile Include="DbConnectionWrapper.cs" />
+    <Compile Include="DepartmentManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DepartmentManager.Designer.cs">
+      <DependentUpon>DepartmentManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DepartmentRepository.cs" />
+    <Compile Include="Encrypt.cs" />
+    <Compile Include="ExportExcel.cs" />
+    <Compile Include="IAccountRepository.cs" />
+    <Compile Include="IClassSectionRepository.cs" />
+    <Compile Include="IDataReaderExtensions.cs" />
+    <Compile Include="IDbCommandExtensions.cs" />
+    <Compile Include="IDbConnectionFactory.cs" />
+    <Compile Include="IDbConnectionWrapper.cs" />
+    <Compile Include="IDepartmentRepository.cs" />
+    <Compile Include="insertData.cs" />
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdminProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdminProfile.Designer.cs">
+      <DependentUpon>AdminProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models.cs" />
+    <Compile Include="MultiSelectComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MySqlConnectionFactory.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schedule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Schedule.Designer.cs">
+      <DependentUpon>Schedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentClassSectionList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentClassSectionList.Designer.cs">
+      <DependentUpon>StudentClassSectionList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentsInClass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentsInClass.Designer.cs">
+      <DependentUpon>StudentsInClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentClassList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentClassList.Designer.cs">
+      <DependentUpon>StudentClassList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentGrade.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentGrade.Designer.cs">
+      <DependentUpon>StudentGrade.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentManager.Designer.cs">
+      <DependentUpon>StudentManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentMenu.Designer.cs">
+      <DependentUpon>StudentMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentProfile.Designer.cs">
+      <DependentUpon>StudentProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentsInClassSection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentsInClassSection.Designer.cs">
+      <DependentUpon>StudentsInClassSection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SubjectManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubjectManager.Designer.cs">
+      <DependentUpon>SubjectManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TeacherClassSection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TeacherClassSection.Designer.cs">
+      <DependentUpon>TeacherClassSection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TeacherManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TeacherManager.Designer.cs">
+      <DependentUpon>TeacherManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TeacherMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TeacherMenu.Designer.cs">
+      <DependentUpon>TeacherMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TeacherProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TeacherProfile.Designer.cs">
+      <DependentUpon>TeacherProfile.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AdminMenu.en.resx">
+      <DependentUpon>AdminMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdminMenu.fr.resx">
+      <DependentUpon>AdminMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdminMenu.resx">
+      <DependentUpon>AdminMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdminProfile.en.resx">
+      <DependentUpon>AdminProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdminProfile.fr.resx">
+      <DependentUpon>AdminProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClassSectionManager.en.resx">
+      <DependentUpon>ClassSectionManager.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClassSectionManager.fr.resx">
+      <DependentUpon>ClassSectionManager.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClassSectionManager.resx">
+      <DependentUpon>ClassSectionManager.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DepartmentManager.en.resx">
+      <DependentUpon>DepartmentManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DepartmentManager.fi-FI.resx">
+      <DependentUpon>DepartmentManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DepartmentManager.fr.resx">
+      <DependentUpon>DepartmentManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DepartmentManager.resx">
+      <DependentUpon>DepartmentManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.en.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.fr.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdminProfile.resx">
+      <DependentUpon>AdminProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Schedule.en.resx">
+      <DependentUpon>Schedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Schedule.fr.resx">
+      <DependentUpon>Schedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Schedule.resx">
+      <DependentUpon>Schedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentClassList.en.resx">
+      <DependentUpon>StudentClassList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentClassList.fr.resx">
+      <DependentUpon>StudentClassList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentClassSectionList.fr.resx">
+      <DependentUpon>StudentClassSectionList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentClassSectionList.resx">
+      <DependentUpon>StudentClassSectionList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentGrade.en.resx">
+      <DependentUpon>StudentGrade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentGrade.fr.resx">
+      <DependentUpon>StudentGrade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentManager.en.resx">
+      <DependentUpon>StudentManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentManager.fr.resx">
+      <DependentUpon>StudentManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentMenu.en.resx">
+      <DependentUpon>StudentMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentMenu.fr.resx">
+      <DependentUpon>StudentMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentProfile.en.resx">
+      <DependentUpon>StudentProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentProfile.fr.resx">
+      <DependentUpon>StudentProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentsInClass.en.resx">
+      <DependentUpon>StudentsInClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentsInClass.fr.resx">
+      <DependentUpon>StudentsInClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentsInClass.resx">
+      <DependentUpon>StudentsInClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentClassList.resx">
+      <DependentUpon>StudentClassList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentGrade.resx">
+      <DependentUpon>StudentGrade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentManager.resx">
+      <DependentUpon>StudentManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentMenu.resx">
+      <DependentUpon>StudentMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentProfile.resx">
+      <DependentUpon>StudentProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentsInClassSection.en.resx">
+      <DependentUpon>StudentsInClassSection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentsInClassSection.fr.resx">
+      <DependentUpon>StudentsInClassSection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentsInClassSection.resx">
+      <DependentUpon>StudentsInClassSection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubjectManager.en.resx">
+      <DependentUpon>SubjectManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubjectManager.fr.resx">
+      <DependentUpon>SubjectManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubjectManager.resx">
+      <DependentUpon>SubjectManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherClassSection.en.resx">
+      <DependentUpon>TeacherClassSection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherClassSection.fr.resx">
+      <DependentUpon>TeacherClassSection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherClassSection.resx">
+      <DependentUpon>TeacherClassSection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherManager.en.resx">
+      <DependentUpon>TeacherManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherManager.fr.resx">
+      <DependentUpon>TeacherManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherManager.resx">
+      <DependentUpon>TeacherManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherMenu.fr.resx">
+      <DependentUpon>TeacherMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherMenu.resx">
+      <DependentUpon>TeacherMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherProfile.en.resx">
+      <DependentUpon>TeacherProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherProfile.fr.resx">
+      <DependentUpon>TeacherProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeacherProfile.resx">
+      <DependentUpon>TeacherProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="screenshots\desktop.ini" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="SchoolManagement_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="screenshots\AddDep.png" />
+    <Content Include="screenshots\AddStudent.png" />
+    <Content Include="screenshots\AddSubject.png" />
+    <Content Include="screenshots\EditClass.png" />
+    <Content Include="screenshots\Login.png" />
+    <Content Include="Resources\init_database.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\red.jpg" />
+    <Content Include="Resources\red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>9</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="packages\Google.Api.CommonProtos.2.16.0\build\Google.Api.CommonProtos.targets" Condition="Exists('packages\Google.Api.CommonProtos.2.16.0\build\Google.Api.CommonProtos.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Google.Api.CommonProtos.2.16.0\build\Google.Api.CommonProtos.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Google.Api.CommonProtos.2.16.0\build\Google.Api.CommonProtos.targets'))" />
+    <Error Condition="!Exists('packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets'))" />
+  </Target>
+  <Import Project="packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets" Condition="Exists('packages\Grpc.Core.2.46.6\build\net45\Grpc.Core.targets')" />
+</Project>

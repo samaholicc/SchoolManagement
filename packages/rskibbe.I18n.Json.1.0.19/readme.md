@@ -1,0 +1,2 @@
+﻿# Description
+A translation sub-package with default JSON implementations for [rskibbe.I18n](https://www.nuget.org/packages/rskibbe.I18n). Visit [the documentation](https://robbelroot.de/blog/rskibbe-i18n-json-a-json-file-based-translation-sub-package/) for more information.

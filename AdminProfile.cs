@@ -1,0 +1,156 @@
+﻿using ComponentFactory.Krypton.Toolkit;
+using MySql.Data.MySqlClient;
+using System;
+using System.Configuration;
+using System.Data;
+using System.Globalization;
+using System.Text;
+using System.Windows.Forms;
+
+namespace SchoolManagement
+{
+    public partial class AdminProfile : KryptonForm
+    {
+        private readonly IAccountRepository _accountRepository;
+
+        public AdminProfile(IAccountRepository accountRepository)
+        {
+            InitializeComponent();
+            _accountRepository = accountRepository;
+            LoadTextBoxAsync();
+        }
+
+        private async void LoadTextBoxAsync()
+        {
+            try
+            {
+                var account = await _accountRepository.GetAccountByIdAsync(Login.ID);
+                if (account != null)
+                {
+                    txtName.Text = account.FullName;
+                    txtID.Text = account.Id;
+                    txtPassword.Text = "•••••"; // Placeholder
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessage(ex.Message);
+            }
+        }
+
+        private async void btnSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string newPassword = txtPassword.Text;
+                if (!string.IsNullOrEmpty(newPassword) && IsPasswordValid(newPassword))
+                {
+                    string hashedPassword = Encrypt.HashString(newPassword);
+                    bool success = await _accountRepository.UpdatePasswordAsync(txtID.Text, hashedPassword);
+                    ShowMessage(success ? "PasswordUpdated" : "FailedToUpdatePassword");
+                    if (success) this.Close();
+                }
+                else
+                {
+                    ShowMessage("InvalidPassword");
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessage(ex.Message);
+            }
+        }
+
+    // Other methods remain unchanged
+
+
+        private void kryptonButton1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private bool IsPasswordValid(string password)
+        {
+            if (password.Length < 8)
+            {
+                ShowMessage("PasswordTooShort");
+                return false;
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*(),.?""{}|<>]"))
+            {
+                ShowMessage("PasswordNoSpecialChar");
+                return false;
+            }
+
+            return true;
+        }
+
+        public string GetCurrentPassword(string userId, MySqlConnection conn)
+        {
+            string password = string.Empty;
+            string query = "SELECT PASSWORD FROM ACCOUNT WHERE ID = @id";
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@id", userId);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        password = reader["PASSWORD"].ToString();
+                    }
+                }
+            }
+            return password;
+        }
+
+        private void ShowMessage(string key)
+        {
+            string message = key;
+
+            if (CultureInfo.CurrentUICulture.Name == "fr-FR") // French
+            {
+                switch (key)
+                {
+                    case "PasswordTooShort": message = "Le mot de passe doit contenir au moins 8 caractères !"; break;
+                    case "PasswordNoSpecialChar": message = "Le mot de passe doit contenir au moins un caractère spécial !"; break;
+                    case "InvalidID": message = "Veuillez entrer un ID valide."; break;
+                    case "FailedToUpdatePassword": message = "Échec de la mise à jour du mot de passe. Vérifiez les détails."; break;
+                    case "PasswordUpdated": message = "Mot de passe mis à jour avec succès."; break;
+                    case "InvalidPassword": message = "Le mot de passe est invalide ou inchangé."; break;
+                    case "NoUserFound": message = "Aucun utilisateur trouvé."; break;
+                }
+            }
+            else // Default to English
+            {
+                switch (key)
+                {
+                    case "PasswordTooShort": message = "Password must be at least 8 characters!"; break;
+                    case "PasswordNoSpecialChar": message = "Password must contain at least one special character!"; break;
+                    case "InvalidID": message = "Please enter a valid ID."; break;
+                    case "FailedToUpdatePassword": message = "Failed to update password. Please check the details."; break;
+                    case "PasswordUpdated": message = "Password updated successfully."; break;
+                    case "InvalidPassword": message = "Password is either unchanged or it does not meet the criteria."; break;
+                    case "NoUserFound": message = "No user found."; break;
+                }
+            }
+
+            MessageBox.Show(message);
+        }
+
+
+
+
+        public class Account
+        {
+            public string Id { get; set; }
+            public string FullName { get; set; }
+            public string Password { get; set; }
+            public string Role { get; set; }
+        }
+        private void AdminProfile_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
