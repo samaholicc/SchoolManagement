@@ -147,6 +147,7 @@ namespace SchoolManagement
             public string FullName { get; set; }
             public string Password { get; set; }
             public string Role { get; set; }
+
         }
         private void AdminProfile_Load(object sender, EventArgs e)
         {

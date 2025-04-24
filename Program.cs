@@ -22,6 +22,7 @@ namespace SchoolManagement
             var services = new ServiceCollection();
             try
             {
+
                 ConfigureServices(services);
                 DatabaseInitializer.InitializeDatabase();
             }
@@ -46,12 +47,13 @@ namespace SchoolManagement
                 throw new InvalidOperationException("Connection string 'MySqlConnection' not found in app.config.");
             }
 
-            // Register IDbConnectionFactory with a factory delegate to avoid ambiguity
+            // Register IDbConnectionFactory
             services.AddSingleton<IDbConnectionFactory>(sp => new MySqlConnectionFactory(connectionString));
-            // Register repositories
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IClassSectionRepository, ClassSectionRepository>();
-            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
+            // Register repositories with the connection string
+            services.AddScoped<IDepartmentRepository>(sp => new DepartmentRepository(connectionString));
+            services.AddScoped<IAccountRepository>(sp => new AccountRepository(sp.GetRequiredService<IDbConnectionFactory>()));
+            services.AddScoped<IClassSectionRepository>(sp => new ClassSectionRepository(sp.GetRequiredService<IDbConnectionFactory>()));
 
             // Register services
             services.AddScoped<ClassSectionService>();

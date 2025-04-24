@@ -79,6 +79,16 @@ namespace SchoolManagement
         {
             try
             {
+                if (_accountRepository == null)
+                {
+                    throw new InvalidOperationException("_accountRepository is not initialized.");
+                }
+
+                if (txtUsername == null)
+                {
+                    throw new InvalidOperationException("txtUsername control is not initialized.");
+                }
+
                 var account = await _accountRepository.GetAccountByIdAsync(txtUsername.Text);
                 if (account != null)
                 {
@@ -86,6 +96,10 @@ namespace SchoolManagement
                 }
                 else
                 {
+                    if (error == null)
+                    {
+                        throw new InvalidOperationException("error control is not initialized.");
+                    }
                     error.Text = GetLocalizedMessage("Invalid username or password.", "Identifiant ou mot de passe invalide.");
                 }
             }

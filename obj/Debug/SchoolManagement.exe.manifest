@@ -162,14 +162,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SchoolManagement.exe" size="3386328">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SchoolManagement.exe" size="3394008">
       <assemblyIdentity name="SchoolManagement" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>H25quOXebG8Fq8WjklGJSaJdmaCua8YlB+Cz7RJxjTs=</dsig:DigestValue>
+        <dsig:DigestValue>l2ATdqZFACoCkpRa1QxjazkfxoTaKEqb8pcBhmCQiGU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -181,7 +181,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>AQ02wqy6cLIgRA1guXBq1QCjn8b9KPYJJNDfM5hfMsE=</dsig:DigestValue>
+        <dsig:DigestValue>BUv/OA15lzCdn91Qnae+W2cjbZQyAfFPb5gaE9NfgaA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -193,7 +193,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>HRoR5rBpBfFRxc5zA37D0b+1ofl2PWf3g4AyD5EBce0=</dsig:DigestValue>
+        <dsig:DigestValue>Mn6buYnzjbNyta3crBXqVmfeSfirls3KccKTCnAhUMg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -205,7 +205,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>ZTebpg9C/kd8a+IAMFtzcoj8ib3WqrJUSz6Fn6lFlL8=</dsig:DigestValue>
+        <dsig:DigestValue>OAkovb7MSfI89fZ7fOIVyFhgSMUZIy5sT7cZZWwsTI0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -329,13 +329,13 @@
       <dsig:DigestValue>d23Bnt0mSYAKk701t0th0Lga6EDtxlnP/vUE7ii11YE=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Resources\init_database.sql" size="7961">
+  <file name="Resources\init_database.sql" size="8203">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>p0pgxCG4+xda135qRLzDzbXSYGs7wzHfNDW8wFKIvIs=</dsig:DigestValue>
+      <dsig:DigestValue>voC5EOQyIGJxY9zgSvXU6PfsDHmth4LDFXKCu+2g35w=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Resources\red.jpg" size="884">

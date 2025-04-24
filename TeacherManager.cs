@@ -10,6 +10,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace SchoolManagement
 {
@@ -18,10 +20,11 @@ namespace SchoolManagement
         private int action; // 0 - add, 1 - edit
         private bool isSelected = false;
         private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
-        private int currFrom = 1;
+        private int currFrom = 1; 
         private int pageSize = 10;
 
-        public TeacherManager()
+    
+    public TeacherManager()
         {
             InitializeComponent();
             LoadTeachers();
@@ -50,7 +53,7 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading departments: {ex.Message}");
+                MessageBox.Show(string.Format(GetLocalizedMessage("ErrorLoadingDepartments"), ex.Message));
             }
         }
 
@@ -62,16 +65,16 @@ namespace SchoolManagement
                 {
                     conn.Open();
                     string query = @"
-                        SELECT 
-                            a.TEACHER_ID AS `Teacher ID`, 
-                            CONCAT(a.DEP_ID, ' - ', d.DEP_NAME) AS `Department`,  
-                            a.FULL_NAME AS `Name`,  
-                            a.DATE_OF_BIRTH AS `Birth`, 
-                            a.GENDER AS `Gender`, 
-                            a.ADRESS AS `Address`
-                        FROM SYSTEM.teacher a  
-                        JOIN SYSTEM.dep d ON a.DEP_ID = d.DEP_ID
-                        LIMIT @PageSize OFFSET @Offset";
+                    SELECT 
+                        a.TEACHER_ID AS `Teacher ID`, 
+                        CONCAT(a.DEP_ID, ' - ', d.DEP_NAME) AS `Department`,  
+                        a.FULL_NAME AS `Name`,  
+                        a.DATE_OF_BIRTH AS `Birth`, 
+                        a.GENDER AS `Gender`, 
+                        a.ADRESS AS `Address`
+                    FROM SYSTEM.teacher a  
+                    JOIN SYSTEM.dep d ON a.DEP_ID = d.DEP_ID
+                    LIMIT @PageSize OFFSET @Offset";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -89,7 +92,7 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading teachers: {ex.Message}");
+                MessageBox.Show(string.Format(GetLocalizedMessage("ErrorLoadingTeachers"), ex.Message));
             }
         }
 
@@ -101,7 +104,7 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please select a teacher to edit!");
+                MessageBox.Show(GetLocalizedMessage("SelectTeacherToEdit"));
                 return;
             }
             action = 1;
@@ -117,11 +120,11 @@ namespace SchoolManagement
         {
             if (!isSelected)
             {
-                MessageBox.Show("Please select a teacher to delete!");
+                MessageBox.Show(GetLocalizedMessage("SelectTeacherToDelete"));
                 return;
             }
 
-            if (MessageBox.Show("Are you sure you want to delete?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(GetLocalizedMessage("ConfirmDelete"), "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 try
                 {
@@ -142,12 +145,12 @@ namespace SchoolManagement
                             cmd.ExecuteNonQuery();
                         }
                     }
-                    MessageBox.Show("Teacher deleted successfully.");
+                    MessageBox.Show(GetLocalizedMessage("TeacherDeleted"));
                     LoadTeachers();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error deleting teacher: {ex.Message}");
+                    MessageBox.Show(string.Format(GetLocalizedMessage("ErrorDeletingTeacher"), ex.Message));
                 }
                 finally
                 {
@@ -196,7 +199,6 @@ namespace SchoolManagement
         #endregion
 
         #region Save / Update Teacher
-
         private void SaveTeacher()
         {
             try
@@ -211,37 +213,117 @@ namespace SchoolManagement
 
                     if (action == 0) // Add new teacher
                     {
-                        string query = @"
-                            INSERT INTO SYSTEM.teacher (FULL_NAME, ADRESS, GENDER, DATE_OF_BIRTH, DEP_ID) 
-                            VALUES (@fullname, @adress, @gender, @dateofbirth, @depId); 
-                            SELECT LAST_INSERT_ID();";
+                        // Generate a unique identifier
+                        string uniqueIdentifier = DateTime.Now.Ticks.ToString() + "_" + new Random().Next(1000, 9999).ToString();
 
-                        using (var cmd = new MySqlCommand(query, conn))
+                        // Log the unique identifier for debugging
+                        MessageBox.Show(string.Format(GetLocalizedMessage("InsertingTeacher"), txtName.Text + " " + uniqueIdentifier));
+
+                        // Insert into teacher table with unique identifier in FULL_NAME
+                        string insertTeacherQuery = @"
+                        INSERT INTO SYSTEM.teacher (FULL_NAME, ADRESS, GENDER, DATE_OF_BIRTH, DEP_ID) 
+                        VALUES (@fullname, @adress, @gender, @dateofbirth, @depId)";
+
+                        using (var cmd = new MySqlCommand(insertTeacherQuery, conn))
                         {
-                            cmd.Parameters.AddWithValue("@fullname", txtName.Text);
+                            cmd.Parameters.AddWithValue("@fullname", txtName.Text + " " + uniqueIdentifier);
                             cmd.Parameters.AddWithValue("@adress", txtAddress.Text);
                             cmd.Parameters.AddWithValue("@gender", rbMale.Checked ? "Homme" : "Femme");
                             cmd.Parameters.AddWithValue("@dateofbirth", dtpBirth.Value);
                             cmd.Parameters.AddWithValue("@depId", depId);
-
-                            object result = cmd.ExecuteScalar();
-                            if (result != null)
-                            {
-                                string newTeacherId = result.ToString();
-                                DataManager dataManager = new DataManager();
-                                dataManager.AddAccount(newTeacherId, Encrypt.HashString(txtPassword.Text));
-                                MessageBox.Show("Teacher added successfully.");
-                            }
+                            cmd.ExecuteNonQuery();
                         }
+
+                        // Retrieve the TEACHER_ID using the unique identifier
+                        string newTeacherId;
+                        string selectTeacherIdQuery = @"
+                        SELECT TEACHER_ID 
+                        FROM SYSTEM.teacher 
+                        WHERE TRIM(FULL_NAME) = @fullname 
+                        ORDER BY TEACHER_ID DESC LIMIT 1";
+
+                        using (var cmd = new MySqlCommand(selectTeacherIdQuery, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@fullname", txtName.Text + " " + uniqueIdentifier);
+                            object result = cmd.ExecuteScalar();
+                            if (result == null)
+                            {
+                                // Fallback: Generate T### in application
+                                string fallbackQuery = @"
+                                SELECT COALESCE(MAX(CAST(SUBSTRING(TEACHER_ID, 2) AS UNSIGNED)), 0) + 1 
+                                FROM SYSTEM.teacher 
+                                WHERE TEACHER_ID REGEXP '^T[0-9]{3}$'";
+                                using (var fallbackCmd = new MySqlCommand(fallbackQuery, conn))
+                                {
+                                    object maxIdResult = fallbackCmd.ExecuteScalar();
+                                    int nextId = maxIdResult != null ? Convert.ToInt32(maxIdResult) : 1;
+                                    newTeacherId = $"T{nextId.ToString("D3")}";
+
+                                    // Update the inserted record with the generated TEACHER_ID
+                                    string updateIdQuery = @"
+                                    UPDATE SYSTEM.teacher 
+                                    SET TEACHER_ID = @teacherId 
+                                    WHERE TRIM(FULL_NAME) = @fullname";
+                                    using (var updateCmd = new MySqlCommand(updateIdQuery, conn))
+                                    {
+                                        updateCmd.Parameters.AddWithValue("@teacherId", newTeacherId);
+                                        updateCmd.Parameters.AddWithValue("@fullname", txtName.Text + " " + uniqueIdentifier);
+                                        int rowsAffected = updateCmd.ExecuteNonQuery();
+                                        if (rowsAffected == 0)
+                                        {
+                                            throw new Exception(string.Format(GetLocalizedMessage("FailedToUpdateTeacherId"), txtName.Text + " " + uniqueIdentifier));
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                newTeacherId = result.ToString();
+                            }
+
+                            if (string.IsNullOrEmpty(newTeacherId) || !newTeacherId.StartsWith("T") || newTeacherId.Length != 4)
+                            {
+                                throw new Exception(string.Format(GetLocalizedMessage("InvalidTeacherId"), newTeacherId ?? "null"));
+                            }
+
+                            // Log the retrieved or generated TEACHER_ID for debugging
+                            MessageBox.Show(string.Format(GetLocalizedMessage("RetrievedTeacherId"), newTeacherId));
+                        }
+
+                        // Update FULL_NAME to remove the unique identifier
+                        string updateTeacherQuery = @"
+                        UPDATE SYSTEM.teacher 
+                        SET FULL_NAME = @fullname 
+                        WHERE TEACHER_ID = @teacherId";
+                        using (var cmd = new MySqlCommand(updateTeacherQuery, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@fullname", txtName.Text);
+                            cmd.Parameters.AddWithValue("@teacherId", newTeacherId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Insert into account table using the retrieved TEACHER_ID
+                        string hashedPassword = Encrypt.HashString(txtPassword.Text);
+                        string accountQuery = "INSERT INTO SYSTEM.account (ID, FULL_NAME, PASSWORD, ROLE) VALUES (@id, @fullname, @password, @role)";
+                        using (var accountCmd = new MySqlCommand(accountQuery, conn))
+                        {
+                            accountCmd.Parameters.AddWithValue("@id", newTeacherId);
+                            accountCmd.Parameters.AddWithValue("@fullname", txtName.Text);
+                            accountCmd.Parameters.AddWithValue("@password", hashedPassword);
+                            accountCmd.Parameters.AddWithValue("@role", "Teacher");
+                            accountCmd.ExecuteNonQuery();
+                        }
+
+                        MessageBox.Show(GetLocalizedMessage("TeacherAdded"));
                     }
                     else // Update existing teacher
                     {
                         string teacherId = txtID.Text;
                         string query = @"
-                            UPDATE SYSTEM.teacher 
-                            SET FULL_NAME = @fullname, ADRESS = @adress, GENDER = @gender, 
-                                DATE_OF_BIRTH = @dateofbirth, DEP_ID = @depId 
-                            WHERE TEACHER_ID = @id";
+                        UPDATE SYSTEM.teacher 
+                        SET FULL_NAME = @fullname, ADRESS = @adress, GENDER = @gender, 
+                            DATE_OF_BIRTH = @dateofbirth, DEP_ID = @depId 
+                        WHERE TEACHER_ID = @id";
 
                         using (var cmd = new MySqlCommand(query, conn))
                         {
@@ -254,20 +336,39 @@ namespace SchoolManagement
                             cmd.ExecuteNonQuery();
                         }
 
+                        // Update password if changed
                         string newPassword = txtPassword.Text.Trim();
                         if (!string.IsNullOrEmpty(newPassword) && IsPasswordValid(newPassword))
                         {
-                            DataManager dataManager = new DataManager();
                             string hashedPassword = Encrypt.HashString(newPassword);
-                            dataManager.UpdatePassword(teacherId, hashedPassword);
-                            MessageBox.Show("Password updated successfully.");
+                            string updatePasswordQuery = "INSERT INTO SYSTEM.account (ID, FULL_NAME, PASSWORD, ROLE) VALUES (@id, @fullname, @password, @role) ON DUPLICATE KEY UPDATE PASSWORD = @password";
+                            using (MySqlCommand updateCmd = new MySqlCommand(updatePasswordQuery, conn))
+                            {
+                                updateCmd.Parameters.AddWithValue("@id", teacherId);
+                                updateCmd.Parameters.AddWithValue("@fullname", txtName.Text);
+                                updateCmd.Parameters.AddWithValue("@password", hashedPassword);
+                                updateCmd.Parameters.AddWithValue("@role", "Teacher");
+                                updateCmd.ExecuteNonQuery();
+                            }
+                            MessageBox.Show(GetLocalizedMessage("PasswordUpdated"));
                         }
+
+                        // Update FULL_NAME in account table
+                        string updateAccountQuery = "UPDATE SYSTEM.account SET FULL_NAME = @FullName WHERE ID = @ID";
+                        using (MySqlCommand updateAccountCmd = new MySqlCommand(updateAccountQuery, conn))
+                        {
+                            updateAccountCmd.Parameters.AddWithValue("@FullName", txtName.Text);
+                            updateAccountCmd.Parameters.AddWithValue("@ID", teacherId);
+                            updateAccountCmd.ExecuteNonQuery();
+                        }
+
+                        MessageBox.Show(GetLocalizedMessage("TeacherUpdated"));
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving teacher: {ex.Message}");
+                MessageBox.Show(string.Format(GetLocalizedMessage("ErrorSavingTeacher"), ex.Message));
             }
             finally
             {
@@ -367,17 +468,17 @@ namespace SchoolManagement
         {
             if (string.IsNullOrWhiteSpace(txtName.Text))
             {
-                MessageBox.Show("Name is required.");
+                MessageBox.Show(GetLocalizedMessage("NameRequired"));
                 return false;
             }
             if (cbDepartment.SelectedIndex == -1)
             {
-                MessageBox.Show("Please select a department.");
+                MessageBox.Show(GetLocalizedMessage("DepartmentRequired"));
                 return false;
             }
             if (action == 0 && string.IsNullOrWhiteSpace(txtPassword.Text))
             {
-                MessageBox.Show("Password is required for new teachers.");
+                MessageBox.Show(GetLocalizedMessage("PasswordRequired"));
                 return false;
             }
             return true;
@@ -387,18 +488,16 @@ namespace SchoolManagement
         {
             if (password.Length < 8)
             {
-                MessageBox.Show("Password must be at least 8 characters long!");
+                MessageBox.Show(GetLocalizedMessage("PasswordLength"));
                 return false;
             }
             if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*(),.?""{}|<>]"))
             {
-                MessageBox.Show("Password must contain at least one special character!");
+                MessageBox.Show(GetLocalizedMessage("PasswordSpecialChar"));
                 return false;
             }
             return true;
         }
-
-        
 
         private void SearchTeachers()
         {
@@ -408,11 +507,11 @@ namespace SchoolManagement
                 {
                     conn.Open();
                     string query = @"
-                        SELECT TEACHER_ID AS `Teacher ID`, DEP_ID AS `Dep`, FULL_NAME AS `Name`, 
-                               DATE_OF_BIRTH AS `Birth`, GENDER AS `Gender`, ADRESS AS `Address`
-                        FROM SYSTEM.teacher 
-                        WHERE FULL_NAME LIKE @search OR TEACHER_ID LIKE @search 
-                              OR DEP_ID LIKE @search OR GENDER LIKE @search OR ADRESS LIKE @search";
+                    SELECT TEACHER_ID AS `Teacher ID`, DEP_ID AS `Dep`, FULL_NAME AS `Name`, 
+                           DATE_OF_BIRTH AS `Birth`, GENDER AS `Gender`, ADRESS AS `Address`
+                    FROM SYSTEM.teacher 
+                    WHERE FULL_NAME LIKE @search OR TEACHER_ID LIKE @search 
+                          OR DEP_ID LIKE @search OR GENDER LIKE @search OR ADRESS LIKE @search";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -428,7 +527,7 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error searching teachers: {ex.Message}");
+                MessageBox.Show(string.Format(GetLocalizedMessage("ErrorSearchingTeachers"), ex.Message));
             }
         }
 
@@ -447,7 +546,7 @@ namespace SchoolManagement
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
-                saveFileDialog.Title = "Save Teachers as CSV";
+                saveFileDialog.Title = GetLocalizedMessage("SaveTeachersCsv");
                 saveFileDialog.FileName = "Teachers_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".csv";
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -458,13 +557,13 @@ namespace SchoolManagement
                     {
                         StringBuilder csvContent = new StringBuilder();
 
-                        // Écrire les en-têtes
+                        // Write headers
                         string[] columnNames = dataTable.Columns.Cast<DataColumn>()
                             .Select(column => $"\"{column.ColumnName}\"")
                             .ToArray();
                         csvContent.AppendLine(string.Join(",", columnNames));
 
-                        // Écrire les données
+                        // Write data
                         foreach (DataRow row in dataTable.Rows)
                         {
                             string[] fields = row.ItemArray.Select(field =>
@@ -473,21 +572,21 @@ namespace SchoolManagement
                             csvContent.AppendLine(string.Join(",", fields));
                         }
 
-                        // Écrire dans le fichier
+                        // Write to file
                         File.WriteAllText(saveFileDialog.FileName, csvContent.ToString(), Encoding.UTF8);
 
-                        MessageBox.Show("Exported to CSV successfully.");
-                        System.Diagnostics.Process.Start(saveFileDialog.FileName); // Ouvre le fichier
+                        MessageBox.Show(GetLocalizedMessage("ExportedCsv"));
+                        System.Diagnostics.Process.Start(saveFileDialog.FileName);
                     }
                     else
                     {
-                        MessageBox.Show("No data to export.");
+                        MessageBox.Show(GetLocalizedMessage("NoDataToExport"));
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error exporting to CSV: {ex.Message}");
+                MessageBox.Show(string.Format(GetLocalizedMessage("ErrorExportingCsv"), ex.Message));
             }
         }
 
@@ -498,15 +597,15 @@ namespace SchoolManagement
             {
                 await conn.OpenAsync();
                 string query = @"
-                    SELECT 
-                        a.TEACHER_ID AS `Teacher ID`, 
-                        CONCAT(a.DEP_ID, ' - ', d.DEP_NAME) AS `Department`,  
-                        a.FULL_NAME AS `Name`,  
-                        a.DATE_OF_BIRTH AS `Birth`, 
-                        a.GENDER AS `Gender`, 
-                        a.ADRESS AS `Address`
-                    FROM SYSTEM.teacher a  
-                    JOIN SYSTEM.dep d ON a.DEP_ID = d.DEP_ID";
+                SELECT 
+                    a.TEACHER_ID AS `Teacher ID`, 
+                    CONCAT(a.DEP_ID, ' - ', d.DEP_NAME) AS `Department`,  
+                    a.FULL_NAME AS `Name`,  
+                    a.DATE_OF_BIRTH AS `Birth`, 
+                    a.GENDER AS `Gender`, 
+                    a.ADRESS AS `Address`
+                FROM SYSTEM.teacher a  
+                JOIN SYSTEM.dep d ON a.DEP_ID = d.DEP_ID";
 
                 MySqlCommand cmd = new MySqlCommand(query, conn);
                 try
@@ -550,70 +649,109 @@ namespace SchoolManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error getting record count: {ex.Message}");
+                MessageBox.Show(string.Format(GetLocalizedMessage("ErrorGettingRecordCount"), ex.Message));
                 return 0;
             }
         }
 
         #endregion
 
-        // Inline DataManager class to avoid conflicts
-        private class DataManager
+        #region Localization
+
+        private string GetLocalizedMessage(string messageKey)
         {
-            private readonly string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
-
-            public void AddAccount(string teacherId, string hashedPassword)
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+            string currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+            var messages = currentCulture.StartsWith("fr", StringComparison.OrdinalIgnoreCase)
+                ? new Dictionary<string, string>
                 {
-                    conn.Open();
-                    string query = "INSERT INTO SYSTEM.account (ID, FULL_NAME, PASSWORD, ROLE) " +
-                                   "SELECT TEACHER_ID, FULL_NAME, @password, 'Teacher' " +
-                                   "FROM SYSTEM.teacher WHERE TEACHER_ID = @id";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id", teacherId);
-                        cmd.Parameters.AddWithValue("@password", hashedPassword);
-                        cmd.ExecuteNonQuery();
-                    }
+                { "ErrorLoadingDepartments", "Erreur lors du chargement des départements : {0}" },
+                { "ErrorLoadingTeachers", "Erreur lors du chargement des enseignants : {0}" },
+                { "SelectTeacherToEdit", "Veuillez sélectionner un enseignant à modifier !" },
+                { "SelectTeacherToDelete", "Veuillez sélectionner un enseignant à supprimer !" },
+                { "ConfirmDelete", "Êtes-vous sûr de vouloir supprimer ?" },
+                { "TeacherDeleted", "Enseignant supprimé avec succès." },
+                { "ErrorDeletingTeacher", "Erreur lors de la suppression de l'enseignant : {0}" },
+                { "NameRequired", "Le nom est requis." },
+                { "DepartmentRequired", "Veuillez sélectionner un département." },
+                { "PasswordRequired", "Le mot de passe est requis pour les nouveaux enseignants." },
+                { "PasswordLength", "Le mot de passe doit contenir au moins 8 caractères !" },
+                { "PasswordSpecialChar", "Le mot de passe doit contenir au moins un caractère spécial !" },
+                { "ErrorSearchingTeachers", "Erreur lors de la recherche des enseignants : {0}" },
+                { "ErrorExportingCsv", "Erreur lors de l'exportation en CSV : {0}" },
+                { "NoDataToExport", "Aucune donnée à exporter." },
+                { "ExportedCsv", "Exporté en CSV avec succès." },
+                { "SaveTeachersCsv", "Enregistrer les enseignants en CSV" },
+                { "ErrorGettingRecordCount", "Erreur lors de l'obtention du nombre d'enregistrements : {0}" },
+                { "ErrorSavingTeacher", "Erreur lors de l'enregistrement de l'enseignant : {0}" },
+                { "TeacherAdded", "Enseignant ajouté avec succès." },
+                { "TeacherUpdated", "Enseignant mis à jour avec succès." },
+                { "PasswordUpdated", "Mot de passe mis à jour avec succès." },
+                { "InsertingTeacher", "Insertion de l'enseignant avec FULL_NAME : {0}" },
+                { "RetrievedTeacherId", "TEACHER_ID récupéré : {0}" },
+                { "FailedToUpdateTeacherId", "Échec de la mise à jour de TEACHER_ID pour FULL_NAME : {0}" },
+                { "InvalidTeacherId", "Format de TEACHER_ID invalide récupéré : {0}" }
                 }
-            }
-
-            public string UpdatePassword(string userId, string hashedPassword)
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                : new Dictionary<string, string>
                 {
-                    conn.Open();
-                    string query = "UPDATE SYSTEM.account SET PASSWORD = @password WHERE ID = @id";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id", userId);
-                        cmd.Parameters.AddWithValue("@password", hashedPassword);
-                        int rowsAffected = cmd.ExecuteNonQuery();
-                        return rowsAffected > 0 ? "Success" : null;
-                    }
-                }
-            }
+                { "ErrorLoadingDepartments", "Error loading departments: {0}" },
+                { "ErrorLoadingTeachers", "Error loading teachers: {0}" },
+                { "SelectTeacherToEdit", "Please select a teacher to edit!" },
+                { "SelectTeacherToDelete", "Please select a teacher to delete!" },
+                { "ConfirmDelete", "Are you sure you want to delete?" },
+                { "TeacherDeleted", "Teacher deleted successfully." },
+                { "ErrorDeletingTeacher", "Error deleting teacher: {0}" },
+                { "NameRequired", "Name is required." },
+                { "DepartmentRequired", "Please select a department." },
+                { "PasswordRequired", "Password is required for new teachers." },
+                { "PasswordLength", "Password must be at least 8 characters long!" },
+                { "PasswordSpecialChar", "Password must contain at least one special character!" },
+                { "ErrorSearchingTeachers", "Error searching teachers: {0}" },
+                { "ErrorExportingCsv", "Error exporting to CSV: {0}" },
+                { "NoDataToExport", "No data to export." },
+                { "ExportedCsv", "Exported to CSV successfully." },
+                { "SaveTeachersCsv", "Save Teachers as CSV" },
+                { "ErrorGettingRecordCount", "Error getting record count: {0}" },
+                { "ErrorSavingTeacher", "Error saving teacher: {0}" },
+                { "TeacherAdded", "Teacher added successfully." },
+                { "TeacherUpdated", "Teacher updated successfully." },
+                { "PasswordUpdated", "Password updated successfully." },
+                { "InsertingTeacher", "Inserting teacher with FULL_NAME: {0}" },
+                { "RetrievedTeacherId", "Retrieved TEACHER_ID: {0}" },
+                { "FailedToUpdateTeacherId", "Failed to update TEACHER_ID for FULL_NAME: {0}" },
+                { "InvalidTeacherId", "Invalid TEACHER_ID format retrieved: {0}" }
+                };
 
-            public bool VerifyPassword(string userId, string hashedPassword)
+            string message;
+            if (messages.TryGetValue(messageKey, out message))
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                return message;
+            }
+            return "Unknown error";
+        }
+
+        #endregion
+
+        // Inline DataManager class to avoid conflicts
+        public void AddAccount(string id, string fullName, string hashedPassword, string role)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "INSERT INTO SYSTEM.account (ID, FULL_NAME, PASSWORD, ROLE) VALUES (@id, @fullname, @password, @role)";
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
-                    conn.Open();
-                    string query = "SELECT PASSWORD FROM SYSTEM.account WHERE ID = @id";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id", userId);
-                        string storedHash = (string)cmd.ExecuteScalar();
-                        return storedHash == hashedPassword;
-                    }
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@fullname", fullName);
+                    cmd.Parameters.AddWithValue("@password", hashedPassword);
+                    cmd.Parameters.AddWithValue("@role", role);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
 
         private void TeacherManager_Load(object sender, EventArgs e)
         {
-
         }
     }
+
 }

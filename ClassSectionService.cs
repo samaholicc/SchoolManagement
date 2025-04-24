@@ -21,7 +21,7 @@ namespace SchoolManagement
             var classes = await _classRepository.GetClassesAsync(page, pageSize);
 
             // Update display properties for UI
-            
+
 
             return classes;
         }
